@@ -10,6 +10,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -199,4 +204,33 @@ public final class Constants {
   public static final class PlatformConstants {
     public static final double kPlatformSpeed = 0.4;
   }
+
+
+  //Vision consants
+/**
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
+ * globally (i.e. public static). Do not put anything functional in this class.
+ *
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * constants are needed, to reduce verbosity.
+ */
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final double kFarTgtXPos = 0.1651;
+    public static final double kFarTgtYPos = 0.1651;
+    public static final double kFarTgtZPos = 0.1651;
+  
+    public static final Pose3d kFarTargetPose = 
+        new Pose3d(
+            new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
+            new Rotation3d(0.0, 0.0, 3.14159)
+        );
+    public static final double kCameraToRobot = 0.1; //?
+  }
+
+  //PID Controller constants
+  public static final double ANGULAR_P = 0.1;
+  public static final double ANGULAR_D = 0.0;
+
 }
