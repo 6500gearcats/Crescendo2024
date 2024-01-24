@@ -8,7 +8,9 @@ import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
     final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
@@ -20,7 +22,11 @@ public class Vision extends SubsystemBase {
     final double GOAL_RANGE_METERS = Units.feetToMeters(3);
 
     // Change this to match the name of your camera
-    static PhotonCamera camera = new PhotonCamera("photonvision");
+    // CHANGED CAMERA NAME TO A CONSTANT
+
+    static PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+
+    //static PhotonCamera camera = new PhotonCamera(Constants.kCamName);
 
     // PID constants should be tuned per robot
     final double LINEAR_P = 0.1;
@@ -33,18 +39,18 @@ public class Vision extends SubsystemBase {
   public double getRotation()
   {
     var result = camera.getLatestResult();
-    double rotationSpeed;
+    double rotation;
     if (result.hasTargets()) 
     {
       // Calculate angular turn power
       // -1.0 required to ensure positive PID controller effort _increases_ yaw
-      rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
+      rotation = -turnController.calculate(result.getBestTarget().getYaw(), 0);
 
   } else {
       // If we have no targets, stay still.
-      rotationSpeed = 0;
+      rotation = 0;
   }
-    return rotationSpeed;
+    return rotation;
   }
 
 

@@ -26,10 +26,11 @@ private final DriveSubsystem m_drive;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotation = m_vision.getRotation();
-    if(rotation > 0)
+    double Xrotation = m_vision.getRotation();
+    double Yrotation = 1 - Math.abs(Xrotation);
+    if(Xrotation != 0)
     {
-      m_drive.drive(0, 0, rotation, true);
+      m_drive.drive(Xrotation, Yrotation, 0.05, true);
     }
   }
 
