@@ -104,7 +104,7 @@ public class RobotContainer {
   }
   public Command getAutonomousCommand() {
     PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
-    return AutoBuilder.followPathWithEvents(Demo_Path);
+    return AutoBuilder.followPath(Demo_Path);
 
     // Code to use an Auto
     // return new PathPlannerAuto("Example Path");
