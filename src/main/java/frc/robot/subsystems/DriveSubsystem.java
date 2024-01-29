@@ -67,7 +67,8 @@ public class DriveSubsystem extends SubsystemBase {
   private SimBoolean m_connected;
   private SimBoolean m_calibrating;
   private boolean m_fieldOriented;
-
+  private Rotation2d simRotation = new Rotation2d();
+      
   private ChassisSpeeds m_lastSpeeds;
 
   // Odometry class for tracking robot pose
@@ -162,6 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_field.setRobotPose(m_simOdometryPose);
     }
 
+
     SmartDashboard.putNumber("NavX Pitch", m_gyro.getPitch());
     SmartDashboard.putNumber("NavX Yaw angle", getAngle());
 
@@ -175,11 +177,22 @@ public class DriveSubsystem extends SubsystemBase {
     REVPhysicsSim.getInstance().run();
 
     //angle.set(5.0);
-    double angle = getPose().getRotation().getDegrees();
-    SmartDashboard.putNumber("SimAngle", angle);
-    m_simAngle.set(angle);
+    // From NavX example
+    //int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+  //  SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    // NavX expects clockwise positive, but sim outputs clockwise negative
+    
+    // navxSimAngle = -drivetrainSim.getHeading().getDegrees();
+    //double angle = getPose().getRotation().getDegrees();
 
+    //double angle = m_gyro.getAngle() - Math.toDegrees(m_lastSpeeds.omegaRadiansPerSecond) * 0.20 ;
+    double angle = m_simOdometryPose.getRotation().getDegrees();
+    
+    double newangle =  Math.IEEEremainder(angle, 360);
+    m_simAngle.set(newangle);
 
+    SmartDashboard.putNumber("SimAngle",m_simAngle.get());
+  
   }
 
   /** 
@@ -309,6 +322,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+    m_lastSpeeds =  speeds;
+
   }
 
   /**
@@ -374,7 +390,12 @@ public class DriveSubsystem extends SubsystemBase {
   /* Return the NavX yaw angle */
   public double getAngle() {
     //return -m_gyro.getYaw();
-    return -m_gyro.getAngle();
+    if (Robot.isReal()) {
+      return -m_gyro.getAngle();
+    }
+    else {
+      return m_simAngle.get();
+    }
   }
 
 
