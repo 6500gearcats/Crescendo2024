@@ -30,7 +30,7 @@ private final DriveSubsystem m_drive;
     double Yrotation = 1 - Math.abs(Xrotation);
     if(Xrotation != 0)
     {
-      m_drive.drive(Xrotation, Yrotation, 0.05, true);
+      m_drive.drive(Xrotation, Yrotation, 0, true);
     }
   }
 

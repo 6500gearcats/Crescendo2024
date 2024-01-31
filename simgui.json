@@ -25,6 +25,9 @@
     "transitory": {
       "LiveWindow": {
         "open": true
+      },
+      "photonvision": {
+        "open": true
       }
     }
   },
