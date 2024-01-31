@@ -4,11 +4,14 @@
 
 package frc.robot.subsystems;
 
-import javax.swing.LayoutStyle;
-
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.REVPhysicsSim;
+// Path Planner Imports
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
+import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDouble;
@@ -25,12 +28,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
-import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.SPI;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Robot;
 import frc.robot.Constants;
  
 
@@ -67,7 +70,8 @@ public class DriveSubsystem extends SubsystemBase {
   private SimBoolean m_connected;
   private SimBoolean m_calibrating;
   private boolean m_fieldOriented;
-
+  private Rotation2d simRotation = new Rotation2d();
+      
   private ChassisSpeeds m_lastSpeeds;
 
   // Odometry class for tracking robot pose
@@ -121,6 +125,33 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_simOdometryPose = m_odometry.getPoseMeters();
     SmartDashboard.putData("Field", m_field);
+
+    // MODIFIED TEMPLATE CODE: Configure AutoBuilder last
+        AutoBuilder.configureHolonomic(
+                this::getPose, // Robot pose supplier
+                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                        4.5, // Max module speed, in m/s
+                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this // Reference to this subsystem to set requirements
+        );
   }
 
   @Override
@@ -135,6 +166,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_field.setRobotPose(m_simOdometryPose);
     }
 
+
     SmartDashboard.putNumber("NavX Pitch", m_gyro.getPitch());
     SmartDashboard.putNumber("NavX Yaw angle", getAngle());
 
@@ -148,11 +180,22 @@ public class DriveSubsystem extends SubsystemBase {
     REVPhysicsSim.getInstance().run();
 
     //angle.set(5.0);
-    double angle = getPose().getRotation().getDegrees();
-    SmartDashboard.putNumber("SimAngle", angle);
-    m_simAngle.set(angle);
+    // From NavX example
+    //int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+  //  SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    // NavX expects clockwise positive, but sim outputs clockwise negative
+    
+    // navxSimAngle = -drivetrainSim.getHeading().getDegrees();
+    //double angle = getPose().getRotation().getDegrees();
 
+    //double angle = m_gyro.getAngle() - Math.toDegrees(m_lastSpeeds.omegaRadiansPerSecond) * 0.20 ;
+    double angle = m_simOdometryPose.getRotation().getDegrees();
+    
+    double newangle =  Math.IEEEremainder(angle, 360);
+    m_simAngle.set(newangle);
 
+    SmartDashboard.putNumber("SimAngle",m_simAngle.get());
+  
   }
 
   /** 
@@ -186,6 +229,11 @@ public class DriveSubsystem extends SubsystemBase {
 
         m_simOdometryPose = pose;
   }
+
+  // Dependency for the AutoBuilder.ConfigureHolonomic method
+  public ChassisSpeeds getChassisSpeed() {
+      return m_lastSpeeds;
+    }
 
   /**
    * Updates the odometry of the robot using the swerve module states and the gyro
@@ -268,6 +316,20 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
+  public void drive(ChassisSpeeds speeds) {
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+    m_lastSpeeds =  speeds;
+
+  }
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -331,7 +393,12 @@ public class DriveSubsystem extends SubsystemBase {
   /* Return the NavX yaw angle */
   public double getAngle() {
     //return -m_gyro.getYaw();
-    return -m_gyro.getAngle();
+    if (Robot.isReal()) {
+      return -m_gyro.getAngle();
+    }
+    else {
+      return m_simAngle.get();
+    }
   }
 
 

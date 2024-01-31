@@ -9,12 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import commands.GetBestTarget;
-/* *
-import com.pathplanner.lib.PathConstraints; import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-*/
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -105,9 +104,15 @@ public class RobotContainer {
     //new Trigger(() -> m_gunnerController.getLeftY() > 0).whileTrue(new ArmUpWithSpeed(m_Arm, (ArmConstants.kArmForwardMaxSpeed * m_gunnerController.getLeftY())));
     //sets the left stick to move arm down, increasing in speed with how far the joystick is pushed
     //new Trigger(() -> m_gunnerController.getLeftY() < 0).whileTrue(new ArmDownWithSpeed(m_Arm, (ArmConstants.kArmReverseMaxSpeed * m_gunnerController.getLeftY())));
-
-  }
-
   
+    
   }
+  public Command getAutonomousCommand() {
+    PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
+    return AutoBuilder.followPath(Demo_Path);
 
+    // Code to use an Auto
+    // return new PathPlannerAuto("Example Path");
+}
+
+}
