@@ -15,6 +15,20 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
+        "Robot": {
+          "arrowColor": [
+            0.06547617167234421,
+            0.7857142686843872,
+            0.7085458636283875,
+            255.0
+          ],
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ]
+        },
         "window": {
           "visible": true
         }
@@ -26,12 +40,18 @@
       "LiveWindow": {
         "open": true
       },
+      "SmartDashboard": {
+        "open": true
+      },
       "photonvision": {
         "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
     "Server": {
       "Publishers": {
         "open": true
@@ -39,5 +59,12 @@
       "open": true
     },
     "visible": true
+  },
+  "Plot": {
+    "Plot <0>": {
+      "window": {
+        "visible": false
+      }
+    }
   }
 }

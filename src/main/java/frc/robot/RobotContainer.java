@@ -43,7 +43,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Vision m_vision = new Vision();
+  private final Navigation m_vision = new Navigation();
   
 
   // The driver's controller

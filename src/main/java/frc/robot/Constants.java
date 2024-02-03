@@ -232,6 +232,8 @@ public final class Constants {
   //PID Controller constants
   public static final double ANGULAR_P = 0.1;
   public static final double ANGULAR_D = 0.0;
+  public static final double P_GAIN = 0.1;
+  public static final double D_GAIN = 0.0;
 
   //Camera constants
   public static final String kCamName = "photonvision";

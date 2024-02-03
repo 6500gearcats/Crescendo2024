@@ -69,7 +69,8 @@ public class Navigation extends SubsystemBase {
                 // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
                 // Use this range as the measurement we give to the PID controller.
                 // -1.0 required to ensure positive PID controller effort _increases_ range
-                //forwardSpeed = -controller.calculate(range, GOAL_RANGE_METERS);
+                double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
+                range = forwardSpeed;
             } else {
                 // If we have no targets, stay still.
                 range = 0;
