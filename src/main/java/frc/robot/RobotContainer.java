@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -103,8 +105,14 @@ public class RobotContainer {
     
   }
   public Command getAutonomousCommand() {
+  PathConstraints constraints = new PathConstraints(
+        3.0, 3.0,
+        Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+
     PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
-    return AutoBuilder.followPath(Demo_Path);
+    //PathPlannerPath Demo2 = PathPlannerPath.fromPathFile("Demo2");
+    return AutoBuilder.pathfindThenFollowPath(Demo_Path, constraints);
 
     // Code to use an Auto
     // return new PathPlannerAuto("Example Path");
