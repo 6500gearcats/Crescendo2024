@@ -11,17 +11,19 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"
     },
     "windows": {
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
-        "bottom": 544,
-        "builtin": "2024 Crescendo",
         "height": 8.013679504394531,
-        "left": 46,
-        "right": 1088,
-        "top": 36,
+        "image": "/Users/jasonholt/Downloads/2024-field.png",
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -37,23 +39,27 @@
     }
   },
   "NetworkTables": {
-    "Retained Values": {
-      "open": false
-    },
     "transitory": {
       "LiveWindow": {
         "open": true
       },
       "SmartDashboard": {
+        "Auto Chooser": {
+          "open": true
+        },
         "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "Server": {
       "Publishers": {
         "open": true
-      }
+      },
+      "open": true
     },
     "visible": true
   }

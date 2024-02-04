@@ -18,6 +18,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -42,11 +44,11 @@ import frc.robot.subsystems.*;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final SendableChooser<Command> autoChooser;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-
-  private Vision visionSim;
   
+  private Vision visionSim;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -58,6 +60,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
     NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
 
@@ -123,7 +128,8 @@ public class RobotContainer {
     return AutoBuilder.pathfindThenFollowPath(Demo_Path, constraints);
     */
     // Code to use an Auto
-    return new PathPlannerAuto("DemoAuto");
+    // return new PathPlannerAuto("TopAuto");
+    return autoChooser.getSelected();
 }
 
 }

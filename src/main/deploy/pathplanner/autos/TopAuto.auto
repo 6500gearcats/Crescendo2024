@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2,
+      "y": 7.0
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopStartingNoteToAmp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DemoCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AmpToNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
