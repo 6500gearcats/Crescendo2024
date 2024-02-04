@@ -10,7 +10,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.hal.SimBoolean;
@@ -116,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
-        }, new Pose2d(2.0, 5.0, new Rotation2d()));
+        }, new Pose2d(0.0, 0.0, new Rotation2d()));
 
         m_lastSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -161,6 +160,12 @@ public class DriveSubsystem extends SubsystemBase {
     }
     else{
       m_field.setRobotPose(m_simOdometryPose);
+
+      Pose2d CurrentPos = m_simOdometryPose;
+      double xPos = CurrentPos.getX();
+      double yPos = CurrentPos.getY();
+      SmartDashboard.putNumber("Position: X", xPos);
+      SmartDashboard.putNumber("Position: Y", yPos);
     }
 
 
@@ -170,6 +175,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
 
   }
+
+  
 
   @Override
   public void simulationPeriodic() {

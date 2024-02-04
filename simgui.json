@@ -29,8 +29,14 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "LiveWindow": {
+        "open": true
+      },
+      "SmartDashboard": {
         "open": true
       }
     }

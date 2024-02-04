@@ -11,6 +11,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
@@ -54,6 +55,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
+    NamedCommands.registerCommand("DemoCommand", demoOutput());
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -104,18 +108,24 @@ public class RobotContainer {
   
     
   }
+
   public Command getAutonomousCommand() {
-  PathConstraints constraints = new PathConstraints(
+    // Code to run a singular path
+  /**PathConstraints constraints = new PathConstraints(
         3.0, 3.0,
         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
 
     PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
-    //PathPlannerPath Demo2 = PathPlannerPath.fromPathFile("Demo2");
     return AutoBuilder.pathfindThenFollowPath(Demo_Path, constraints);
-
+    */
     // Code to use an Auto
-    // return new PathPlannerAuto("Example Path");
+    return new PathPlannerAuto("DemoAuto");
+}
+
+private Command demoOutput() {
+  System.out.println("Ran Demo Command");
+  return null;
 }
 
 }
