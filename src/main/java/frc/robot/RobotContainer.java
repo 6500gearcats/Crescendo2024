@@ -44,6 +44,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Navigation m_vision = new Navigation();
+
+  private Vision visionSim;
   
 
   // The driver's controller

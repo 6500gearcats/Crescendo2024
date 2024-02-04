@@ -11,24 +11,25 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "Robot": {
-          "arrowColor": [
-            0.06547617167234421,
-            0.7857142686843872,
-            0.7085458636283875,
-            255.0
-          ],
-          "color": [
-            1.0,
-            1.0,
-            1.0,
-            255.0
-          ]
-        },
+        "bottom": 544,
+        "builtin": "2024 Crescendo",
+        "height": 8.013679504394531,
+        "left": 46,
+        "right": 1088,
+        "top": 36,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/VisionSystemSim-main/Sim Field": {
+        "height": 8.013679504394531,
+        "width": 16.541748046875,
         "window": {
           "visible": true
         }
@@ -55,15 +56,8 @@
     "Server": {
       "Publishers": {
         "open": true
-      },
-      "open": true
-    }
-  },
-  "Plot": {
-    "Plot <0>": {
-      "window": {
-        "visible": false
       }
-    }
+    },
+    "visible": true
   }
 }

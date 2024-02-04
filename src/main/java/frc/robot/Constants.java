@@ -5,9 +5,18 @@
 package frc.robot;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -205,38 +214,19 @@ public final class Constants {
     public static final double kPlatformSpeed = 0.4;
   }
 
+    public static class Vision {
+        public static final String kCameraName = "YOUR CAMERA NAME";
+        // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+        public static final Transform3d kRobotToCam =
+                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
 
-  //Vision consants
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final double kFarTgtXPos = 0.1651;
-    public static final double kFarTgtYPos = 0.1651;
-    public static final double kFarTgtZPos = 0.1651;
-  
-    public static final Pose3d kFarTargetPose = 
-        new Pose3d(
-            new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
-            new Rotation3d(0.0, 0.0, 3.14159)
-        );
-    public static final double kCameraToRobot = 0.1; //?
-  }
+        // The layout of the AprilTags on the field
+        public static final AprilTagFieldLayout kTagLayout =
+                AprilTagFields.kDefaultField.loadAprilTagLayoutField();
 
-  //PID Controller constants
-  public static final double ANGULAR_P = 0.1;
-  public static final double ANGULAR_D = 0.0;
-  public static final double P_GAIN = 0.1;
-  public static final double D_GAIN = 0.0;
-
-  //Camera constants
-  public static final String kCamName = "photonvision";
-  public static final double kRangeSpeedOffset = 0.05;
-
+        // The standard deviations of our vision estimated poses, which affect correction rate
+        // (Fake values. Experiment and determine estimation noise on an actual robot.)
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    }
 }
