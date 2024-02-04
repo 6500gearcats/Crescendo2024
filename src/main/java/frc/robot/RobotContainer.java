@@ -43,11 +43,11 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Navigation m_vision = new Navigation();
-
-  private Vision visionSim;
+  //private Vision visionSim;
   
+private final Navigation m_vision = new Navigation();
 
+  
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -60,6 +60,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    m_vision.setDriveController(m_robotDrive);
 
     
 

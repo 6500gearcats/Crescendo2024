@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.kauailabs.navx.frc.AHRS;
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -420,4 +422,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 //PID Controllers
 public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
+
+public PhotonPipelineResult getLatestCameraResult() {
+  return m_simVision.getLatestResult();
+}
 }

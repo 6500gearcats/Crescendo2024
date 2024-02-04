@@ -230,7 +230,7 @@ public final class Constants {
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     }
 
-    public static final double kRangeSpeedOffset = 0.05;
+    public static final double kRangeSpeedOffset = 0.6;
     public static final double ANGULAR_P = 0.1;
     public static final double ANGULAR_D = 0.0;
 }

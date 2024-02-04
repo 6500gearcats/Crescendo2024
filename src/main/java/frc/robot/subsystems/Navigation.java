@@ -24,7 +24,7 @@ public class Navigation extends SubsystemBase {
     // Change this to match the name of your camera
     // CHANGED CAMERA NAME TO A CONSTANT
 
-    static PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+    //static PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
 
     //static PhotonCamera camera = new PhotonCamera(Constants.kCamName);
 
@@ -36,15 +36,17 @@ public class Navigation extends SubsystemBase {
     final double ANGULAR_D = 0.0;
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
+    DriveSubsystem m_drive;
+
   public double getRotation()
   {
-    var result = camera.getLatestResult();
+    var result = m_drive.getLatestCameraResult();
     double rotation;
     if (result.hasTargets()) 
     {
       // Calculate angular turn power
       // Remove -1.0 because it was inverting results.
-      rotation = turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.kRangeSpeedOffset;
+      rotation = -turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.kRangeSpeedOffset;
 
   } else {
       // If we have no targets, stay still.
@@ -56,7 +58,7 @@ public class Navigation extends SubsystemBase {
   // HEADER - METHOD TO FIND DISTANCE FROM TARGET
   public double getRange()
   {
-    var result = camera.getLatestResult();
+    var result = m_drive.getLatestCameraResult();
     double range;
     if (result.hasTargets()) {
                 // First calculate range
@@ -85,5 +87,9 @@ public class Navigation extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void setDriveController(DriveSubsystem robotDrive) {
+    m_drive = robotDrive;
   }
 }
