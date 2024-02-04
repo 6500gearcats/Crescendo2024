@@ -237,5 +237,6 @@ public final class Constants {
 
   //Camera constants
   public static final String kCamName = "photonvision";
+  public static final double kRangeSpeedOffset = 0.05;
 
 }

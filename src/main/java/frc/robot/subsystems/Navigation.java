@@ -10,6 +10,7 @@ import org.photonvision.PhotonUtils;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Navigation extends SubsystemBase {
     final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
@@ -70,13 +71,12 @@ public class Navigation extends SubsystemBase {
                 // Use this range as the measurement we give to the PID controller.
                 // -1.0 required to ensure positive PID controller effort _increases_ range
                 double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
-                range = forwardSpeed;
+                return forwardSpeed * Constants.kRangeSpeedOffset;
             } else {
                 // If we have no targets, stay still.
-                range = 0;
+                return 0;
                 // When this is implemented - DO NOTHING IF RANGE IS 0
             }
-            return range;
   }
 
   /** Creates a new Navigation object when used. */
