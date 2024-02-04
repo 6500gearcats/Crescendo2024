@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DemoCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "AmpToNote"
