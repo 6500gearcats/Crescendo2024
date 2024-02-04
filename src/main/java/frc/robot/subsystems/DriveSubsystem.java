@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
+import frc.robot.Vision;
 
 public class DriveSubsystem extends SubsystemBase {
   public boolean turboEnable = false;
@@ -75,6 +76,8 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveDriveOdometry m_odometry;
 
   private final Field2d m_field = new Field2d();
+
+  private Vision m_simVision = new Vision();
 
   private Pose2d m_simOdometryPose;
 
@@ -175,6 +178,15 @@ public class DriveSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // Update the odometry in the periodic block
     REVPhysicsSim.getInstance().run();
+
+
+        // Update camera simulation
+        m_simVision.simulationPeriodic(this.getPose());
+
+        var debugField = m_simVision.getSimDebugField();
+        debugField.getObject("EstimatedRobot").setPose(this.getPose());
+        //debugField.getObject("EstimatedRobotModules").setPoses(this.getModulePoses());
+
 
     //angle.set(5.0);
     // From NavX example
