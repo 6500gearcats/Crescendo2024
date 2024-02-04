@@ -30,12 +30,12 @@ private final DriveSubsystem m_drive;
   public void execute() {
     double rotation = m_vision.getRotation();
     double speed = m_vision.getRange();
-    if(speed > 1)
+    if(speed > 0.5)
     {
-      speed = 1;
+      speed = 0.5;
     }
-    else if (speed < -1) {
-      speed = -1;    
+    else if (speed < -0.5) {
+      speed = -0.5;    
     }
 
     SmartDashboard.putNumber("Sim-Robot (Vision) Speed", speed);
