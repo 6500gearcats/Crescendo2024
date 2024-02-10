@@ -231,10 +231,17 @@ public final class Constants {
     }
 public static class Navigation{
     public static final double kRangeSpeedOffset = 0.6;
-    public static final double kP = 0.5;
-    public static final double kD = 0.5;
-    public static final double kI = 0.5;
+    public static final double ang_kP = 0.1;
+    public static final double ang_kD = 0.0005;
+    public static final double ang_kI = 0.5;
+    public static final double lin_kI = 0.5;
+    public static final double lin_kP = 0.1;
+    public static final double lin_kD = 0.0005;
     public static final double aprilTagPos = 5; 
+    //Pc = .15
+    //Kc = .165
+    //Kp = .099
+    //Ki = 1.32
 }
 
 }

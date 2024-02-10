@@ -29,12 +29,8 @@ public class Navigation extends SubsystemBase {
     //static PhotonCamera camera = new PhotonCamera(Constants.kCamName);
 
     // PID constants should be tuned per robot
-    final double LINEAR_P = 0.1;
-    final double LINEAR_D = 0.0;
-    PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
-    final double ANGULAR_P = 0.1;
-    final double ANGULAR_D = 0.0;
-    PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
+    PIDController forwardController = new PIDController(Constants.Navigation.lin_kP, Constants.Navigation.lin_kI, Constants.Navigation.lin_kD);
+    PIDController turnController = new PIDController(Constants.Navigation.ang_kP, Constants.Navigation.ang_kI, Constants.Navigation.ang_kD);
 
     DriveSubsystem m_drive;
 
@@ -46,7 +42,7 @@ public class Navigation extends SubsystemBase {
     {
       // Calculate angular turn power
       // Remove -1.0 because it was inverting results.
-      rotation = -turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.kRangeSpeedOffset;
+      rotation = -turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.Navigation.kRangeSpeedOffset;
 
   } else {
       // If we have no targets, stay still.
@@ -73,7 +69,7 @@ public class Navigation extends SubsystemBase {
                 // Use this range as the measurement we give to the PID controller.
                 // -1.0 required to ensure positive PID controller effort _increases_ range
                 double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
-                return forwardSpeed * Constants.kRangeSpeedOffset;
+                return forwardSpeed * Constants.Navigation.kRangeSpeedOffset;
             } else {
                 // If we have no targets, stay still.
                 return 0;
