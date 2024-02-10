@@ -40,10 +40,19 @@
     "transitory": {
       "LiveWindow": {
         "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      },
+      "photonvision": {
+        "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
     "Server": {
       "Publishers": {
         "open": true

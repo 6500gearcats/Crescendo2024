@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.kauailabs.navx.frc.AHRS;
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -16,6 +18,7 @@ import com.revrobotics.REVPhysicsSim;
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -34,6 +37,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.Vision;
+import frc.robot.Constants;
+ 
 
 public class DriveSubsystem extends SubsystemBase {
   public boolean turboEnable = false;
@@ -415,4 +420,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_fieldOriented = !m_fieldOriented;
     return m_fieldOriented;
   }
+//PID Controllers
+public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
+
+public PhotonPipelineResult getLatestCameraResult() {
+  return m_simVision.getLatestResult();
+}
 }
