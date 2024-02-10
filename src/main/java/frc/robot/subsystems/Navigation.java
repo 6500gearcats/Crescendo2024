@@ -4,10 +4,14 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -55,7 +59,36 @@ public class Navigation extends SubsystemBase {
     return rotation;
   }
 
-  // HEADER - METHOD TO FIND DISTANCE FROM TARGET
+  // HEADER - METHOD TO GET ROTATION FOR A CHOSEN TARGET
+
+  public double getChosenTargetRotation(int targetID)
+  {
+    var result = m_drive.getLatestCameraResult();
+    // Get a list of all of the targets that have been detected. 
+    List<PhotonTrackedTarget> targets = result.getTargets();
+    double rotation = 0;
+
+    // For each target we have check if it matches the id you want.
+    for(PhotonTrackedTarget target : targets)
+    {
+      if(result.hasTargets())
+      {
+        if(target.getFiducialId() == targetID)
+        {
+          // Use the value of target to find our rotation using the getYaw command
+          rotation = -turnController.calculate(target.getYaw(), 0) * Constants.kRangeSpeedOffset;
+        }
+      }
+      else
+      {
+        rotation = 0;
+      }
+    }
+
+    return rotation;
+  }
+
+  // HEADER - METHOD TO FIND SPEED TO APROACH A TARGET
   public double getRange()
   {
     var result = m_drive.getLatestCameraResult();
@@ -79,6 +112,41 @@ public class Navigation extends SubsystemBase {
                 return 0;
                 // When this is implemented - DO NOTHING IF RANGE IS 0
             }
+  }
+
+  // HEADER - METHOD TO FIND SPEED TO APROACH A TARGET
+  public double getChosenTargetRange(int targetID)
+  {
+    var result = m_drive.getLatestCameraResult();
+    List<PhotonTrackedTarget> targets = result.getTargets();
+    double range = 0;
+    double forwardSpeed = 0;
+
+    for(PhotonTrackedTarget target : targets)
+    {
+      if(result.hasTargets())
+      {
+        range =
+                        PhotonUtils.calculateDistanceToTargetMeters(
+                                CAMERA_HEIGHT_METERS, // Previously declarde
+                                TARGET_HEIGHT_METERS,
+                                CAMERA_PITCH_RADIANS,
+                                Units.degreesToRadians(target.getPitch()));
+
+                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
+                // Use this range as the measurement we give to the PID controller.
+                // -1.0 required to ensure positive PID controller effort _increases_ range
+                forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
+                forwardSpeed *= Constants.kRangeSpeedOffset;
+      }
+      else
+      {
+        // If we have no targets, stay still
+        range = 0;
+      }
+    }
+
+    return forwardSpeed; 
   }
 
   /** Creates a new Navigation object when used. */

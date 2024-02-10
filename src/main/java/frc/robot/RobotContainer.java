@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import commands.GetBestTarget;
+import commands.GetChosenTarget;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -18,10 +19,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -98,11 +100,43 @@ private final Navigation m_vision = new Navigation();
     //new JoystickButton(m_driverController, Button.kStart.value).whileTrue(new LightPurple());
 
     // Set the wheels in locked arrangement to prevent movement
+    
+
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    
+    // Chase the most apparent target while A is pressed
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
-
+    
+    
+    // Create a smartdashboard target chooser
+    /*
+    SendableChooser<Integer> m_chooser = new SendableChooser<>();
+    m_chooser.setDefaultOption("April Tag 1", 1);
+            m_chooser.addOption("April Tag 2", 2);
+            m_chooser.addOption("April Tag 3", 3);
+            m_chooser.addOption("April Tag 4", 4);
+            m_chooser.addOption("April Tag 5", 5);
+            m_chooser.addOption("April Tag 6", 6);
+            m_chooser.addOption("April Tag 7", 7);
+            m_chooser.addOption("April Tag 8", 8);
+            m_chooser.addOption("April Tag 9", 9);
+            m_chooser.addOption("April Tag 10", 10);
+            m_chooser.addOption("April Tag 11", 11);
+            m_chooser.addOption("April Tag 12", 12);
+            m_chooser.addOption("April Tag 13", 13);
+            m_chooser.addOption("April Tag 14", 14);
+            m_chooser.addOption("April Tag 15", 15);
+            m_chooser.addOption("April Tag 16", 16);
+          
+            //Put the chooser on the dashboard
+            SmartDashboard.putData(m_chooser); 
+    */
+    // Chase an april tag with an ID of 1 while B is pressed
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new GetChosenTarget(m_vision, m_robotDrive, 2));
+    
     //GUNNER CONTROLLER
     //sets the left stick to move arm up, increasing in speed with how far the joystick is pushed
     //new Trigger(() -> m_gunnerController.getLeftY() > 0).whileTrue(new ArmUpWithSpeed(m_Arm, (ArmConstants.kArmForwardMaxSpeed * m_gunnerController.getLeftY())));
