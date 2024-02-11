@@ -10,11 +10,31 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.hal.SimBoolean;
+import edu.wpi.first.hal.SimBoolean;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+
 
 public class Navigation extends SubsystemBase {
     final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
@@ -40,7 +60,19 @@ public class Navigation extends SubsystemBase {
     final double ANGULAR_D = 0.0;
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
-    DriveSubsystem m_drive;
+    private DriveSubsystem m_drive;
+
+    // Create a new gyro object
+
+    private AHRS m_gyro;
+
+    private int m_gyroSim;
+    private SimDouble m_simAngle;
+    private SimBoolean m_connected;
+    private SimBoolean m_calibrating;
+  
+
+    
 
   public double getRotation()
   {
@@ -149,8 +181,29 @@ public class Navigation extends SubsystemBase {
     return forwardSpeed; 
   }
 
+  public Pose3d getRobotPosition()
+  {
+    // Create an april tag field layout object
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    // Create a result object
+    var result = m_drive.getLatestCameraResult();
+    // Create a target object using the values of the result object
+    
+    PhotonTrackedTarget target = result.getBestTarget();
+
+    // Use the target and april tag layout to determine the position of the robot
+    // FOLLOWING CODE USING UNDIFINED TRANSFORM 3D PARAMETER, PLEASE FIND HOW TO GET THIS
+    //Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), aprilTagFieldLayout.getTagPose(target.getFiducialId()), cameraToRobot);
+
+    // Return the value of the robot's position
+
+    return null;
+  }
+
   /** Creates a new Navigation object when used. */
-  public Navigation() {}
+  public Navigation(DriveSubsystem theDrive) {
+    m_drive = theDrive;
+  }
 
   @Override
   public void periodic() {

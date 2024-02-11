@@ -66,6 +66,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  // Public so navigation can use it
   private AHRS m_gyro;
 
   private int m_gyroSim;
