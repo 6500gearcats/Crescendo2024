@@ -55,6 +55,9 @@
             "open": true
           }
         },
+        "VisionSystemSim-main": {
+          "open": true
+        },
         "open": true
       },
       "photonvision": {

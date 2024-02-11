@@ -111,9 +111,9 @@ private final Navigation m_vision = new Navigation();
     
     
     // Create a smartdashboard target chooser
-    /*
+    
     SendableChooser<Integer> m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("April Tag 1", 1);
+    m_chooser.setDefaultOption("Default - 2", 2);
             m_chooser.addOption("April Tag 2", 2);
             m_chooser.addOption("April Tag 3", 3);
             m_chooser.addOption("April Tag 4", 4);
@@ -132,10 +132,11 @@ private final Navigation m_vision = new Navigation();
           
             //Put the chooser on the dashboard
             SmartDashboard.putData(m_chooser); 
-    */
+
+    
     // Chase an april tag with an ID of 1 while B is pressed
     new JoystickButton(m_driverController, Button.kB.value)
-        .whileTrue(new GetChosenTarget(m_vision, m_robotDrive, 2));
+        .whileTrue(new GetChosenTarget(m_vision, m_robotDrive, m_chooser));
     
     //GUNNER CONTROLLER
     //sets the left stick to move arm up, increasing in speed with how far the joystick is pushed
