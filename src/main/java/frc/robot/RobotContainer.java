@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Navigation;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a

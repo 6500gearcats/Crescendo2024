@@ -52,10 +52,10 @@
     }
   },
   "NetworkTables Info": {
-    "Connections": {
+    "Clients": {
       "open": true
     },
-    "Clients": {
+    "Connections": {
       "open": true
     },
     "Server": {
