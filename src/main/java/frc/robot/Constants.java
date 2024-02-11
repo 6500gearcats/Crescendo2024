@@ -19,6 +19,11 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -224,4 +229,8 @@ public final class Constants {
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     }
+
+    public static final double kRangeSpeedOffset = 0.6;
+    public static final double ANGULAR_P = 0.1;
+    public static final double ANGULAR_D = 0.0;
 }

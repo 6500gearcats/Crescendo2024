@@ -44,14 +44,17 @@
         "open": true
       },
       "SmartDashboard": {
-        "Auto Chooser": {
-          "open": true
-        },
+        "open": true
+      },
+      "photonvision": {
         "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
     "Clients": {
       "open": true
     },

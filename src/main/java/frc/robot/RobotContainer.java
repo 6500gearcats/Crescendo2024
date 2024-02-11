@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import java.sql.JDBCType;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import commands.GetBestTarget;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -30,9 +36,11 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  //private Vision visionSim;
   
-  private Vision visionSim;
+private final Navigation m_vision = new Navigation();
 
+  
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -51,6 +59,8 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    m_vision.setDriveController(m_robotDrive);
 
     
 
@@ -89,7 +99,8 @@ public class RobotContainer {
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
-
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
     //GUNNER CONTROLLER
     //sets the left stick to move arm up, increasing in speed with how far the joystick is pushed
