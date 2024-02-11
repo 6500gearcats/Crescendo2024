@@ -7,8 +7,12 @@ package frc.robot.subsystems;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.Pigeon2;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,6 +41,7 @@ public class Navigation extends SubsystemBase {
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
     DriveSubsystem m_drive;
+    private final Pigeon2 pidgey = new Pigeon2(1, "rio");
 
   public double getRotation()
   {
@@ -82,14 +87,39 @@ public class Navigation extends SubsystemBase {
   }
 
   /** Creates a new Navigation object when used. */
-  public Navigation() {}
+  public Navigation() {
+    /* Configure Pigeon2 */
+    var toApply = new Pigeon2Configuration();
+
+    /* User can change the configs if they want, or leave it empty for factory-default */
+
+    pidgey.getConfigurator().apply(toApply);
+
+    /* Speed up signals to an appropriate rate */
+    pidgey.getYaw().setUpdateFrequency(100);
+    pidgey.getGravityVectorZ().setUpdateFrequency(100);
+
+    
+    
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Pigeon Yaw", pidgey.getYaw().getValue());
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
     m_drive = robotDrive;
   }
+
+ 
+
+  @Override
+  public void simulationPeriodic() {
+ 
+  }
+
+
+
 }
