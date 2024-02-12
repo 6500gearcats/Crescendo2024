@@ -4,43 +4,27 @@
 
 package commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Navigation;
 
-public class PickUpNearestNote extends Command {
-  /** Creates a new PickUpNearestNote. */
-  private final Navigation m_vision;
-  private final DriveSubsystem m_drive;
-  private final Intake m_intakeSystem;
-
-  public PickUpNearestNote(Navigation vision, DriveSubsystem drive, Intake intake) {
-    m_vision = vision;
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class PickUpNearestNote extends SequentialCommandGroup {
+  private int posX;
+  private int posY;
+  private Intake m_intakeSystem;
+  private DriveSubsystem m_drive;
+  public PickUpNearestNote(Intake theIntake, DriveSubsystem drive) {
+    m_intakeSystem = theIntake;
     m_drive = drive;
-    m_intakeSystem = intake;
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    // Use Vision to find note
-    // Get Values of the note to use for PathFindToPos
-    new PathFindToPos(0, 0);
-    new PickUpNote(m_intakeSystem);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(
+    // Use Vision in NoteFinder to pass Note Position (Into posX and posY)
+    new PathFindToPos(posX, posY, m_drive),
+    new PickUpNote(m_intakeSystem)
+    );
   }
 }
