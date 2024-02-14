@@ -41,7 +41,7 @@ public class Navigation extends SubsystemBase {
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
     DriveSubsystem m_drive;
-    private final Pigeon2 pidgey = new Pigeon2(1, "rio");
+    private final Pigeon2 pidgey = new Pigeon2(30, "rio");
 
   public double getRotation()
   {
