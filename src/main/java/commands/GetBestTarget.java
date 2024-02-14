@@ -6,6 +6,8 @@ package commands;
 
 import org.photonvision.PhotonCamera;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
@@ -40,6 +42,14 @@ private final DriveSubsystem m_drive;
 
     SmartDashboard.putNumber("Sim-Robot (Vision) Speed", speed);
     SmartDashboard.putNumber("Sim-Robot (Vision) Rotation", rotation);
+    
+    Pose3d robotPoseEstimate = m_vision.getRobotPosition();
+
+    SmartDashboard.putNumber("Robot Rotation", robotPoseEstimate.getRotation().getAngle());
+    SmartDashboard.putNumber("Robot X Position", robotPoseEstimate.getTranslation().getX());
+    SmartDashboard.putNumber("Robot Y Position", robotPoseEstimate.getTranslation().getY());
+    SmartDashboard.putNumber("Robot Z Position", robotPoseEstimate.getZ());
+    
     if(rotation != 0)
     {
       m_drive.drive(speed, 0, rotation, false);

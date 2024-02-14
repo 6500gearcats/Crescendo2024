@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
@@ -20,6 +21,7 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -29,6 +31,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -183,27 +186,33 @@ public class Navigation extends SubsystemBase {
 
   public Pose3d getRobotPosition()
   {
+    // Create a pose3d object for our output
+    Pose3d robotPose = null;
+
     // Create an april tag field layout object
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     // Create a result object
     var result = m_drive.getLatestCameraResult();
     // Create a target object using the values of the result object
-    
     PhotonTrackedTarget target = result.getBestTarget();
-
-    // Use the target and april tag layout to determine the position of the robot
-    // FOLLOWING CODE USING UNDIFINED TRANSFORM 3D PARAMETER, PLEASE FIND HOW TO GET THIS
-    //Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), aprilTagFieldLayout.getTagPose(target.getFiducialId()), cameraToRobot);
-
+      
+    Transform3d camToRobot = new Transform3d(new Translation3d(0, 0, CAMERA_HEIGHT_METERS), new Rotation3d(0, CAMERA_PITCH_RADIANS, 0));
+    
+    Optional<Pose3d> fieldRelativeAprilTagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
+    
+      
+    if(fieldRelativeAprilTagPose.isPresent())
+    {
+      // Use the target and april tag layout to determine the position of the robot
+      // FOLLOWING CODE USING UNDIFINED TRANSFORM 3D PARAMETER, PLEASE FIND HOW TO GET
+      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), fieldRelativeAprilTagPose.get(), camToRobot);
+    }
     // Return the value of the robot's position
-
-    return null;
+    return robotPose;
   }
 
   /** Creates a new Navigation object when used. */
-  public Navigation(DriveSubsystem theDrive) {
-    m_drive = theDrive;
-  }
+  public Navigation() {}
 
   @Override
   public void periodic() {
