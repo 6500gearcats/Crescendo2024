@@ -20,7 +20,7 @@ public class Shooter extends SubsystemBase {
 
   public final MotorController m_ShooterMotor = m_sparkMax;
 
-  private boolean m_bRingFired = false; 
+  private boolean m_bNoteFired = false; 
   private boolean m_bShooterAtSpeed = false;
 
   private final RelativeEncoder m_shooterEncoder = m_sparkMax.getEncoder();
@@ -47,14 +47,13 @@ public class Shooter extends SubsystemBase {
     m_bShooterAtSpeed = m_shooterEncoder.getVelocity() >= ShooterConstants.kShooterFastRPM;
     return m_bShooterAtSpeed;
   }
+
+  public void stopShooter() {
+    m_ShooterMotor.stopMotor();
+  }
   
   public void reverseMotor() {
     m_ShooterMotor.set(-ShooterConstants.kShooterSpeedSlow);
   }
 
 }
-
-
-
-
-//shoot speaker, shoot, note in, speed up moter

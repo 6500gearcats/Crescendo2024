@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import commands.GetBestTarget;
+import commands.ShootNote;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -18,10 +19,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -29,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
@@ -46,7 +44,8 @@ public class RobotContainer {
   //private Vision visionSim;
   
 private final Navigation m_vision = new Navigation();
-
+private final Shooter m_robotShooter = new Shooter();
+private final Intake m_robotIntake = new Intake();
   
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -89,27 +88,16 @@ private final Navigation m_vision = new Navigation();
    */
   private void configureButtonBindings() {
 
-    //DRIVER CONTROLLER
-    //while left button is pressed, speed is modified by the turbo mode modifier constant 
-    //new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
-    //new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
-    //Turn on lights: Yellow = Back,     Purple = Start
-    //new JoystickButton(m_driverController, Button.kBack.value).whileTrue(new LightYellow());
-    //new JoystickButton(m_driverController, Button.kStart.value).whileTrue(new LightPurple());
-
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
-    //GUNNER CONTROLLER
-    //sets the left stick to move arm up, increasing in speed with how far the joystick is pushed
-    //new Trigger(() -> m_gunnerController.getLeftY() > 0).whileTrue(new ArmUpWithSpeed(m_Arm, (ArmConstants.kArmForwardMaxSpeed * m_gunnerController.getLeftY())));
-    //sets the left stick to move arm down, increasing in speed with how far the joystick is pushed
-    //new Trigger(() -> m_gunnerController.getLeftY() < 0).whileTrue(new ArmDownWithSpeed(m_Arm, (ArmConstants.kArmReverseMaxSpeed * m_gunnerController.getLeftY())));
-  
-    
+    // Basic Functions 
+    new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
+      .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+
   }
   public Command getAutonomousCommand() {
     PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
