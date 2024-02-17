@@ -156,11 +156,10 @@ public final class Constants {
 
 // These constants are not correct, temporary until parts added.
   
-  public static final class 
-  NeckConstants {
+  public static final class NeckConstants {
     // These are port values (where it's located on the robot)
     public static final int kNeckMotorPort = 11;  
-    // These are speed values
+    // NOT UPDATED TO 2024 NECK VALUES
     public static final double kNeckReverseSpeed = 0.6;
     public static final double kNeckForwardSpeed = -0.7;
     public static final double kNeckForwardMaxSpeed = 0.9;
@@ -169,8 +168,7 @@ public final class Constants {
     // TODO tune
     public static final double kNeckSlowModifier = 0.57;
     
-    //not set right
-    //encoder values
+    // NOT UPDATED TO 2024 NECK VALUES
     public static final double kEncoderUpperThreshold = 0.30;
     public static final double kNeckStowAngle = 0.8;
     public static final double kNeckFloorAngle = 0;
@@ -182,11 +180,6 @@ public final class Constants {
 
   public static final class GyroConstants{
     public static final double kTiltPitch = 65; //11? tilt angle=
-    public static final double kPlatformLevel = 7;
-  }
-
-  public static final class PlatformConstants {
-    public static final double kPlatformSpeed = 0.4;
   }
 
     public static class Vision {
@@ -208,7 +201,7 @@ public final class Constants {
     public static class ShooterConstants {
       public static final int kShooterMotorPort = 10;
 
-      //values !!not final
+      // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
       public static final double kShooterFastRPM = 3500;
       public static final int kShooterSlowRPM = 3000;
