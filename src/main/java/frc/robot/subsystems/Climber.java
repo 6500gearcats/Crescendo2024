@@ -5,23 +5,22 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxLimitSwitch;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMax.FaultID;
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.SparkLimitSwitch;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.utility.EncoderOdometer;
+
 
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
+  public final MotorController kRight_ClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.kBrushless);
   public Climber() {
-    public final CANSparkMax kRight_ClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.brushless);
-    m_lowerLimit = m_winchMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    m_upperLimit = m_winchMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    int m_lowerLimit = m_winchMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    int m_upperLimit = m_winchMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
   }
 
   @Override
@@ -34,4 +33,5 @@ public class Climber extends SubsystemBase {
     boolean upperLimit = m_upperLimit.isPressed();
     SmartDashboard.putBoolean("Upper limit", upperLimit);
     SmartDashboard.putBoolean("Lower limit", lowerLimit);
+  }
 }

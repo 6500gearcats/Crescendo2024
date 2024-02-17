@@ -225,8 +225,8 @@ public final class Constants {
 
       }
     
-    public static class Intake { 
-      public static final int kIntake_WheelsMoterPort = 9;
+    public static class IntakeConstants { 
+      public static final int kIntakeMotorPort = 9;
     }
       
       //values
