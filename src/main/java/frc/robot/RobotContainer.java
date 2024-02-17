@@ -89,14 +89,6 @@ private final Navigation m_vision = new Navigation();
    */
   private void configureButtonBindings() {
 
-    //DRIVER CONTROLLER
-    //while left button is pressed, speed is modified by the turbo mode modifier constant 
-    //new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
-    //new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
-    //Turn on lights: Yellow = Back,     Purple = Start
-    //new JoystickButton(m_driverController, Button.kBack.value).whileTrue(new LightYellow());
-    //new JoystickButton(m_driverController, Button.kStart.value).whileTrue(new LightPurple());
-
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
@@ -113,17 +105,17 @@ private final Navigation m_vision = new Navigation();
   }
 
   public Command getAutonomousCommand() {
-    // Code to run a singular path
-  /**PathConstraints constraints = new PathConstraints(
-        3.0, 3.0,
-        Units.degreesToRadians(540), Units.degreesToRadians(720));
+    /**Code to run a singular path
+  PathConstraints constraints = new PathConstraints(
+    3.0, 3.0,
+    Units.degreesToRadians(540), Units.degreesToRadians(720));
 
 
     PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
     return AutoBuilder.pathfindThenFollowPath(Demo_Path, constraints);
+    Code to use an Auto
+    return new PathPlannerAuto("TopAuto");
     */
-    // Code to use an Auto
-    //return new PathPlannerAuto("TopAuto");
     return autoChooser.getSelected();
 }
 
