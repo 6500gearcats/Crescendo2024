@@ -12,7 +12,7 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushed);
+public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
 
   public Intake() {}
 
@@ -25,9 +25,9 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   }
 
   public boolean NoteIsPresent() {
-    boolean ballIsPresent = false;
+    boolean ringIsPresent = false;
     // Use ColorSensor to determine if true
-    return ballIsPresent;
+    return ringIsPresent;
   }
 
   public void stop() {
