@@ -197,7 +197,11 @@ public final class Constants {
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     }
-
+    
+    public static class ShootNoteConstants {
+      public static final long kmiliSeconds = 1000;
+    }
+  
     public static class ShooterConstants {
       public static final int kShooterMotorPort = 10;
 
@@ -221,6 +225,7 @@ public final class Constants {
     public static class IntakeConstants { 
       public static final int kIntakeMotorPort = 9;
       public static final double kFeedSpeed = 0.2;
+      
     }
       
       //values
