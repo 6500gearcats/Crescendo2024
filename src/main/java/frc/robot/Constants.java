@@ -66,15 +66,15 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 2;
-    public static final int kRearLeftDrivingCanId = 1;
-    public static final int kFrontRightDrivingCanId = 3;
-    public static final int kRearRightDrivingCanId = 4;
+    public static final int kFrontLeftDrivingCanId = 1; 
+    public static final int kRearLeftDrivingCanId = 4;
+    public static final int kFrontRightDrivingCanId = 2;
+    public static final int kRearRightDrivingCanId = 3;
 
-    public static final int kFrontLeftTurningCanId = 6;
-    public static final int kRearLeftTurningCanId = 5;
-    public static final int kFrontRightTurningCanId = 7;
-    public static final int kRearRightTurningCanId = 8;
+    public static final int kFrontLeftTurningCanId = 5;
+    public static final int kRearLeftTurningCanId = 8;
+    public static final int kFrontRightTurningCanId = 6;
+    public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
   }
@@ -156,62 +156,30 @@ public final class Constants {
 
 // These constants are not correct, temporary until parts added.
   
-  public static final class ArmConstants {
+  public static final class NeckConstants {
     // These are port values (where it's located on the robot)
-    public static final int kArmMotorPort = 10;  
-    // These are speed values
-    public static final double kArmReverseSpeed = 0.6;
-    public static final double kArmForwardSpeed = -0.7;
-    public static final double kArmForwardMaxSpeed = 0.9;
-    public static final double kArmReverseMaxSpeed = -0.9;
+    public static final int kNeckMotorPort = 11;  
+    // NOT UPDATED TO 2024 NECK VALUES
+    public static final double kNeckReverseSpeed = 0.6;
+    public static final double kNeckForwardSpeed = -0.7;
+    public static final double kNeckForwardMaxSpeed = 0.9;
+    public static final double kNeckReverseMaxSpeed = -0.9;
 
     // TODO tune
-    public static final double kArmSlowModifier = 0.57;
+    public static final double kNeckSlowModifier = 0.57;
     
-    //not set right
-    //encoder values
+    // NOT UPDATED TO 2024 NECK VALUES
     public static final double kEncoderUpperThreshold = 0.30;
-    public static final double kArmStowAngle = 0.8;
-    public static final double kArmFloorAngle = 0;
-    public static final double kArmHighAngle = 0.315; //good
-    public static final double kArmMidAngle = 0.37; //good
-    public static final double kArmLowAngle = 0.70;
+    public static final double kNeckStowAngle = 0.8;
+    public static final double kNeckFloorAngle = 0;
+    public static final double kNeckHighAngle = 0.315; //good
+    public static final double kNeckMidAngle = 0.37; //good
+    public static final double kNeckLowAngle = 0.70;
     public static final double kLoadingStation = 0.36;
-  }
-
-  public static final class ClawConstants {
-    //ports
-    public static final int kClawMotorPort = 9;
-    public static final int kOpen = 0;
-    public static final int kClose = 0;
-    //speeds (claw is reversed)
-    public static final double kClawReverseSpeed = 0.75;
-    public static final double kClawForwardSpeed = -0.75;
-    public static final double kClawForwardMaxSpeed = -0.9;
-    public static final double kClawReverseMaxSpeed = 0.9;
-
-    // TODO tune
-    public static final double kSlowClawModifier = 0.5;
-
-    //not set right
-    //encoder values
-    public static final double kClawStowAngle = 0.49; //good
-    public static final double kClawFloorAngle = 0;
-    public static final double kClawHighAngle = 0.67;
-    public static final double kClawMidAngle = 0.67; //probably same as high
-    public static final double kClawLowAngle = 0.67; //probably same as high
-    public static final double kClawLowerLimit = 0.27; //good
-    public static final double kClawUpperLimit = 0.815; //good
-    public static final double kClawTolerance = 0.01; //good
   }
 
   public static final class GyroConstants{
     public static final double kTiltPitch = 65; //11? tilt angle=
-    public static final double kPlatformLevel = 7;
-  }
-
-  public static final class PlatformConstants {
-    public static final double kPlatformSpeed = 0.4;
   }
 
     public static class Vision {
@@ -230,7 +198,36 @@ public final class Constants {
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     }
 
+    public static class ShooterConstants {
+      public static final int kShooterMotorPort = 10;
+
+      // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
+      public static final double kShooterSpeedSlow = 0.6;
+      public static final double kShooterFastRPM = 3500;
+      public static final int kShooterSlowRPM = 3000;
+      public static final double kShooterSpeedFast = -0.6;
+      public static final double kShooterSpeed = 0.9; //0.43
+      public static final double kBallFiredThreshold = 0.1;
+      public static final int kShooterEncoderPort = 10;
+    }
+
+    public static class ClimberConstants {
+       public static final int kRight_ClimberMotorPort = 13;
+       public static final int kLeft_ClimberMotorPort = 12;
+       public static final double kMaxDriveSpeed = 0.1;
+
+      }
+    
+    public static class IntakeConstants { 
+      public static final int kIntakeMotorPort = 9;
+    }
+      
+      //values
+    
+
     public static final double kRangeSpeedOffset = 0.6;
     public static final double ANGULAR_P = 0.1;
     public static final double ANGULAR_D = 0.0;
 }
+
+//
