@@ -8,9 +8,6 @@ import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import commands.GetBestTarget;
-import commands.ShootNote;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -21,6 +18,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
