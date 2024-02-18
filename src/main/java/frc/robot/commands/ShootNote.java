@@ -20,6 +20,7 @@ public class ShootNote extends Command {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     addRequirements(m_ShooterSystem);
+    addRequirements(m_IntakeSystem);
   }
 
   // Called when the command is initially scheduled.
