@@ -17,10 +17,12 @@ import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  public final MotorController kRight_ClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.kBrushless);
+  public final CANSparkMax m_LeftClimberMotor = new CANSparkMax(ClimberConstants.kLeft_ClimberMotorPort,MotorType.kBrushless);
+  public final CANSparkMax m_RightClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.kBrushless);
+  
   public Climber() {
-    int m_lowerLimit = m_winchMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-    int m_upperLimit = m_winchMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    // int m_lowerLimit = m_LeftClimberMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    // int m_upperLimit = m_LeftClimberMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
   }
 
   @Override
@@ -29,9 +31,10 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean ArmIsFullyExtended() {
-    boolean lowerLimit = m_lowerLimit.isPressed();
-    boolean upperLimit = m_upperLimit.isPressed();
-    SmartDashboard.putBoolean("Upper limit", upperLimit);
-    SmartDashboard.putBoolean("Lower limit", lowerLimit);
+    // boolean lowerLimit = m_lowerLimit.isPressed();
+    // boolean upperLimit = m_upperLimit.isPressed();
+    // SmartDashboard.putBoolean("Upper limit", upperLimit);
+    // SmartDashboard.putBoolean("Lower limit", lowerLimit);
+    return true;
   }
 }
