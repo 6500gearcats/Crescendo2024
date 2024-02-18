@@ -93,8 +93,11 @@ private final Intake m_robotIntake = new Intake();
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
+
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
+    new Trigger(() -> ( m_driverController.getRightTriggerAxis() > 0.5))
+        .whileTrue(new RunCommand(() -> m_robotIntake.setFeedSpeed(), m_robotIntake));
 
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))

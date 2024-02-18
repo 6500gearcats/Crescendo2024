@@ -33,4 +33,8 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   public void stop() {
     m_intakeMotor.stopMotor();
   }
+
+  public void setFeedSpeed() {
+    m_intakeMotor.set(IntakeConstants.kFeedSpeed);
+  }
 }
