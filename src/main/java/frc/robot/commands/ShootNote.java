@@ -43,6 +43,7 @@ public class ShootNote extends Command {
   @Override
   public void end(boolean interrupted) {
     m_ShooterSystem.stopShooter();
+    m_IntakeSystem.stop();
   }
 
   // Returns true when the command should end.
