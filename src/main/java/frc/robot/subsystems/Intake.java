@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShootNoteConstants;
@@ -22,6 +23,7 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Note Sensor", m_noteSensor.get());
   }
    public void setPickupSpeed() {
     m_intakeMotor.set(IntakeConstants.kPickUpSpeed);
