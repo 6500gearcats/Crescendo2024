@@ -106,7 +106,12 @@ public class Navigation extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Pigeon Yaw", pidgey.getYaw().getValue());
+    double pidgeyYaw = pidgey.getYaw().getValue();
+    SmartDashboard.putNumber("Pigeon Yaw", pidgeyYaw);
+    double navxYaw = m_drive.getAngle();
+    double yawError = pidgeyYaw - navxYaw;
+    SmartDashboard.putNumber("Pigeon Yaw", yawError);
+
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
