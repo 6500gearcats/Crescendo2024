@@ -34,6 +34,7 @@ public class ShootNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_ShooterSystem.setShooterSpeedFast();
     if (m_ShooterSystem.shooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
   }
@@ -49,7 +50,7 @@ public class ShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 
   
