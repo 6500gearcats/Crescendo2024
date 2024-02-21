@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.ShootNoteConstants;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ShootNote extends Command {
   
@@ -50,6 +51,7 @@ public class ShootNote extends Command {
     return secondPast();
   }
 
+  
   private boolean secondPast() {
     long currentSeconds = System.currentTimeMillis();
 
