@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean shooterSpeedSetFast(){
-    m_bShooterAtSpeed = m_shooterEncoder.getVelocity() >= ShooterConstants.kShooterFastRPM;
+    m_bShooterAtSpeed = Math.abs(m_shooterEncoder.getVelocity()) >= ShooterConstants.kShooterFastRPM;
     return m_bShooterAtSpeed;
   }
 

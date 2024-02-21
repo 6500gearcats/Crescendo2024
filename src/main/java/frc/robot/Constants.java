@@ -207,7 +207,7 @@ public final class Constants {
 
       // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
-      public static final double kShooterFastRPM = 3500;
+      public static final double kShooterFastRPM = 2000;
       public static final int kShooterSlowRPM = 3000;
       public static final double kShooterSpeedFast = -0.6;
       public static final double kShooterSpeed = 0.9; //0.43
@@ -224,7 +224,7 @@ public final class Constants {
     
     public static class IntakeConstants { 
       public static final int kIntakeMotorPort = 9;
-      public static final double kFeedSpeed = 0.2;
+      public static final double kFeedSpeed = 0.5;
       public static final double kPickUpSpeed = 0.6;
       
     }
