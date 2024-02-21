@@ -225,6 +225,7 @@ public final class Constants {
     public static class IntakeConstants { 
       public static final int kIntakeMotorPort = 9;
       public static final double kFeedSpeed = 0.2;
+      public static final double kPickUpSpeed = 0.6;
       
     }
       
