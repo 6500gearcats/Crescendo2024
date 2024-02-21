@@ -49,7 +49,7 @@ public class ShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return secondPast();
+    return true;
   }
 
   
@@ -63,7 +63,6 @@ public class ShootNote extends Command {
   private boolean sensorPast() {
     return false;
   }
-
 
   }
 
