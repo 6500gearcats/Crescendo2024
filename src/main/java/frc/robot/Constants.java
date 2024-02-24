@@ -44,6 +44,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 3.5; //3
     public static final double kNormalSpeedMetersPerSecond = 2.0; //1.5
     public static final double kMaxAngularSpeed = 0.75 * Math.PI; // radians per second (was 2)
+    public static final double kTurboAngularSpeed = 1.31 * Math.PI;
 
     //turbo
     public static final double kTurboModeModifier = 7.0/2.0;
