@@ -4,32 +4,39 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.ShootNoteConstants;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ShootNote extends Command {
   
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
+  private long seconds;
 
   public ShootNote(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     addRequirements(m_ShooterSystem);
+    addRequirements(m_IntakeSystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_ShooterSystem.setShooterSpeedFast();
+    seconds = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_ShooterSystem.setShooterSpeedFast();
     if (m_ShooterSystem.shooterSpeedSetFast()){
-      m_IntakeSystem.setPickupSpeed();
+      m_IntakeSystem.setFeedSpeed();
   }
   }
 
@@ -37,6 +44,7 @@ public class ShootNote extends Command {
   @Override
   public void end(boolean interrupted) {
     m_ShooterSystem.stopShooter();
+    m_IntakeSystem.stop();
   }
 
   // Returns true when the command should end.
@@ -44,4 +52,18 @@ public class ShootNote extends Command {
   public boolean isFinished() {
     return false;
   }
-}
+
+  
+  private boolean secondPast() {
+    long currentSeconds = System.currentTimeMillis();
+
+    return (currentSeconds - seconds) >= ShootNoteConstants.kmiliSeconds; 
+  }
+
+  //For sensor, not added yet
+  private boolean sensorPast() {
+    return false;
+  }
+
+  }
+

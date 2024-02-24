@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -92,8 +93,15 @@ private final Intake m_robotIntake = new Intake();
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whileTrue(new PickUpNote(m_robotIntake));
+
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
+    new Trigger(() -> ( m_driverController.getRightTriggerAxis() > 0.5))
+        .whileTrue(new RunCommand(() -> m_robotIntake.setFeedSpeed(), m_robotIntake));
 
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))

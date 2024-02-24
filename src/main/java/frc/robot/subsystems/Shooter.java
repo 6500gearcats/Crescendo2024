@@ -31,6 +31,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Motor rotation", m_shooterEncoder.getVelocity());
+    SmartDashboard.putNumber("Motor speed", shooterSpeed());
 
   }
 
@@ -44,7 +45,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean shooterSpeedSetFast(){
-    m_bShooterAtSpeed = m_shooterEncoder.getVelocity() >= ShooterConstants.kShooterFastRPM;
+    m_bShooterAtSpeed = Math.abs(m_shooterEncoder.getVelocity()) >= ShooterConstants.kShooterFastRPM;
     return m_bShooterAtSpeed;
   }
 
