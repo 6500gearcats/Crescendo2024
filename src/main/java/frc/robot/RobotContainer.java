@@ -18,7 +18,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
-import frc.robot.commands.MoveNeck;
+import frc.robot.commands.MoveNeckUp;
+import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.DriveSubsystem;
@@ -108,9 +109,9 @@ private final Neck m_Neck = new Neck();
       .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
-        .whileTrue(new MoveNeck(m_Neck, .1));
+        .whileTrue(new MoveNeckUp(m_Neck));
     new JoystickButton(m_gunnerController, Button.kA.value)
-        .whileTrue(new MoveNeck(m_Neck, -.1));
+        .whileTrue(new MoveNeckDown(m_Neck));
     
   }
   public Command getAutonomousCommand() {

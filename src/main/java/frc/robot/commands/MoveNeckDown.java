@@ -5,15 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.NeckConstants;
 import frc.robot.subsystems.Neck;
 
-public class MoveNeck extends Command {
+public class MoveNeckDown extends Command {
   private final Neck m_Neck;
-  private final double speed;
 
-  public MoveNeck(Neck theNeck, double theSpeed) {
+  public MoveNeckDown(Neck theNeck) {
     m_Neck = theNeck;
-    speed = theSpeed;
   }
 
   // Called when the command is initially scheduled.
@@ -23,16 +22,18 @@ public class MoveNeck extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Neck.MoveNeckSpeed(speed);
+    m_Neck.getMotorController().set(NeckConstants.kNeckReverseSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Neck.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_Neck.AtMinHeight();
   }
 }
