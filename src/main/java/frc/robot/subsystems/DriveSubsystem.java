@@ -313,7 +313,6 @@ public class DriveSubsystem extends SubsystemBase {
     {
       xSpeed *= DriveConstants.kTurboModeModifier;
       ySpeed *= DriveConstants.kTurboModeModifier;
-      System.out.println("here" + xSpeed + ySpeed);
     }
   
     m_lastSpeeds =  (fieldRelative) ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getAngle()))
