@@ -4,7 +4,9 @@
 //EDIT PORTS; create code!
 package frc.robot.subsystems;
 
-import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -15,9 +17,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.NeckConstants;
 
 public class Neck extends SubsystemBase {
@@ -60,7 +59,15 @@ public class Neck extends SubsystemBase {
     SmartDashboard.putNumber("Neck Encoder:", NeckPosition);
     SmartDashboard.putNumber("Neck motor speed", m_neckMotor.get());
     SmartDashboard.putBoolean("Neck limit: ", m_lowerLimitSwitch.get());
+
+  if ( AtMaxHeight() && m_neckMotor.get() > 0) {
+      m_neckMotor.set(0);
   }
+  if(AtMinHeight() && m_neckMotor.get() < 0)
+  {
+    m_neckMotor.set(0);
+  }
+}
 //Moves Neck up at constant speed
 public void NeckUp() {
   if ( AtMaxHeight() ) {
@@ -88,6 +95,7 @@ public void NeckDown() {
   else {
       m_neckMotor.set(NeckConstants.kNeckReverseSpeed);
   }
+
 }
 
 //same method that takes in a speed to be used instead of our constant, useful in the NeckDown command
@@ -96,8 +104,24 @@ public void NeckDownSpeed(double speed) {
   
 }
 
+public void MoveNeckSpeed(double speed) {
+  if ( AtMaxHeight() ) {
+      m_neckMotor.set(0);
+  }
+  else if(m_tiltNeckEncoder.get() <= 0.02)
+  {
+    m_neckMotor.set(0);
+  } else {
+      m_neckMotor.set(NeckFilter.calculate(speed));
+  }
+}
+
+
 public boolean AtMaxHeight() {
-  return m_tiltNeckEncoder.getAbsolutePosition() < NeckConstants.kEncoderUpperThreshold;
+  return m_tiltNeckEncoder.getAbsolutePosition() > NeckConstants.kEncoderUpperThreshold;
+}
+public boolean AtMinHeight() {
+  return m_tiltNeckEncoder.getAbsolutePosition() < 0.2;
 }
 public double getNeckAngle() {
   return m_tiltNeckEncoder.getAbsolutePosition();
