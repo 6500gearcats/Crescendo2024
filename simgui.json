@@ -29,10 +29,7 @@
       },
       "/SmartDashboard/VisionSystemSim-main/Sim Field": {
         "height": 8.013679504394531,
-        "width": 16.541748046875,
-        "window": {
-          "visible": true
-        }
+        "width": 16.541748046875
       }
     }
   },
@@ -59,5 +56,8 @@
       }
     },
     "visible": true
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }
