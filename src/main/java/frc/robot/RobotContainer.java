@@ -43,10 +43,13 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private Vision visionSim;
   
+private Vision m_simVision = new Vision();
 private final Navigation m_vision = new Navigation();
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
-  
+private final NoteFinder m_NoteFinder = new NoteFinder(m_simVision);
+private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_simVision);
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
