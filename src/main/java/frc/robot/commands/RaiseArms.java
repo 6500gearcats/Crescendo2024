@@ -20,13 +20,13 @@ public class RaiseArms extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_ClimberSystem.setClimberSpeed(ClimberConstants.kClimberSpeedUp);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_ClimberSystem.setClimberSpeed(ClimberConstants.kClimberSpeedUp);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
