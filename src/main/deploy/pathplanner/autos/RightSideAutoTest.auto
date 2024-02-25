@@ -12,15 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "RightSide1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "RunIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightSide1"
           }
         }
       ]
