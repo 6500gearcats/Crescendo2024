@@ -221,8 +221,8 @@ public final class Constants {
        public static final int kRight_ClimberMotorPort = 13;
        public static final int kLeft_ClimberMotorPort = 12;
        public static final double kMaxDriveSpeed = 0.1;
-
-       public static final double climberSpeed = 0;
+       public static final double kMaxArmHeight = 0.25; //Random filler number
+       public static final double kClimberSpeed = 0;
       }
     
     public static class IntakeConstants { 

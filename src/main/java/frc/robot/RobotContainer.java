@@ -31,6 +31,7 @@ import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
