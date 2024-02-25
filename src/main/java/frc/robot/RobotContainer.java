@@ -16,10 +16,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.RaiseArms;
 import frc.robot.commands.PickUpNote;
+import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,6 +49,7 @@ public class RobotContainer {
 private final Navigation m_vision = new Navigation();
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
+private final Climber m_robotClimber = new Climber();
   
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -97,6 +101,8 @@ private final Intake m_robotIntake = new Intake();
         .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake));
+    new JoystickButton(m_driverController, Button.kBack.value)
+        .whileTrue(new RaiseArms(m_robotClimber));
 
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));

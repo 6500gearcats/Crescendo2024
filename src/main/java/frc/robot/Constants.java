@@ -220,6 +220,7 @@ public final class Constants {
        public static final int kLeft_ClimberMotorPort = 12;
        public static final double kMaxDriveSpeed = 0.1;
 
+       public static final double climberSpeed = 0;
       }
     
     public static class IntakeConstants { 
