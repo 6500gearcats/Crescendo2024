@@ -8,8 +8,6 @@ import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import commands.GetBestTarget;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -24,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveNormal;
@@ -67,6 +64,7 @@ private final Neck m_Neck = new Neck();
   public RobotContainer() {
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
     NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
+    NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
