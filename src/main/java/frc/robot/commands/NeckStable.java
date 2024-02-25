@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
 import frc.robot.subsystems.Neck;
@@ -28,6 +29,7 @@ public class NeckStable extends Command {
     if((m_Neck.getNeckAngle() > NeckConstants.KEncoderDeadbandThreshold))
     {
       m_Neck.getMotorController().set(NeckConstants.kNeckStableSpeed);
+      SmartDashboard.putString("RunningArm:", "Stabilizing");
     }
     else
     {

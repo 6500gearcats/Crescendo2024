@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
 import frc.robot.subsystems.Neck;
+import edu.wpi.first.wpilibj.smartdashboard.*;;;;
 
 public class MoveNeckUp extends Command {
   private final Neck m_Neck;
@@ -24,6 +25,7 @@ public class MoveNeckUp extends Command {
   @Override
   public void execute() {
     m_Neck.getMotorController().set(NeckConstants.kNeckForwardSpeed);
+    SmartDashboard.putString("RunningArm:", "Up");
   }
 
   // Called once the command ends or is interrupted.
