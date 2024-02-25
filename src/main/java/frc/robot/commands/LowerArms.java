@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.Climber;
 
 public class LowerArms extends Command {
@@ -20,12 +21,13 @@ public class LowerArms extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ClimberSystem.setClimberSpeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_ClimberSystem.setClimberSpeed(ClimberConstants.kClimberSpeedDown);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

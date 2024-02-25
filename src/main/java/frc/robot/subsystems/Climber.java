@@ -3,19 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.NeckConstants;
 
 
 
@@ -46,6 +41,11 @@ public class Climber extends SubsystemBase {
     m_RightClimberMotor.set(ClimberConstants.kClimberSpeed);
   }
 
+  public void setClimberSpeed(double speed) {
+    m_LeftClimberMotor.set(speed);
+    m_RightClimberMotor.set(speed);
+  }
+
   public void stop(){
     m_LeftClimberMotor.stopMotor();
     m_RightClimberMotor.stopMotor();
@@ -63,8 +63,8 @@ public class Climber extends SubsystemBase {
   */
 
   public boolean ArmIsFullyExtended() {
-    if((m_leftClimberEncoder.getPosition() > ClimberConstants.kMaxArmHeight) && 
-    (m_leftClimberEncoder.getPosition() > ClimberConstants.kMaxArmHeight)) 
+    if((m_leftClimberEncoder.getPosition() < ClimberConstants.kMaxArmHeight) || 
+    (m_rightClimberEncoder.getPosition() < ClimberConstants.kMaxArmHeight)) 
       {
         return true;
       }
@@ -72,8 +72,8 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean ArmIsFullyStowed() {
-    if((m_leftClimberEncoder.getPosition() < ClimberConstants.kMaxArmHeight) && 
-    (m_leftClimberEncoder.getPosition() < ClimberConstants.kMaxArmHeight)) 
+    if((m_leftClimberEncoder.getPosition() > ClimberConstants.kMinArmHeight) || 
+    (m_rightClimberEncoder.getPosition() > ClimberConstants.kMinArmHeight)) 
       {
         return true;
       }
