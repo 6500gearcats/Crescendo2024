@@ -13,6 +13,7 @@ public class MoveNeckUp extends Command {
 
   public MoveNeckUp(Neck theNeck) {
     m_Neck = theNeck;
+    addRequirements(m_Neck);
   }
 
   // Called when the command is initially scheduled.

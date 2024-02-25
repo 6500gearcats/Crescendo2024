@@ -15,6 +15,7 @@ public class NeckStable extends Command {
   public NeckStable(Neck theNeck) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Neck = theNeck;
+    addRequirements(m_Neck);
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +27,7 @@ public class NeckStable extends Command {
   public void execute() {
     if((m_Neck.getNeckAngle() > NeckConstants.KEncoderDeadbandThreshold))
     {
-      m_Neck.getMotorController().set(NeckConstants.kNeckForwardSpeed);
+      m_Neck.getMotorController().set(NeckConstants.kNeckStableSpeed);
     }
     else
     {
