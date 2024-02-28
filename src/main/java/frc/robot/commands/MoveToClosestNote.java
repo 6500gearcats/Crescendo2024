@@ -4,13 +4,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.Vision;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Navigation;
-import frc.robot.subsystems.NoteFinder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.NoteFinder;
 
 public class MoveToClosestNote extends Command {
   /** Creates a new MoveToClosestNote. */
@@ -23,6 +21,7 @@ public class MoveToClosestNote extends Command {
     m_drive = drive;
     m_NoteFinder = finder;
     m_IntakeSystem = intake;
+    ;
   }
 
   // Called when the command is initially scheduled.
@@ -42,27 +41,15 @@ public class MoveToClosestNote extends Command {
       speed = -0.5;    
     }
 
-    SmartDashboard.putNumber("Sim-Robot (Vision) Speed", speed);
-    SmartDashboard.putNumber("Sim-Robot (Vision) Rotation", rotation);
-
 
     if(rotation != 0)
     {
       m_drive.drive(speed, 0, rotation, false);
     }
 
-    // If we are close to target, donut suck
+        // If we are close to target, donut suck
 
-    if (m_NoteFinder.getDistance() < 1);
-    {
-      m_IntakeSystem.setPickupSpeed();
-      
-    }
-
-    if (m_IntakeSystem.NoteIsPresent())
-    {
-      m_IntakeSystem.stop();
-    }
+        
   }
 
   // Called once the command ends or is interrupted.
@@ -70,8 +57,4 @@ public class MoveToClosestNote extends Command {
   public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }

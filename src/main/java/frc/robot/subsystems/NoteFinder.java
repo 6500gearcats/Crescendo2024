@@ -9,13 +9,12 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.Vision.kCameraNameNote;
-import static frc.robot.Constants.Vision.kCameraNameTag;
 
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Vision;
@@ -125,6 +124,8 @@ public class NoteFinder extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Sim-Robot (Vision) Speed", getRange());
+    SmartDashboard.putNumber("Sim-Robot (Vision) Rotation", getRotation());
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
