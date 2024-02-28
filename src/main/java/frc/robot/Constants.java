@@ -173,7 +173,7 @@ public final class Constants {
     // NOT UPDATED TO 2024 NECK VALUES
     public static final double kEncoderUpperThreshold = 0.30;
     public static final double kEncoderLowerThreshold = 0.01;
-    public static final double KEncoderDeadbandThreshold = 0.1;
+    public static final double KEncoderDeadbandThreshold = 0.01;
     public static final double kNeckStowAngle = 0.8;
     public static final double kNeckFloorAngle = 0;
     public static final double kNeckHighAngle = 0.315; //good
