@@ -18,6 +18,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.LowerArms;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.PickUpNote;
@@ -105,7 +106,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_gunnerController, Button.kX.value)
         .whileTrue(new RaiseArms(m_robotClimber));
         new JoystickButton(m_gunnerController, Button.kB.value)
-    .whileTrue(new RaiseArms(m_robotClimber));
+    .whileTrue(new LowerArms(m_robotClimber));
 
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
