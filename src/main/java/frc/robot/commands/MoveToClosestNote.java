@@ -44,15 +44,24 @@ public class MoveToClosestNote extends Command {
 
     SmartDashboard.putNumber("Sim-Robot (Vision) Speed", speed);
     SmartDashboard.putNumber("Sim-Robot (Vision) Rotation", rotation);
+
+
     if(rotation != 0)
     {
       m_drive.drive(speed, 0, rotation, false);
     }
-    if (Vision.getRange < 1);
+
+    // If we are close to target, donut suck
+
+    if (m_NoteFinder.getDistance() < 1);
     {
-      m_drive.wait(2000);
       m_IntakeSystem.setPickupSpeed();
       
+    }
+
+    if (m_IntakeSystem.NoteIsPresent())
+    {
+      m_IntakeSystem.stop();
     }
   }
 

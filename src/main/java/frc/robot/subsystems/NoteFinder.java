@@ -89,6 +89,32 @@ public class NoteFinder extends SubsystemBase {
                 // When this is implemented - DO NOTHING IF RANGE IS 0
             }
   }
+  
+// This is a method it get distance
+
+  public double getDistance()
+  {
+    var result = m_vision.getLatestResult(kCameraNameNote);
+    double range;
+    if (result.hasTargets()) {
+                // First calculate range
+                range =
+                        PhotonUtils.calculateDistanceToTargetMeters(
+                                CAMERA_HEIGHT_METERS, // Previously declarde
+                                TARGET_HEIGHT_METERS,
+                                CAMERA_PITCH_RADIANS,
+                                Units.degreesToRadians(result.getBestTarget().getPitch()));
+
+                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
+                // Use this range as the measurement we give to the PID controller.
+                // -1.0 required to ensure positive PID controller effort _increases_ range
+            } else {
+                // If we have no targets, stay still.
+                return 0;
+                // When this is implemented - DO NOTHING IF RANGE IS 0
+            }
+      return range;
+  }
 
   /** Creates a new Navigation object when used. */
   public NoteFinder(Vision vision) {

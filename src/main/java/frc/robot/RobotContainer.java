@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -39,8 +40,6 @@ import frc.robot.subsystems.*;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private Vision visionSim;
   
 private Vision m_simVision = new Vision();
@@ -109,6 +108,9 @@ private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_simVision);
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
       .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+
+    new JoystickButton(m_gunnerController, Button.kA.value)
+        .whileTrue(new MoveToClosestNote(m_NoteFinder, m_robotDrive, m_robotIntake));
 
   }
   public Command getAutonomousCommand() {
