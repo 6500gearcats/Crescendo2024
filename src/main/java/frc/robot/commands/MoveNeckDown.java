@@ -24,7 +24,8 @@ public class MoveNeckDown extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Neck.getMotorController().set(NeckConstants.kNeckReverseSpeed);
+    //m_Neck.getMotorController().set(NeckConstants.kNeckReverseSpeed);
+    m_Neck.move(NeckConstants.kNeckReverseSpeed);
     SmartDashboard.putString("RunningArm:", "Down");
   }
 

@@ -24,7 +24,7 @@ public class MoveNeckUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Neck.getMotorController().set(NeckConstants.kNeckForwardSpeed);
+    m_Neck.move(NeckConstants.kNeckForwardSpeed);
     SmartDashboard.putString("RunningArm:", "Up");
   }
 
