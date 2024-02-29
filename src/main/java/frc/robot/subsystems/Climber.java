@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -18,7 +19,9 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public final CANSparkMax m_LeftClimberMotor = new CANSparkMax(ClimberConstants.kLeft_ClimberMotorPort,MotorType.kBrushless);
   public final CANSparkMax m_RightClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.kBrushless);
-  private final DigitalInput m_armSensor = new DigitalInput(9);
+  private final DigitalInput m_LeftArmDownSensor = new DigitalInput(0);
+  private final DigitalInput m_RightArmDownSensor = new DigitalInput(1);
+  
   private final AbsoluteEncoder m_leftClimberEncoder;
   private final AbsoluteEncoder m_rightClimberEncoder;
 
@@ -34,6 +37,9 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Left arm encoder", m_LeftArmDownSensor.get());
+    SmartDashboard.putBoolean("Right arm encoder", m_RightArmDownSensor.get());
+
   }
 
   public void setClimberSpeed() {
@@ -43,7 +49,7 @@ public class Climber extends SubsystemBase {
 
   public void setClimberSpeed(double speed) {
     m_LeftClimberMotor.set(speed);
-    m_RightClimberMotor.set(speed);
+    m_RightClimberMotor.set(-speed);
   }
 
   public void stop(){
@@ -63,8 +69,8 @@ public class Climber extends SubsystemBase {
   */
 
   public boolean ArmIsFullyExtended() {
-    if((m_leftClimberEncoder.getPosition() < ClimberConstants.kMaxArmHeight) || 
-    (m_rightClimberEncoder.getPosition() < ClimberConstants.kMaxArmHeight)) 
+    if((m_leftClimberEncoder.getPosition() > ClimberConstants.kMaxArmHeight) || 
+    (m_rightClimberEncoder.getPosition() > ClimberConstants.kMaxArmHeight)) 
       {
         return true;
       }
@@ -72,12 +78,12 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean ArmIsFullyStowed() {
-    if((m_leftClimberEncoder.getPosition() > ClimberConstants.kMinArmHeight) || 
-    (m_rightClimberEncoder.getPosition() > ClimberConstants.kMinArmHeight)) 
+    if((m_LeftArmDownSensor.get()) || 
+    (m_RightArmDownSensor.get())) 
       {
-        return true;
+        return false;
       }
-    return false;
+    return true;
   }
 
 }

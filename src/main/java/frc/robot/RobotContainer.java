@@ -106,7 +106,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_gunnerController, Button.kX.value)
         .whileTrue(new RaiseArms(m_robotClimber));
         new JoystickButton(m_gunnerController, Button.kB.value)
-    .whileTrue(new LowerArms(m_robotClimber));
+        .whileTrue(new LowerArms(m_robotClimber));
 
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
