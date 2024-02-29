@@ -4,8 +4,9 @@
 
 package frc.robot.subsystems;
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,8 +18,8 @@ import frc.robot.Constants.ClimberConstants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  public final CANSparkMax m_LeftClimberMotor = new CANSparkMax(ClimberConstants.kLeft_ClimberMotorPort,MotorType.kBrushless);
-  public final CANSparkMax m_RightClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.kBrushless);
+  public final CANSparkMax m_LeftClimberMotor = new CANSparkMax(ClimberConstants.kLeft_ClimberMotorPort,CANSparkLowLevel.MotorType.kBrushless);
+  public final CANSparkMax m_RightClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,CANSparkLowLevel.MotorType.kBrushless);
   private final DigitalInput m_LeftArmDownSensor = new DigitalInput(0);
   private final DigitalInput m_RightArmDownSensor = new DigitalInput(1);
   
@@ -27,6 +28,8 @@ public class Climber extends SubsystemBase {
 
   
   public Climber() {
+
+    m_RightClimberMotor.setInverted(true);
     // int m_lowerLimit = m_LeftClimberMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     // int m_upperLimit = m_LeftClimberMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     m_leftClimberEncoder = m_LeftClimberMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -38,7 +41,7 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Left Hook Down", !m_LeftArmDownSensor.get());
-    SmartDashboard.putBoolean("Left Hook Down", m_RightArmDownSensor.get());
+    SmartDashboard.putBoolean("Right Hook Down", !m_RightArmDownSensor.get());
     SmartDashboard.putNumber("Left arm encoder", m_leftClimberEncoder.getPosition());
     SmartDashboard.putNumber("Right arm encoder", m_rightClimberEncoder.getPosition());
   }
@@ -50,7 +53,7 @@ public class Climber extends SubsystemBase {
 
   public void setClimberSpeed(double speed) {
     m_LeftClimberMotor.set(speed);
-    m_RightClimberMotor.set(-speed);
+    m_RightClimberMotor.set(speed);
   }
 
   public void stop(){
