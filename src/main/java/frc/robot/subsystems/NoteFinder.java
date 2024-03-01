@@ -131,4 +131,8 @@ public class NoteFinder extends SubsystemBase {
   public void setDriveController(DriveSubsystem robotDrive) {
     m_drive = robotDrive;
   }
+
+  public int NearestNotePosition() {
+    return 1; // Placeholder for when vision is utilized in here to find a notes position
+  }
 }
