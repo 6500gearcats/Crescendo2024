@@ -4,36 +4,28 @@
 
 package frc.robot;
 
-import java.sql.JDBCType;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
-import edu.wpi.first.wpilibj.XboxController.Axis;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Navigation;
+import frc.robot.subsystems.NoteFinder;
+import frc.robot.subsystems.Shooter;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -114,11 +106,13 @@ private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_simVision);
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
         .whileTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
 
+    new JoystickButton(m_gunnerController, Button.kA.value)
+        .whileTrue(new ParallelCommandGroup(new MoveToClosestNote(m_NoteFinder, m_robotDrive, m_robotIntake), new PickUpNote(m_robotIntake)));
+    
   }
   public Command getAutonomousCommand() {
     PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
     return AutoBuilder.followPath(Demo_Path);
-
 
     // Code to use an Auto
     // return new PathPlannerAuto("Example Path");
