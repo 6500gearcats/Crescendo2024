@@ -14,4 +14,8 @@ public class NoteFinder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public int NearestNotePosition() {
+    return 1; // Placeholder for when vision is utilized in here to find a notes position
+  }
 }
