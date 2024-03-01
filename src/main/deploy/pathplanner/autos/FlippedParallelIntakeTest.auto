@@ -22,15 +22,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "RunIntake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "LeftSide1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
                 }
               }
             ]
