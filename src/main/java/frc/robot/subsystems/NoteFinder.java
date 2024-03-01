@@ -20,13 +20,13 @@ import frc.robot.Constants;
 import frc.robot.Vision;
 
 public class NoteFinder extends SubsystemBase {
-    final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-    final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+    final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(12);
+    final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
     // Angle between horizontal and the camera.
     final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
 
     // How far from the target we want to be
-    final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+    final double GOAL_RANGE_METERS = Units.feetToMeters(0);
 
     // Change this to match the name of your camera
     // CHANGED CAMERA NAME TO A CONSTANT

@@ -44,6 +44,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Neck;
+import frc.robot.subsystems.NoteFinder;
 import frc.robot.subsystems.Shooter;
 
 /*

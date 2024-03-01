@@ -33,6 +33,9 @@ public class MoveToClosestNote extends Command {
   public void execute() {
     double rotation = m_NoteFinder.getRotation(); 
     double speed = m_NoteFinder.getRange();
+
+    
+
     if(speed > 0.5)
     {
       speed = 0.5;
@@ -42,9 +45,9 @@ public class MoveToClosestNote extends Command {
     }
 
 
-    if(rotation != 0)
+    if(Math.abs(rotation)  > 0.05)
     {
-      m_drive.drive(speed, 0, rotation, false);
+      m_drive.drive(speed, 0, -rotation, false);
     }
 
         // If we are close to target, donut suck

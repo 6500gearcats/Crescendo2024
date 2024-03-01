@@ -17,8 +17,8 @@ public class GrabNote extends ParallelRaceGroup {
   public GrabNote(NoteFinder finder, DriveSubsystem drive, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addCommands(
-      new MoveToClosestNote(null, null, null),
-      new PickUpNote(null)
+      new MoveToClosestNote(finder, drive, intake),
+      new PickUpNote(intake)
     );
   }
 }
