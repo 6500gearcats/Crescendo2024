@@ -2,26 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 15.27,
-      "y": 5.55
+      "x": 0.94,
+      "y": 4.59
     },
-    "rotation": -179.3990267756774
+    "rotation": -62.388349305035234
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNote"
-                }
-              }
-            ]
+            "name": "ShootNote"
           }
         },
         {
@@ -31,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RightSide1"
+                  "pathName": "Bottom1"
                 }
               },
               {
@@ -48,22 +41,21 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "RightSide2"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ShootNote"
-                      }
-                    }
-                  ]
+                  "pathName": "Bottom2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Bottom3"
                 }
               }
             ]
