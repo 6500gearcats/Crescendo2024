@@ -12,7 +12,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.hal.SimBoolean;
@@ -82,13 +81,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final Field2d m_field = new Field2d();
 
-  private Vision m_simVision = new Vision();
+  private Vision m_simVision;
 
   private Pose2d m_simOdometryPose;
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
-
+  public DriveSubsystem(Vision vision) {
+    m_simVision = vision;
     try {
       /* Communicate w/navX-MXP via theimport com.kauailabs.navx.frc.AHRS;A MXP SPI Bus. */
       /* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
@@ -124,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
-        }, new Pose2d(2.0, 5.0, new Rotation2d()));
+        }, new Pose2d(0.0, 0.0, new Rotation2d()));
 
         m_lastSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
@@ -169,6 +168,12 @@ public class DriveSubsystem extends SubsystemBase {
     }
     else{
       m_field.setRobotPose(m_simOdometryPose);
+
+      Pose2d CurrentPos = m_simOdometryPose;
+      double xPos = CurrentPos.getX();
+      double yPos = CurrentPos.getY();
+      SmartDashboard.putNumber("Position: X", xPos);
+      SmartDashboard.putNumber("Position: Y", yPos);
     }
 
 
@@ -178,6 +183,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
 
   }
+
+  
 
   @Override
   public void simulationPeriodic() {
@@ -424,6 +431,6 @@ public class DriveSubsystem extends SubsystemBase {
 public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
 
 public PhotonPipelineResult getLatestCameraResult() {
-  return m_simVision.getLatestResult();
+  return m_simVision.getLatestResult(Constants.Vision.kCameraNameNote);
 }
 }

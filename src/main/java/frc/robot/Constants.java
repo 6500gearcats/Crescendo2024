@@ -198,7 +198,8 @@ public final class Constants {
   }
 
     public static class Vision {
-        public static final String kCameraName = "YOUR CAMERA NAME";
+        public static final String kCameraNameTag = "Microsoft_LifeCam_HD-3000";
+        public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
                 new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
@@ -250,6 +251,7 @@ public final class Constants {
     public static final double kRangeSpeedOffset = 0.6;
     public static final double ANGULAR_P = 0.1;
     public static final double ANGULAR_D = 0.0;
+    public static final double kDefaultNoteFinderSpeed = 1;
 }
 
 //

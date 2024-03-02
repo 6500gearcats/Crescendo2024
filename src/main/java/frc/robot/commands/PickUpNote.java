@@ -40,6 +40,5 @@ public class PickUpNote extends Command {
   public boolean isFinished() {
     return m_IntakeSystem.NoteIsPresent();
   }
-
   
 }

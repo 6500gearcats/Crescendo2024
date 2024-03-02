@@ -4,16 +4,34 @@
 
 package frc.robot;
 
+import java.sql.JDBCType;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.GrabNote;
+import frc.robot.commands.MoveToClosestNote;
+import frc.robot.commands.PickUpNote;
+import frc.robot.commands.ShootNote;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
@@ -27,6 +45,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Neck;
+import frc.robot.subsystems.NoteFinder;
 import frc.robot.subsystems.Shooter;
 
 /*
@@ -36,15 +55,17 @@ import frc.robot.subsystems.Shooter;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final SendableChooser<Command> autoChooser;
   //private Vision visionSim;
   
+private Vision m_simVision = new Vision();
 private final Navigation m_vision = new Navigation();
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
+private final NoteFinder m_NoteFinder = new NoteFinder(m_simVision);
+private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_simVision);
 private final Neck m_Neck = new Neck();
-  
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -53,6 +74,14 @@ private final Neck m_Neck = new Neck();
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
+    NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
+    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
+    NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -115,13 +144,24 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_gunnerController, Button.kA.value)
         .whileTrue(new MoveNeckDown(m_Neck));
     
-  }
-  public Command getAutonomousCommand() {
-    PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
-    return AutoBuilder.followPath(Demo_Path);
+    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
+        .whileTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
 
-    // Code to use an Auto
-    // return new PathPlannerAuto("Example Path");
+  }
+
+  public Command getAutonomousCommand() {
+    /**Code to run a singular path
+  PathConstraints constraints = new PathConstraints(
+    3.0, 3.0,
+    Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+
+    PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
+    return AutoBuilder.pathfindThenFollowPath(Demo_Path, constraints);
+    Code to use an Auto
+    return new PathPlannerAuto("TopAuto");
+    */
+    return autoChooser.getSelected();
 }
 
 }
