@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.SparkMaxLimitSwitch;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -127,13 +128,12 @@ public AbsoluteEncoder getNeckEncoder()
   return m_neckEncoder;
 }
 
-public MotorController getMotorController()
-{
-  return m_neckMotor;
-}
-
 public void stop() {
   m_neckMotor.set(0.0);
+}
+
+public void setSpeed(double speed) {
+  m_neckMotor.set(speed);
 }
 
 }

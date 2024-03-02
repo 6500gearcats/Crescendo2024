@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
+import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.NeckConstants;
 import frc.robot.Constants.ShootNoteConstants;
 import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -18,12 +21,14 @@ public class ShootNote extends Command {
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
   public final Navigation m_Navigation;
+  public final Neck m_Neck;
   private long seconds;
 
-  public ShootNote(Shooter theShooter, Intake theIntake, Navigation theNav) {
+  public ShootNote(Shooter theShooter, Intake theIntake, Navigation theNav, Neck theNeck) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     m_Navigation = theNav;
+    m_Neck = theNeck;
     addRequirements(m_ShooterSystem);
     addRequirements(m_IntakeSystem);
   }
@@ -36,17 +41,30 @@ public class ShootNote extends Command {
     
   }
 
-  public double setNeckAngle() {
+  public void setNeckAngle() {
     //Get distance from April Tag (or gyro) --> get "range" from getRange() in Navigation 
     //Slope = 12.391 --> kShooterDistanceFactor
     double distance = m_Navigation.getRange();
     double targetAngle = distance * ShooterConstants.kShooterDistanceFactor;
-    return targetAngle;
+    //m_Neck.getMotorController().set(targetAngle);
+    double encoderDifference = m_Neck.getNeckAngle() - targetAngle;
+    while(encoderDifference != targetAngle)
+    {
+      if(encoderDifference < targetAngle)
+        {
+          m_Neck.setSpeed(NeckConstants.kNeckForwardSpeed);
+        }
+    else if(encoderDifference > targetAngle)
+        {
+          m_Neck.setSpeed(NeckConstants.kNeckReverseSpeed);
+        }
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    setNeckAngle();
     m_ShooterSystem.setShooterSpeedFast();
     if (m_ShooterSystem.shooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
