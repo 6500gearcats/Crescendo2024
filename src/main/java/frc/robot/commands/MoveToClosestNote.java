@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.NoteFinder;
@@ -36,21 +36,28 @@ public class MoveToClosestNote extends Command {
 
     
 
-    if(speed > 0.5)
+    if(speed > 2)
     {
-      speed = 0.5;
+      speed = 2;
     }
-    else if (speed < -0.5) {
-      speed = -0.5;    
+    else if (speed < -2) {
+      speed = -2;    
     }
+    speed = Math.abs(speed);
 
 
     if(Math.abs(rotation)  > 0.05)
     {
       m_drive.drive(speed, 0, -rotation, false);
     }
-
-        // If we are close to target, donut suck
+    else if(speed != 0){
+      m_drive.drive(speed, 0, -rotation, false);
+    }
+    else {
+      m_drive.drive(Constants.kDefaultNoteFinderSpeed, 0, 0, false);
+    } 
+    
+       
 
         
   }

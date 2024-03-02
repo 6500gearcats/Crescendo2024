@@ -238,6 +238,7 @@ public final class Constants {
     public static final double kRangeSpeedOffset = 0.6;
     public static final double ANGULAR_P = 0.1;
     public static final double ANGULAR_D = 0.0;
+    public static final double kDefaultNoteFinderSpeed = 1;
 }
 
 //
