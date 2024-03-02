@@ -4,8 +4,13 @@
 
 package frc.robot;
 
+import java.sql.JDBCType;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,10 +24,14 @@ import frc.robot.commands.PickUpNote;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
@@ -45,6 +54,7 @@ import frc.robot.subsystems.Shooter;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final SendableChooser<Command> autoChooser;
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private Vision visionSim;
@@ -63,6 +73,14 @@ private final Neck m_Neck = new Neck();
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
+    NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
+    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
+    NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -127,12 +145,20 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new MoveNeckDown(m_Neck));
     
   }
-  public Command getAutonomousCommand() {
-    PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
-    return AutoBuilder.followPath(Demo_Path);
 
-    // Code to use an Auto
-    // return new PathPlannerAuto("Example Path");
+  public Command getAutonomousCommand() {
+    /**Code to run a singular path
+  PathConstraints constraints = new PathConstraints(
+    3.0, 3.0,
+    Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+
+    PathPlannerPath Demo_Path = PathPlannerPath.fromPathFile("Demo_Path");
+    return AutoBuilder.pathfindThenFollowPath(Demo_Path, constraints);
+    Code to use an Auto
+    return new PathPlannerAuto("TopAuto");
+    */
+    return autoChooser.getSelected();
 }
 
 }
