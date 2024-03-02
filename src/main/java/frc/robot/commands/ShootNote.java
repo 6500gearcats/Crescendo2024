@@ -43,14 +43,14 @@ public class ShootNote extends Command {
     
   }
 
-  public void setNeckAngle() {
+  public boolean setNeckAngle() {
     //Get distance from April Tag (or gyro) --> get "range" from getRange() in Navigation 
     //Slope = 12.391 --> kShooterDistanceFactor
     double distance = m_Navigation.getRange();
     double targetAngle = distance * ShooterConstants.kShooterDistanceFactor;
     //m_Neck.getMotorController().set(targetAngle);
     double encoderDifference = m_Neck.getNeckAngle() - targetAngle;
-    while(encoderDifference != targetAngle)
+    if(encoderDifference != targetAngle)
     {
       if(encoderDifference < targetAngle)
         {
@@ -61,15 +61,20 @@ public class ShootNote extends Command {
           m_Neck.move(NeckConstants.kNeckReverseSpeed);
         }
     }
+    else{
+      return true;
+    }
+    return false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    setNeckAngle();
+    if(setNeckAngle()){
     m_ShooterSystem.setShooterSpeedFast();
     if (m_ShooterSystem.shooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
+    }
   }
   }
 
