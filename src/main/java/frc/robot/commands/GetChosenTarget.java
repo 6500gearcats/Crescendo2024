@@ -16,10 +16,9 @@ private final Navigation m_vision;
 private final DriveSubsystem m_drive;
 private SendableChooser<Integer> m_chooser;
 
-  public GetChosenTarget(Navigation vision, DriveSubsystem drive, SendableChooser<Integer> chooserID) {
+  public GetChosenTarget(Navigation vision, DriveSubsystem drive) {
     m_drive = drive;
     m_vision = vision;
-    m_chooser = chooserID;
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +28,7 @@ private SendableChooser<Integer> m_chooser;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int targetID = m_chooser.getSelected().intValue();
+    int targetID = 5; //m_chooser.getSelected().intValue();
     double rotation = m_vision.getChosenTargetRotation(targetID);
     double speed = m_vision.getChosenTargetRange(targetID);
     if(speed > 0.5)

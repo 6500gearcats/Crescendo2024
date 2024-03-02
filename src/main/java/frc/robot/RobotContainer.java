@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.GetChosenTarget;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
@@ -132,6 +133,9 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake));
+
+    new JoystickButton(m_gunnerController, Button.kB.value)
+        .whileTrue(new GetChosenTarget(m_vision, m_robotDrive));
 
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
