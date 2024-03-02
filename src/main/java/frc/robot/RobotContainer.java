@@ -29,6 +29,7 @@ import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.subsystems.Buttons;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
@@ -56,6 +57,7 @@ private final Neck m_Neck = new Neck();
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   //XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
   Joystick m_buttonBox = new Joystick(OIConstants.kGunnerControllerPort);
+  Buttons m_Buttons = new Buttons(m_buttonBox);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -130,12 +132,12 @@ private final Neck m_Neck = new Neck();
     
     
     // Create button box buttons
-    BooleanEvent button1 = m_buttonBox.button(buttonBoxConstants.kButton1Port, new EventLoop()); //TODO check event loop requirments
-    BooleanEvent button2 = m_buttonBox.button(buttonBoxConstants.kButton2Port, new EventLoop()); //TODO check event loop requirments
-    
-    new Trigger(button1)
+    m_Buttons.addButton(0);
+    m_Buttons.addButton(1);
+
+    new Trigger(m_Buttons.getValueAtButtonIndex(0))
       .whileTrue(new MoveNeckDown(m_Neck));
-    new Trigger(button2)
+    new Trigger(m_Buttons.getValueAtButtonIndex(1))
       .whileTrue(new MoveNeckUp(m_Neck));
     
     
