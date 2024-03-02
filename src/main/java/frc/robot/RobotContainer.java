@@ -4,17 +4,15 @@
 
 package frc.robot;
 
-import java.sql.JDBCType;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,13 +20,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.buttonBoxConstants;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
-import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.MoveNeckDown;
+import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.DriveSubsystem;
@@ -56,7 +54,8 @@ private final Neck m_Neck = new Neck();
   
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
+  //XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
+  Joystick m_buttonBox = new Joystick(OIConstants.kGunnerControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -122,14 +121,23 @@ private final Neck m_Neck = new Neck();
     new Trigger(() -> ( m_driverController.getRightTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotIntake.setFeedSpeed(), m_robotIntake));
 
-    // Basic Functions 
-    new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
-      .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+    // Basic Functions
 
-    new JoystickButton(m_gunnerController, Button.kY.value)
-        .whileTrue(new MoveNeckUp(m_Neck));
-    new JoystickButton(m_gunnerController, Button.kA.value)
-        .whileTrue(new MoveNeckDown(m_Neck));
+    //new JoystickButton(m_gunnerController, Button.kY.value)
+      //  .whileTrue(new MoveNeckUp(m_Neck));
+    //new JoystickButton(m_gunnerController, Button.kA.value)
+      //  .whileTrue(new MoveNeckDown(m_Neck));
+    
+    
+    // Create button box buttons
+    BooleanEvent button1 = m_buttonBox.button(buttonBoxConstants.kButton1Port, new EventLoop()); //TODO check event loop requirments
+    BooleanEvent button2 = m_buttonBox.button(buttonBoxConstants.kButton2Port, new EventLoop()); //TODO check event loop requirments
+    
+    new Trigger(button1)
+      .whileTrue(new MoveNeckDown(m_Neck));
+    new Trigger(button2)
+      .whileTrue(new MoveNeckUp(m_Neck));
+    
     
   }
 
