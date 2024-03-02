@@ -84,7 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
   private Vision m_simVision = new Vision();
 
   private Pose2d m_simOdometryPose;
-
+  
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
 
@@ -348,6 +348,22 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[3]);
 
     m_lastSpeeds =  speeds;
+
+    //SmartDashboard Encoders
+    SwerveModuleState w = m_frontLeft.getState();
+    SwerveModuleState x = m_rearLeft.getState();
+    SwerveModuleState y = m_frontRight.getState();
+    SwerveModuleState z = m_rearRight.getState();
+
+  SmartDashboard.putNumber("LFront Speed", w.speedMetersPerSecond);
+  SmartDashboard.putNumber("LFront Angle", w.angle.getDegrees());
+  SmartDashboard.putNumber("LRear Speed", x.speedMetersPerSecond);
+  SmartDashboard.putNumber("LRear Angle", x.angle.getDegrees());
+  SmartDashboard.putNumber("RFront Speed", y.speedMetersPerSecond);
+  SmartDashboard.putNumber("RFront Angle", y.angle.getDegrees());
+  SmartDashboard.putNumber("RRear Speed", z.speedMetersPerSecond);
+  SmartDashboard.putNumber("RRear Angle", z.angle.getDegrees());
+
 
   }
 
