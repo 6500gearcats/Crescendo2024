@@ -77,6 +77,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
+    public static double kTurboAngularSpeed = 0.3;
   }
 
   public static final class ModuleConstants {
@@ -160,16 +161,17 @@ public final class Constants {
     // These are port values (where it's located on the robot)
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
-    public static final double kNeckReverseSpeed = 0.6;
-    public static final double kNeckForwardSpeed = -0.7;
-    public static final double kNeckForwardMaxSpeed = 0.9;
-    public static final double kNeckReverseMaxSpeed = -0.9;
+    public static final double kNeckReverseSpeed = -0.3;
+    public static final double kNeckForwardSpeed = 0.3;
+    public static final double kNeckForwardMaxSpeed = 0.6;
+    public static final double kNeckReverseMaxSpeed = -0.6;
 
     // TODO tune
     public static final double kNeckSlowModifier = 0.57;
     
     // NOT UPDATED TO 2024 NECK VALUES
     public static final double kEncoderUpperThreshold = 0.30;
+    public static final double kEncoderLowerThreshold = 0.01;
     public static final double kNeckStowAngle = 0.8;
     public static final double kNeckFloorAngle = 0;
     public static final double kNeckHighAngle = 0.315; //good
