@@ -31,6 +31,8 @@ public class ShootNote extends Command {
     m_Neck = theNeck;
     addRequirements(m_ShooterSystem);
     addRequirements(m_IntakeSystem);
+    addRequirements(m_Navigation);
+    addRequirements(m_Neck);
   }
 
   // Called when the command is initially scheduled.
