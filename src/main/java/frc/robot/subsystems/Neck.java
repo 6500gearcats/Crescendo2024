@@ -4,20 +4,23 @@
 //EDIT PORTS; create code!
 package frc.robot.subsystems;
 
-import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.CANSparkBase.ControlType;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.controller.ArmFeedforward;
+//import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+// import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
 //import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+//import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -31,8 +34,8 @@ public class Neck extends SubsystemBase {
     // Create the Neck tilter motor and claw tilter motor
     // The constants are not corect right now, will be replaced.
 
-    private final CANSparkMax m_CanSparkMaxNeck = new CANSparkMax(NeckConstants.kNeckMotorPort, MotorType.kBrushless); 
-    private final MotorController m_neckMotor =  m_CanSparkMaxNeck;
+    private final CANSparkMax m_neckMotor = new CANSparkMax(NeckConstants.kNeckMotorPort, MotorType.kBrushless); 
+    //private final MotorController m_neckMotor =  m_CanSparkMaxNeck;
 
     private final AbsoluteEncoder m_neckEncoder;
 
@@ -46,16 +49,30 @@ public class Neck extends SubsystemBase {
     //private boolean m_isNeckStored = false;
     //private boolean m_isNeckCapped = false;
 
-    private final SlewRateLimiter NeckFilter = new SlewRateLimiter(0.6);
-
+    //private final SlewRateLimiter NeckFilter = new SlewRateLimiter(0.6);
+    private ArmFeedforward armFeedforward = new ArmFeedforward(NeckConstants.kNeck_kS, NeckConstants.kNeck_kG, NeckConstants.kNeck_kV);
     private double NeckPosition;
     //private boolean lowerLimit;
 
+    private SparkPIDController neckPIDcontroller;
+
   public Neck() {
-    m_neckEncoder = m_CanSparkMaxNeck.getAbsoluteEncoder(Type.kDutyCycle);
+    m_neckEncoder = m_neckMotor.getAbsoluteEncoder(Type.kDutyCycle);
+
+    // See https://www.chiefdelphi.com/t/holding-up-a-wrist-with-a-neo/425787/14 to set these
+    double endAngle = 0;
+    double startAngle = 0;
+    double valueAtEndAngle =0;
+
+
+    m_neckEncoder.setPositionConversionFactor((endAngle - startAngle) / valueAtEndAngle);    
 
     if (RobotBase.isSimulation()) {
-      REVPhysicsSim.getInstance().addSparkMax(m_CanSparkMaxNeck, DCMotor.getNEO(1)); }
+      REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); }
+    neckPIDcontroller = m_neckMotor.getPIDController();
+    neckPIDcontroller.setP(NeckConstants.kNeck_kP);
+    neckPIDcontroller.setI(NeckConstants.kNeck_kI);
+    neckPIDcontroller.setD(NeckConstants.kNeck_kD);
 
   }
 
@@ -69,47 +86,7 @@ public class Neck extends SubsystemBase {
     SmartDashboard.putNumber("Neck motor speed", m_neckMotor.get());
     //SmartDashboard.putBoolean("Neck limit: ", m_lowerLimitSwitch.get());
   }
-//Moves Neck up at constant speed
-/*
-public void NeckUp() {
-  if ( AtMaxHeight() ) {
-      m_neckMotor.set(0);
-  } else {
-      m_neckMotor.set(NeckConstants.kNeckForwardSpeed);
-  }
-}
-*/
 
-//same method that takes in a speed to be used instead of our constant, useful in the NeckUp command
-/*
-public void NeckUpSpeed(double speed) {
-  if (slowNeck) speed *= NeckConstants.kNeckSlowModifier;
-  if ( AtMaxHeight() ) {
-      m_neckMotor.set(0);
-  } else {
-      m_neckMotor.set(NeckFilter.calculate(speed));
-  }
-}
-*/
-
-//Moves Neck down at constant speed
-/*
-public void NeckDown() {
-  if (m_neckEncoder.getPosition() >= 0.75){
-    m_neckMotor.set(NeckConstants.kNeckReverseSpeed*NeckConstants.kNeckSlowModifier);
-  }
-  else {
-      m_neckMotor.set(NeckConstants.kNeckReverseSpeed);
-  }
-}
-*/
-//same method that takes in a speed to be used instead of our constant, useful in the NeckDown command
-/*
-public void NeckDownSpeed(double speed) {
-  if (slowNeck) speed *= NeckConstants.kNeckSlowModifier;
-  
-}
-*/
 
 public boolean AtMaxHeight() {
   return m_neckEncoder.getPosition() > NeckConstants.kEncoderUpperThreshold;
@@ -132,8 +109,17 @@ public void stop() {
   m_neckMotor.set(0.0);
 }
 
-public void setSpeed(double speed) {
-  m_neckMotor.set(speed);
+public void move(double kneckreversespeed) {
+  m_neckMotor.set(kneckreversespeed);
+}
+
+public void moveTo(Rotation2d target) {
+  neckPIDcontroller.setReference(
+                target.getRadians(),
+                ControlType.kPosition,
+                0,
+                armFeedforward.calculate(target.getRadians(), 0));
+  
 }
 
 }

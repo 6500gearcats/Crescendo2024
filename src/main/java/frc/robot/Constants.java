@@ -165,6 +165,7 @@ public final class Constants {
     public static final double kNeckForwardSpeed = 0.3;
     public static final double kNeckForwardMaxSpeed = 0.6;
     public static final double kNeckReverseMaxSpeed = -0.6;
+    public static final double kNeckStableSpeed = 0.058;
 
     // TODO tune
     public static final double kNeckSlowModifier = 0.57;
@@ -172,12 +173,24 @@ public final class Constants {
     // NOT UPDATED TO 2024 NECK VALUES
     public static final double kEncoderUpperThreshold = 0.30;
     public static final double kEncoderLowerThreshold = 0.01;
+    public static final double KEncoderDeadbandThreshold = 0.01;
     public static final double kNeckStowAngle = 0.8;
     public static final double kNeckFloorAngle = 0;
     public static final double kNeckHighAngle = 0.315; //good
     public static final double kNeckMidAngle = 0.37; //good
     public static final double kNeckLowAngle = 0.70;
     public static final double kLoadingStation = 0.36;
+
+    //Controller constants
+    public static final double kNeck_kS = 1.7;
+    public static final double kNeck_kG = 0.5;
+    public static final double kNeck_kV = 0.0;
+
+    public static final double kNeck_kP = 0.0;
+    public static final double kNeck_kI = 0.0;
+    public static final double kNeck_kD = 0.0;
+
+
   }
 
   public static final class GyroConstants{
@@ -185,7 +198,8 @@ public final class Constants {
   }
 
     public static class Vision {
-        public static final String kCameraName = "YOUR CAMERA NAME";
+        public static final String kCameraNameTag = "Microsoft_LifeCam_HD-3000";
+        public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
                 new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
@@ -238,6 +252,7 @@ public final class Constants {
     public static final double kRangeSpeedOffset = 0.6;
     public static final double ANGULAR_P = 0.1;
     public static final double ANGULAR_D = 0.0;
+    public static final double kDefaultNoteFinderSpeed = 1;
 }
 
 //

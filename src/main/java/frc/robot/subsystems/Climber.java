@@ -20,9 +20,12 @@ public class Climber extends SubsystemBase {
   public final CANSparkMax m_LeftClimberMotor = new CANSparkMax(ClimberConstants.kLeft_ClimberMotorPort,MotorType.kBrushless);
   public final CANSparkMax m_RightClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,MotorType.kBrushless);
   
+  SparkLimitSwitch m_lowerLimit;
+  SparkLimitSwitch m_upperLimit;
+
   public Climber() {
-    // int m_lowerLimit = m_LeftClimberMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-    // int m_upperLimit = m_LeftClimberMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    m_lowerLimit = m_LeftClimberMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    m_upperLimit = m_LeftClimberMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
   }
 
   @Override
@@ -30,11 +33,13 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  
+
   public boolean ArmIsFullyExtended() {
-    // boolean lowerLimit = m_lowerLimit.isPressed();
-    // boolean upperLimit = m_upperLimit.isPressed();
-    // SmartDashboard.putBoolean("Upper limit", upperLimit);
-    // SmartDashboard.putBoolean("Lower limit", lowerLimit);
+    boolean lowerLimit = m_lowerLimit.isPressed();
+    boolean upperLimit = m_upperLimit.isPressed();
+    SmartDashboard.putBoolean("Upper limit", upperLimit);
+    SmartDashboard.putBoolean("Lower limit", lowerLimit);
     return true;
   }
 }
