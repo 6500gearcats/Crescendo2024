@@ -52,11 +52,11 @@ public class ShootNote extends Command {
     {
       if(encoderDifference < targetAngle)
         {
-          m_Neck.setSpeed(NeckConstants.kNeckForwardSpeed);
+          m_Neck.move(NeckConstants.kNeckForwardSpeed);
         }
     else if(encoderDifference > targetAngle)
         {
-          m_Neck.setSpeed(NeckConstants.kNeckReverseSpeed);
+          m_Neck.move(NeckConstants.kNeckReverseSpeed);
         }
     }
   }
