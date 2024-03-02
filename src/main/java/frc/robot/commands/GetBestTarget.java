@@ -29,7 +29,7 @@ private final DriveSubsystem m_drive;
   @Override
   public void execute() {
     double rotation = m_vision.getRotation();
-    double speed = m_vision.getRange();
+    double speed = m_vision.driveToTarget();
     if(speed > 0.5)
     {
       speed = 0.5;

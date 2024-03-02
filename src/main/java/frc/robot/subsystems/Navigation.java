@@ -56,7 +56,7 @@ public class Navigation extends SubsystemBase {
   }
 
   // HEADER - METHOD TO FIND DISTANCE FROM TARGET
-  public double getRange()
+  public double driveToTarget()
   {
     var result = m_drive.getLatestCameraResult();
     double range;
@@ -79,6 +79,21 @@ public class Navigation extends SubsystemBase {
                 return 0;
                 // When this is implemented - DO NOTHING IF RANGE IS 0
             }
+  }
+
+public double getRange() {
+    var result = m_drive.getLatestCameraResult();
+    double distance = 0.0;
+    if (result.hasTargets()) {
+                // First calculate range
+                distance =
+                        PhotonUtils.calculateDistanceToTargetMeters(
+                                CAMERA_HEIGHT_METERS, // Previously declarde
+                                TARGET_HEIGHT_METERS,
+                                CAMERA_PITCH_RADIANS,
+                                Units.degreesToRadians(result.getBestTarget().getPitch()));
+       }
+    return distance;
   }
 
   /** Creates a new Navigation object when used. */
