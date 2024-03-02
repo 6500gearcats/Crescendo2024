@@ -180,6 +180,17 @@ public final class Constants {
     public static final double kNeckMidAngle = 0.37; //good
     public static final double kNeckLowAngle = 0.70;
     public static final double kLoadingStation = 0.36;
+
+    //Controller constants
+    public static final double kNeck_kS = 1.7;
+    public static final double kNeck_kG = 0.5;
+    public static final double kNeck_kV = 0.0;
+
+    public static final double kNeck_kP = 0.0;
+    public static final double kNeck_kI = 0.0;
+    public static final double kNeck_kD = 0.0;
+
+
   }
 
   public static final class GyroConstants{

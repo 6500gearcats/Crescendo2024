@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -48,9 +49,11 @@ public class Neck extends SubsystemBase {
     //private boolean m_isNeckCapped = false;
 
     //private final SlewRateLimiter NeckFilter = new SlewRateLimiter(0.6);
-    private ArmFeedforward armFeedforward = new ArmFeedforward(1.7, 0, 0);
+    private ArmFeedforward armFeedforward = new ArmFeedforward(NeckConstants.kNeck_kS, NeckConstants.kNeck_kG, NeckConstants.kNeck_kV);
     private double NeckPosition;
     //private boolean lowerLimit;
+
+    private SparkPIDController neckPIDcontroller;
 
   public Neck() {
     m_neckEncoder = m_neckMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -65,10 +68,10 @@ public class Neck extends SubsystemBase {
 
     if (RobotBase.isSimulation()) {
       REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); }
-
-    m_neckMotor.getPIDController().setP(0.0);
-    m_neckMotor.getPIDController().setI(0.0);
-    m_neckMotor.getPIDController().setD(0.0);
+    neckPIDcontroller = m_neckMotor.getPIDController();
+    neckPIDcontroller.setP(NeckConstants.kNeck_kP);
+    neckPIDcontroller.setI(NeckConstants.kNeck_kI);
+    neckPIDcontroller.setD(NeckConstants.kNeck_kD);
 
   }
 
@@ -105,7 +108,7 @@ public void move(double kneckreversespeed) {
 }
 
 public void moveTo(Rotation2d target) {
-  m_neckMotor.getPIDController().setReference(
+  neckPIDcontroller.setReference(
                 target.getRadians(),
                 ControlType.kPosition,
                 0,
