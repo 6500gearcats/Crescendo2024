@@ -44,6 +44,8 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
     m_intakeMotor.set(IntakeConstants.kFeedSpeed);
   }
 
-
+  public void setReverseSpeed() {
+    m_intakeMotor.set(IntakeConstants.kReverseFeedSpeed);
+  }
 
 }

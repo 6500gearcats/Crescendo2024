@@ -49,9 +49,9 @@ public final class Constants {
     public static final double kTurboModeModifier = 7.0/2.0;
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(28.0);
+    public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23.0);
+    public static final double kWheelBase = Units.inchesToMeters(23.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -241,6 +241,7 @@ public final class Constants {
     public static class IntakeConstants { 
       public static final int kIntakeMotorPort = 9;
       public static final double kFeedSpeed = 0.5;
+      public static final double kReverseFeedSpeed = -0.3;
       public static final double kPickUpSpeed = 0.6;
       
     }

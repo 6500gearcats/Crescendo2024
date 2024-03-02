@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.BackwardsIntake;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
@@ -120,6 +121,8 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
 
+    new JoystickButton(m_gunnerController, Button.kLeftBumper.value).whileTrue(new BackwardsIntake(m_robotShooter, m_robotIntake));
+
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
@@ -138,7 +141,7 @@ private final Neck m_Neck = new Neck();
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
       .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
-
+      
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new MoveNeckUp(m_Neck));
     new JoystickButton(m_gunnerController, Button.kA.value)
