@@ -81,13 +81,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final Field2d m_field = new Field2d();
 
-  private Vision m_simVision = new Vision();
+  private Vision m_simVision;
 
   private Pose2d m_simOdometryPose;
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
-
+  public DriveSubsystem(Vision vision) {
+    m_simVision = vision;
     try {
       /* Communicate w/navX-MXP via theimport com.kauailabs.navx.frc.AHRS;A MXP SPI Bus. */
       /* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
@@ -431,6 +431,6 @@ public class DriveSubsystem extends SubsystemBase {
 public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
 
 public PhotonPipelineResult getLatestCameraResult() {
-  return m_simVision.getLatestResult();
+  return m_simVision.getLatestResult(Constants.Vision.kCameraNameNote);
 }
 }
