@@ -36,8 +36,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
-import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.MoveNeckDown;
+import frc.robot.commands.MoveNeckUp;
+import frc.robot.commands.NeckStable;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.DriveSubsystem;
@@ -99,7 +100,8 @@ private final Neck m_Neck = new Neck();
                 MathUtil.applyDeadband(-m_driverController.getRightX(), 0.1),
                 !m_driverController.getRightBumper()),
             m_robotDrive));
-      
+
+    m_Neck.setDefaultCommand(new NeckStable(m_Neck));  
   }
   
 
