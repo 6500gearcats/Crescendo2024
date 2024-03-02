@@ -36,10 +36,12 @@ public class NeckStable extends Command {
       m_Neck.moveTo(m_target);
       SmartDashboard.putString("RunningArm:", "Stabilizing");
     }
+    /*
     else
     {
       m_Neck.stop();
     }
+    */
   }
 
   // Called once the command ends or is interrupted.

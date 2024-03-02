@@ -66,6 +66,10 @@ public class Neck extends SubsystemBase {
     if (RobotBase.isSimulation()) {
       REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); }
 
+    m_neckMotor.getPIDController().setP(0.0);
+    m_neckMotor.getPIDController().setI(0.0);
+    m_neckMotor.getPIDController().setD(0.0);
+
   }
 
   @Override
