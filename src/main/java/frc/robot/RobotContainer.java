@@ -148,7 +148,7 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new MoveNeckDown(m_Neck));
     
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .whileTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+        .onTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
 
   }
 
