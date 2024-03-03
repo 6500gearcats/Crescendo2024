@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
@@ -121,7 +122,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
 
-    new JoystickButton(m_gunnerController, Button.kLeftBumper.value).whileTrue(new BackwardsIntake(m_robotShooter, m_robotIntake));
+    new JoystickButton(m_gunnerController, Button.kLeftBumper.value).whileTrue(new BackwardsIntake(m_robotIntake));
 
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
@@ -131,7 +132,8 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
     new JoystickButton(m_driverController, Button.kY.value)
-        .whileTrue(new PickUpNote(m_robotIntake));
+        .onTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
