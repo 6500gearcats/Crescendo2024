@@ -24,6 +24,7 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Note Sensor", m_noteSensor.get());
+
   }
    public void setPickupSpeed() {
     m_intakeMotor.set(IntakeConstants.kPickUpSpeed);
@@ -43,6 +44,8 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
     m_intakeMotor.set(IntakeConstants.kFeedSpeed);
   }
 
-
+  public void setReverseSpeed() {
+    m_intakeMotor.set(IntakeConstants.kReverseFeedSpeed);
+  }
 
 }

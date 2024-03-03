@@ -1,6 +1,11 @@
 {
   "HALProvider": {
     "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
       "navX-Sensor[0]": {
         "header": {
           "open": true
@@ -22,12 +27,8 @@
         }
       },
       "/SmartDashboard/Field": {
-        "bottom": 544,
-        "builtin": "2024 Crescendo",
         "height": 8.013679504394531,
-        "left": 46,
-        "right": 1088,
-        "top": 36,
+        "image": "/Users/jasonholt/Downloads/2024-field.png",
         "width": 16.541748046875,
         "window": {
           "visible": true
