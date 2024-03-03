@@ -5,12 +5,19 @@
 package frc.robot.subsystems;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -145,12 +152,77 @@ public class Navigation extends SubsystemBase {
     return rotation;
   }
 
+  public Pose3d getRobotPosition()
+  {
+    // Create a pose3d object for our output
+    Pose3d robotPose = null;
+
+    // Create an april tag field layout object
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    // Create a result object
+    var result = m_drive.getLatestCameraResult();
+    // Create a target object using the values of the result object
+    PhotonTrackedTarget target = result.getBestTarget();
+      
+    Transform3d camToRobot = new Transform3d(new Translation3d(0, 0, CAMERA_HEIGHT_METERS), new Rotation3d(0, CAMERA_PITCH_RADIANS, 0));
+    
+    Optional<Pose3d> fieldRelativeAprilTagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
+    
+      
+    if(fieldRelativeAprilTagPose.isPresent())
+    {
+      // Use the target and april tag layout to determine the position of the robot
+      // FOLLOWING CODE USING UNDIFINED TRANSFORM 3D PARAMETER, PLEASE FIND HOW TO GET
+      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), fieldRelativeAprilTagPose.get(), camToRobot);
+    }
+    // Return the value of the robot's position
+    return robotPose;
+  }
+
+  public double getRotationToPostion(Pose2d desiredLocation)
+  {
+    Pose3d robotPose = getRobotPosition();
+    double rotation;
+    if (robotPose != null) 
+    {
+      // Calculate angular turn power
+      // Remove -1.0 because it was inverting results.
+      rotation = -turnController.calculate(PhotonUtils.getYawToPose(robotPose.toPose2d(), desiredLocation).getRadians(), 0) * Constants.kRangeSpeedOffset;
+
+  } else {
+      // If we have no targets, stay still.
+      rotation = 0;
+  }
+    return rotation;
+  }
+
   /** Creates a new Navigation object when used. */
   public Navigation() {}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public double getRangeToPosition(Pose3d desiredLocation)
+  {
+    var result = m_drive.getLatestCameraResult();
+    double range;
+    if (result.hasTargets()) {
+                // First calculate range
+                range =
+                        getRobotPosition().getTranslation().toTranslation2d().getDistance(desiredLocation.getTranslation().toTranslation2d());
+                        
+                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
+                // Use this range as the measurement we give to the PID controller.
+                // -1.0 required to ensure positive PID controller effort _increases_ range
+                double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
+                return forwardSpeed * Constants.kRangeSpeedOffset;
+            } else {
+                // If we have no targets, stay still.
+                return 0;
+                // When this is implemented - DO NOTHING IF RANGE IS 0
+            }
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
