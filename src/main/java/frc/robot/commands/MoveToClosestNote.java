@@ -32,7 +32,7 @@ public class MoveToClosestNote extends Command {
   @Override
   public void execute() {
     double rotation = m_NoteFinder.getRotation(); 
-    double speed = m_NoteFinder.getRange() + Constants.kDefaultNoteFinderSpeed;
+    double speed = m_NoteFinder.getRange();
 
     
 
@@ -44,6 +44,7 @@ public class MoveToClosestNote extends Command {
       speed = -4;    
     }
     speed = Math.abs(speed);
+    speed += Constants.kDefaultNoteFinderSpeed;
 
 
     if(Math.abs(rotation)  > 0.05)
@@ -52,6 +53,10 @@ public class MoveToClosestNote extends Command {
     }
     else if(speed != 0){
       m_drive.drive(speed, 0, -rotation, false);
+      if(speed < 2) {
+        m_drive.drive(speed+Constants.kDefaultNoteFinderSpeed, 0, -rotation, false);
+      }
+      
     }
     else {
       m_drive.drive(Constants.kDefaultNoteFinderSpeed, 0, 0, false);
