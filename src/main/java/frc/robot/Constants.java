@@ -230,6 +230,8 @@ public final class Constants {
       public static final double kBallFiredThreshold = 0.1;
       public static final int kShooterEncoderPort = 10;
       public static final double kShooterDistanceFactor = 12.391;
+
+    public static final double kRangeAngleError = 0.02;
     }
 
     public static class ClimberConstants {

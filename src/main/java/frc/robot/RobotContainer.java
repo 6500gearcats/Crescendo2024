@@ -23,6 +23,7 @@ import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
+import frc.robot.commands.ShootFromRange;
 import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -76,7 +77,7 @@ private final Neck m_Neck = new Neck();
   public RobotContainer() {
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
     NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
-    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake, m_vision, m_Neck).withTimeout(1.5));
+    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -126,7 +127,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
     new JoystickButton(m_driverController, Button.kB.value)
-        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake, m_vision, m_Neck));
+        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake));
 
@@ -137,7 +138,7 @@ private final Neck m_Neck = new Neck();
 
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
-      .whileTrue(new ShootNote(m_robotShooter, m_robotIntake, m_vision, m_Neck));
+      .whileTrue(new ShootFromRange(m_robotShooter, m_robotIntake, m_vision, m_Neck));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new MoveNeckUp(m_Neck));

@@ -20,19 +20,13 @@ public class ShootNote extends Command {
   
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
-  public final Navigation m_Navigation;
-  public final Neck m_Neck;
   private long seconds;
 
-  public ShootNote(Shooter theShooter, Intake theIntake, Navigation theNav, Neck theNeck) {
+  public ShootNote(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
-    m_Navigation = theNav;
-    m_Neck = theNeck;
     addRequirements(m_ShooterSystem);
     addRequirements(m_IntakeSystem);
-    addRequirements(m_Navigation);
-    addRequirements(m_Neck);
   }
 
   // Called when the command is initially scheduled.
@@ -43,39 +37,13 @@ public class ShootNote extends Command {
     
   }
 
-  public boolean setNeckAngle() {
-    //Get distance from April Tag (or gyro) --> get "range" from getRange() in Navigation 
-    //Slope = 12.391 --> kShooterDistanceFactor
-    double distance = m_Navigation.getRange();
-    double targetAngle = distance * ShooterConstants.kShooterDistanceFactor;
-    //m_Neck.getMotorController().set(targetAngle);
-    double encoderDifference = m_Neck.getNeckAngle() - targetAngle;
-    if(encoderDifference != targetAngle)
-    {
-      if(encoderDifference < targetAngle)
-        {
-          m_Neck.move(NeckConstants.kNeckForwardSpeed);
-        }
-    else if(encoderDifference > targetAngle)
-        {
-          m_Neck.move(NeckConstants.kNeckReverseSpeed);
-        }
-    }
-    else{
-      return true;
-    }
-    return false;
-  }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(setNeckAngle()){
     m_ShooterSystem.setShooterSpeedFast();
     if (m_ShooterSystem.shooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
     }
-  }
   }
 
   // Called once the command ends or is interrupted.
