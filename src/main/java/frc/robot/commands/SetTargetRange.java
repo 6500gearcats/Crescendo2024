@@ -24,7 +24,7 @@ public class SetTargetRange extends Command {
     m_Neck = neck;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(nav, neck);    
+    addRequirements(neck);    
   }
 
   // Called when the command is initially scheduled.
