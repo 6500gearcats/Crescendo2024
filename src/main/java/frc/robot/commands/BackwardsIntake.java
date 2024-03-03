@@ -4,25 +4,26 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShootNoteConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
-public class PickUpNote extends Command {
-  /** Creates a new PickUpNote. */
+
+public class BackwardsIntake extends Command {
+  private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
-  
-  public PickUpNote(Intake intake) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_IntakeSystem = intake;
+  /** Creates a new BackwardsIntake. */
+  public BackwardsIntake(Shooter theShooter, Intake theIntake) {
+    m_ShooterSystem = theShooter;
+    m_IntakeSystem = theIntake;
+    addRequirements(m_ShooterSystem);
     addRequirements(m_IntakeSystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_IntakeSystem.setPickupSpeed();
+    m_IntakeSystem.setReverseSpeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,11 +35,4 @@ public class PickUpNote extends Command {
   public void end(boolean interrupted) {
     m_IntakeSystem.stop();
   }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return m_IntakeSystem.NoteIsPresent();
-  }
-  
 }

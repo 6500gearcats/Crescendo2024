@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import org.ejml.equation.IntegerSequence.Range;
 import org.photonvision.PhotonCamera;
 
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
@@ -30,6 +32,7 @@ private final DriveSubsystem m_drive;
   public void execute() {
     double rotation = m_vision.getRotation();
     double speed = m_vision.getRange();
+
     if(speed > 0.5)
     {
       speed = 0.5;

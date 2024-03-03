@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 4.5
+      "x": 1.32,
+      "y": 5.55
     },
     "rotation": 0
   },
@@ -12,21 +12,53 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "MiddleStartingNoteToSpeaker"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "DemoCommand"
+            "name": "ShootNote"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "SpeakerToNote"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle3"
+                }
+              }
+            ]
           }
         }
       ]

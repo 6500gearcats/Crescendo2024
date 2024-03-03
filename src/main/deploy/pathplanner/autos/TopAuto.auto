@@ -2,31 +2,63 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 7.0
+      "x": 0.89,
+      "y": 6.54
     },
-    "rotation": 0
+    "rotation": 61.21284756412362
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "TopStartingNoteToAmp"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "DemoCommand"
+            "name": "ShootNote"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "AmpToNote"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top3"
+                }
+              }
+            ]
           }
         }
       ]
