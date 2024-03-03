@@ -32,16 +32,16 @@ public class MoveToClosestNote extends Command {
   @Override
   public void execute() {
     double rotation = m_NoteFinder.getRotation(); 
-    double speed = m_NoteFinder.getRange();
+    double speed = m_NoteFinder.getRange() + Constants.kDefaultNoteFinderSpeed;
 
     
 
-    if(speed > 2)
+    if(speed > 4)
     {
-      speed = 2;
+      speed = 4;
     }
-    else if (speed < -2) {
-      speed = -2;    
+    else if (speed < -4) {
+      speed = -4;    
     }
     speed = Math.abs(speed);
 
