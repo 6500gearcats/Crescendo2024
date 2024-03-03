@@ -26,7 +26,12 @@ public class MoveToClosestNote extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() { 
+    // This stops the command if note finder can't find note; Seth is forcing me to write fancy.
+    if(m_NoteFinder.getRotation() == 0 && m_NoteFinder.getRange() == 0) {
+      this.cancel();
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -36,14 +41,15 @@ public class MoveToClosestNote extends Command {
 
     
 
-    if(speed > 2)
+    if(speed > 4)
     {
-      speed = 2;
+      speed = 4;
     }
-    else if (speed < -2) {
-      speed = -2;    
+    else if (speed < -4) {
+      speed = -4;    
     }
     speed = Math.abs(speed);
+    speed += Constants.kDefaultNoteFinderSpeed;
 
 
     if(Math.abs(rotation)  > 0.05)
@@ -52,6 +58,10 @@ public class MoveToClosestNote extends Command {
     }
     else if(speed != 0){
       m_drive.drive(speed, 0, -rotation, false);
+      if(speed < 2) {
+        m_drive.drive(2, 0, -rotation, false);
+      }
+      
     }
     else {
       m_drive.drive(Constants.kDefaultNoteFinderSpeed, 0, 0, false);
