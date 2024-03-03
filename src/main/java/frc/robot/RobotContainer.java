@@ -26,18 +26,30 @@ import frc.robot.commands.climb.RaiseHooks;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.GrabNote;
+import frc.robot.commands.MoveToClosestNote;
+import frc.robot.commands.PickUpNote;
+import frc.robot.commands.ShootNote;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.BackwardsIntake;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
+import frc.robot.commands.NeckStable;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.Climber;
@@ -45,6 +57,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Neck;
+import frc.robot.subsystems.NoteFinder;
 import frc.robot.subsystems.Shooter;
 
 /*
@@ -55,16 +68,17 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private Vision visionSim;
   
+private Vision m_simVision = new Vision();
 private final Navigation m_vision = new Navigation();
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
 private final Climber m_robotClimber = new Climber();
+private final NoteFinder m_NoteFinder = new NoteFinder(m_simVision);
+private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_simVision);
 private final Neck m_Neck = new Neck();
-  
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -99,7 +113,8 @@ private final Neck m_Neck = new Neck();
                 MathUtil.applyDeadband(-m_driverController.getRightX(), 0.1),
                 !m_driverController.getRightBumper()),
             m_robotDrive));
-      
+
+    m_Neck.setDefaultCommand(new NeckStable(m_Neck));  
   }
   
 
@@ -118,6 +133,8 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
 
+    new JoystickButton(m_gunnerController, Button.kLeftBumper.value).whileTrue(new BackwardsIntake(m_robotIntake));
+
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
@@ -126,7 +143,8 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
     new JoystickButton(m_driverController, Button.kY.value)
-        .whileTrue(new PickUpNote(m_robotIntake));
+        .onTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
     new JoystickButton(m_gunnerController, Button.kX.value)
         .onTrue(new RaiseHooks(m_robotClimber));
@@ -141,12 +159,15 @@ private final Neck m_Neck = new Neck();
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
       .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
-
+      
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new MoveNeckUp(m_Neck));
     new JoystickButton(m_gunnerController, Button.kA.value)
         .whileTrue(new MoveNeckDown(m_Neck));
     
+    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
+        .onTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+
   }
 
   public Command getAutonomousCommand() {

@@ -4,40 +4,55 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
 import frc.robot.subsystems.Neck;
 
-public class MoveNeckDown extends Command {
-  private final Neck m_Neck;
+public class NeckStable extends Command {
+  /** Creates a new NeckStable. */
+  Neck m_Neck;
+  Rotation2d m_target;
 
-  public MoveNeckDown(Neck theNeck) {
+  public NeckStable(Neck theNeck) {
+    // Use addRequirements() here to declare subsystem dependencies.
     m_Neck = theNeck;
     addRequirements(m_Neck);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // Use the current angle as the target
+    m_target = Rotation2d.fromDegrees(m_Neck.getNeckAngle());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //m_Neck.getMotorController().set(NeckConstants.kNeckReverseSpeed);
-    m_Neck.move(NeckConstants.kNeckReverseSpeed);
-    SmartDashboard.putString("RunningArm:", "Down");
+    if(m_target.getDegrees() > NeckConstants.KEncoderDeadbandThreshold)
+    {
+      m_Neck.moveTo(m_target);
+      SmartDashboard.putString("RunningArm:", "Stabilizing");
+    }
+    /*
+    else
+    {
+      m_Neck.stop();
+    }
+    */
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Neck.stop();
+    //m_Neck.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Neck.AtMinHeight();
+    return false;
   }
 }

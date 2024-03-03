@@ -44,7 +44,8 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision {
-    private final PhotonCamera camera;
+    private final PhotonCamera cameraTag;
+    private final PhotonCamera cameraNote;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;
 
@@ -53,11 +54,12 @@ public class Vision {
     private VisionSystemSim visionSim;
 
     public Vision() {
-        camera = new PhotonCamera(kCameraName);
+        cameraTag = new PhotonCamera(kCameraNameTag);
+        cameraNote = new PhotonCamera(kCameraNameNote);
 
         photonEstimator =
                 new PhotonPoseEstimator(
-                        kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
+                        kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraTag, kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         // ----- Simulation
@@ -75,7 +77,7 @@ public class Vision {
             cameraProp.setLatencyStdDevMs(15);
             // Create a PhotonCameraSim which will update the linked PhotonCamera's values with visible
             // targets.
-            cameraSim = new PhotonCameraSim(camera, cameraProp);
+            cameraSim = new PhotonCameraSim(cameraTag, cameraProp);
             // Add the simulated camera to view the targets on this simulated field.
             visionSim.addCamera(cameraSim, kRobotToCam);
 
@@ -83,9 +85,13 @@ public class Vision {
         }
     }
 
-    public PhotonPipelineResult getLatestResult() {
-        return camera.getLatestResult();
+    public PhotonPipelineResult getLatestResult(String Cameraname) {
+        if (Cameraname.equals(kCameraNameTag))
+            return cameraTag.getLatestResult();
+        else
+            return cameraNote.getLatestResult();
     }
+
 
     /**
      * The latest estimated robot pose on the field from vision data. This may be empty. This should
@@ -96,7 +102,7 @@ public class Vision {
      */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         var visionEst = photonEstimator.update();
-        double latestTimestamp = camera.getLatestResult().getTimestampSeconds();
+        double latestTimestamp = cameraTag.getLatestResult().getTimestampSeconds();
         boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
         if (Robot.isSimulation()) {
             visionEst.ifPresentOrElse(
@@ -121,7 +127,7 @@ public class Vision {
      */
     public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
         var estStdDevs = kSingleTagStdDevs;
-        var targets = getLatestResult().getTargets();
+        var targets = getLatestResult(kCameraNameTag).getTargets();
         int numTags = 0;
         double avgDist = 0;
         for (var tgt : targets) {
