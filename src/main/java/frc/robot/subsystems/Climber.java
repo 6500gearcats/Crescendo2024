@@ -6,14 +6,14 @@ package frc.robot.subsystems;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-
+import frc.robot.utility.EncoderOdometer;
 
 
 public class Climber extends SubsystemBase {
@@ -26,6 +26,9 @@ public class Climber extends SubsystemBase {
   private final AbsoluteEncoder m_leftClimberEncoder;
   private final AbsoluteEncoder m_rightClimberEncoder;
 
+    //private RelativeEncoder m_winchEncoder;
+  private RelativeEncoder m_winchEncoder;
+  private EncoderOdometer m_winchOdometer;
   
   public Climber() {
 
@@ -34,6 +37,10 @@ public class Climber extends SubsystemBase {
     // int m_upperLimit = m_LeftClimberMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     m_leftClimberEncoder = m_LeftClimberMotor.getAbsoluteEncoder(Type.kDutyCycle);
     m_rightClimberEncoder = m_RightClimberMotor.getAbsoluteEncoder(Type.kDutyCycle);
+
+    m_winchEncoder = m_LeftClimberMotor.getEncoder();
+    m_winchOdometer = new EncoderOdometer(m_winchEncoder);
+
 
   }
 
@@ -44,6 +51,7 @@ public class Climber extends SubsystemBase {
     SmartDashboard.putBoolean("Right Hook Down", !m_RightArmDownSensor.get());
     SmartDashboard.putNumber("Left arm encoder", m_leftClimberEncoder.getPosition());
     SmartDashboard.putNumber("Right arm encoder", m_rightClimberEncoder.getPosition());
+    SmartDashboard.putNumber("Arm position", m_winchOdometer.getPosition());
   }
 
   public void setClimberSpeed() {
@@ -73,11 +81,10 @@ public class Climber extends SubsystemBase {
   */
 
   public boolean ArmIsFullyExtended() {
-    if((m_leftClimberEncoder.getPosition() > ClimberConstants.kMaxArmHeight) || 
-    (m_rightClimberEncoder.getPosition() > ClimberConstants.kMaxArmHeight)) 
-      {
-        return true;
-      }
+    if(m_winchOdometer.getPosition() > ClimberConstants.kMaxArmHeight)  
+    {
+      return true;
+    }
     return false;
   }
 
@@ -87,6 +94,7 @@ public class Climber extends SubsystemBase {
       {
         return false;
       }
+    m_winchOdometer.reset();
     return true;
   }
 
