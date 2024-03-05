@@ -156,8 +156,6 @@ private final Neck m_Neck = new Neck();
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
       .whileTrue(new ShootNote(m_robotShooter, m_robotIntake, m_vision, m_Neck));
-
-      .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
       
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new MoveNeckUp(m_Neck));

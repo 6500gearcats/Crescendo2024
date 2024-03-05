@@ -82,35 +82,16 @@ public class Navigation extends SubsystemBase {
             }
   }
 
-  
-
-  
-
 public double getRange() {
-    var result = m_drive.getLatestCameraResult();
+    var result = m_vision.getLatestCameraResult();
     double distance = 0.0;
     if (result.hasTargets()) {
                 // First calculate range
                 distance =
                         PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
-                                Units.degreesToRadians(result.getBestTarget().getPitch()));
-       }
-    return distance;
-  }
-
-public double getRange() {
-    var result = m_drive.getLatestCameraResult();
-    double distance = 0.0;
-    if (result.hasTargets()) {
-                // First calculate range
-                distance =
-                        PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
+                                VisionConstants.CAMERA_HEIGHT_METERS, // Previously declarde
+                                VisionConstants.TARGET_HEIGHT_METERS,
+                                VisionConstants.CAMERA_PITCH_RADIANS,
                                 Units.degreesToRadians(result.getBestTarget().getPitch()));
        }
     return distance;
