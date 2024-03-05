@@ -12,6 +12,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -49,7 +50,7 @@ public class Navigation extends SubsystemBase {
     {
       // Calculate angular turn power
       // Remove -1.0 because it was inverting results.
-      rotation = -turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.kRangeSpeedOffset;
+      rotation = turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.kRangeSpeedOffset;
 
   } else {
       // If we have no targets, stay still.
@@ -151,6 +152,10 @@ public class Navigation extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(m_drive.getLatestCameraResult().hasTargets())
+    {
+    SmartDashboard.putNumber("Current Fiducial Id:", m_drive.getLatestCameraResult().getBestTarget().getFiducialId());
+    }
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
