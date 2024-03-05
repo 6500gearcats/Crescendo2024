@@ -102,7 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
 
-    m_gyro.setAngleAdjustment(180.0);
+    //m_gyro.setAngleAdjustment(180.0);
     m_gyro.zeroYaw();
 
     if (RobotBase.isSimulation()) {
