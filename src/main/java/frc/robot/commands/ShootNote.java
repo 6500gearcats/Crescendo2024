@@ -60,6 +60,10 @@ public class ShootNote extends Command {
         {
           m_Neck.move(NeckConstants.kNeckReverseSpeed);
         }
+    else if(m_Neck.getNeckAngle() > 0.1)
+        {
+          this.cancel();
+        }
     }
     else{
       return true;
@@ -83,6 +87,7 @@ public class ShootNote extends Command {
   public void end(boolean interrupted) {
     m_ShooterSystem.stopShooter();
     m_IntakeSystem.stop();
+    m_Neck.stop();
   }
 
   // Returns true when the command should end.
