@@ -50,11 +50,14 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
     SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Speed", speed);
     SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Rotation", rotation);
-    if(rotation != 0)
+    //If robot is orenent to face the april tag move forward
+    if(rotation == 0)
     {
       m_drive.drive(speed, 0, rotation, false);
     }
   }
+
+
 
   // Called once the command ends or is interrupted.
   @Override
