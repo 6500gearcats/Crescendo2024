@@ -28,17 +28,11 @@
       },
       "/SmartDashboard/Field": {
         "height": 8.013679504394531,
-        "width": 16.541748046875,
-        "window": {
-          "visible": true
-        }
+        "width": 16.541748046875
       },
       "/SmartDashboard/VisionSystemSim-main/Sim Field": {
         "height": 8.013679504394531,
-        "width": 16.541748046875,
-        "window": {
-          "visible": true
-        }
+        "width": 16.541748046875
       }
     }
   },
@@ -63,9 +57,6 @@
       "open": true
     },
     "Server": {
-      "Publishers": {
-        "open": true
-      },
       "open": true
     },
     "visible": true
