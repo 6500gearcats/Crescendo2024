@@ -15,15 +15,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Vision;
+import frc.robot.Constants.VisionConstants;
 
 public class Navigation extends SubsystemBase {
-    final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-    final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
-    // Angle between horizontal and the camera.
-    final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
-
-    // How far from the target we want to be
-    final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+    
 
     // Change this to match the name of your camera
     // CHANGED CAMERA NAME TO A CONSTANT
@@ -41,10 +37,11 @@ public class Navigation extends SubsystemBase {
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
     DriveSubsystem m_drive;
+    Vision m_vision;
 
   public double getRotation()
   {
-    var result = m_drive.getLatestCameraResult();
+    var result = m_vision.getLatestCameraResult();
     double rotation;
     if (result.hasTargets()) 
     {
@@ -62,21 +59,21 @@ public class Navigation extends SubsystemBase {
   // HEADER - METHOD TO FIND DISTANCE FROM TARGET
   public double getRange()
   {
-    var result = m_drive.getLatestCameraResult();
+    var result = m_vision.getLatestCameraResult();
     double range;
     if (result.hasTargets()) {
                 // First calculate range
                 range =
                         PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
+                                VisionConstants.CAMERA_HEIGHT_METERS, // Previously declarde
+                                VisionConstants.TARGET_HEIGHT_METERS,
+                                VisionConstants.CAMERA_PITCH_RADIANS,
                                 Units.degreesToRadians(result.getBestTarget().getPitch()));
 
                 // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
                 // Use this range as the measurement we give to the PID controller.
                 // -1.0 required to ensure positive PID controller effort _increases_ range
-                double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
+                double forwardSpeed = -DriveSubsystem.turnController.calculate(range, VisionConstants.GOAL_RANGE_METERS);
                 return forwardSpeed * Constants.kRangeSpeedOffset;
             } else {
                 // If we have no targets, stay still.
@@ -85,80 +82,26 @@ public class Navigation extends SubsystemBase {
             }
   }
 
-  public double getChosenTargetRange(int targetID)
-  {
-    var result = m_drive.getLatestCameraResult();
-    List<PhotonTrackedTarget> targets = result.getTargets();
-    double range = 0;
-    double forwardSpeed = 0;
+  
 
-    for(PhotonTrackedTarget target : targets)
-    {
-      if(result.hasTargets())
-      {
-        range =
-                        PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
-                                Units.degreesToRadians(target.getPitch()));
-
-                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
-                // Use this range as the measurement we give to the PID controller.
-                // -1.0 required to ensure positive PID controller effort _increases_ range
-                forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
-                forwardSpeed *= Constants.kRangeSpeedOffset;
-      }
-      else
-      {
-        // If we have no targets, stay still
-        range = 0;
-      }
-    }
-
-    return forwardSpeed; 
-  }
-
-  public double getChosenTargetRotation(int targetID)
-  {
-    var result = m_drive.getLatestCameraResult();
-    // Get a list of all of the targets that have been detected. 
-    List<PhotonTrackedTarget> targets = result.getTargets();
-    double rotation = 0;
-
-    // For each target we have check if it matches the id you want.
-    for(PhotonTrackedTarget target : targets)
-    {
-      if(result.hasTargets())
-      {
-        if(target.getFiducialId() == targetID)
-        {
-          // Use the value of target to find our rotation using the getYaw command
-          rotation = -turnController.calculate(target.getYaw(), 0) * Constants.kRangeSpeedOffset;
-        }
-      }
-      else
-      {
-        rotation = 0;
-      }
-    }
-
-    return rotation;
-  }
+  
 
   /** Creates a new Navigation object when used. */
-  public Navigation() {}
+  public Navigation(Vision vision) {
+    m_vision = vision;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(m_drive.getLatestCameraResult().hasTargets())
+    if(m_vision.getLatestCameraResult().hasTargets())
     {
-    SmartDashboard.putNumber("Current Fiducial Id:", m_drive.getLatestCameraResult().getBestTarget().getFiducialId());
+    SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
     }
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
     m_drive = robotDrive;
   }
+
 }

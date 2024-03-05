@@ -427,10 +427,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_fieldOriented = !m_fieldOriented;
     return m_fieldOriented;
   }
-//PID Controllers
-public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
 
-public PhotonPipelineResult getLatestCameraResult() {
-  return m_simVision.getLatestResult(Constants.Vision.kCameraNameNote);
-}
+  //PID Controllers
+  public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
+
 }
