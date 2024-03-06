@@ -72,6 +72,10 @@ public class MoveToClosestNote extends Command {
         
   }
 
+  public boolean isFinished() {
+    return m_IntakeSystem.NoteIsPresent();
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
