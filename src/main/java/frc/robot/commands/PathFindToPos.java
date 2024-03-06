@@ -31,7 +31,7 @@ public class PathFindToPos extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    targetPose = new Pose2d(x, y, Rotation2d.fromDegrees(180));
+    targetPose = new Pose2d(x, y, Rotation);
 Command pathfindingCommand = AutoBuilder.pathfindToPose(
         targetPose,
         constraints,
