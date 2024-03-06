@@ -169,7 +169,7 @@ public class Navigation extends SubsystemBase {
     Optional<Pose3d> fieldRelativeAprilTagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
     
       
-    if(fieldRelativeAprilTagPose.isPresent())
+    if(fieldRelativeAprilTagPose.isPresent() && result.hasTargets())
     {
       // Use the target and april tag layout to determine the position of the robot
       // FOLLOWING CODE USING UNDIFINED TRANSFORM 3D PARAMETER, PLEASE FIND HOW TO GET

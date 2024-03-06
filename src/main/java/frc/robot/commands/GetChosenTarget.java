@@ -12,13 +12,13 @@ import frc.robot.subsystems.Navigation;
 
 public class GetChosenTarget extends Command {
   /** Creates a new GetBestTarget. */
-private final Navigation m_vision;
+private final Navigation m_navigation;
 private final DriveSubsystem m_drive;
 private SendableChooser<Integer> m_chooser;
 
   public GetChosenTarget(Navigation vision, DriveSubsystem drive) {
     m_drive = drive;
-    m_vision = vision;
+    m_navigation = vision;
   }
 
   // Called when the command is initially scheduled.
@@ -29,8 +29,8 @@ private SendableChooser<Integer> m_chooser;
   @Override
   public void execute() {
     int targetID = 5; //m_chooser.getSelected().intValue();
-    double rotation = m_vision.getChosenTargetRotation(targetID);
-    double speed = m_vision.getChosenTargetRange(targetID);
+    double rotation = m_navigation.getChosenTargetRotation(targetID);
+    double speed = m_navigation.getChosenTargetRange(targetID);
     if(speed > 0.5)
     {
       speed = 0.5;
