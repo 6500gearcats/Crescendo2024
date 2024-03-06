@@ -84,6 +84,7 @@ private Vision m_noteVision = new Vision(cameraNote);
 private final Navigation m_vision = new Navigation(m_tagVision);
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
+private final Climber m_robotClimber = new Climber();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
