@@ -73,6 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
   private SimBoolean m_calibrating;
   private boolean m_fieldOriented;
   private Rotation2d simRotation = new Rotation2d();
+  private Navigation m_navigation;
       
   private ChassisSpeeds m_lastSpeeds;
 
@@ -88,6 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Vision vision) {
     m_simVision = vision;
+    m_navigation = new Navigation(vision);
     try {
       /* Communicate w/navX-MXP via theimport com.kauailabs.navx.frc.AHRS;A MXP SPI Bus. */
       /* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
@@ -226,7 +228,12 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public Pose2d getPose() {
     if (Robot.isReal()) {
-      return m_odometry.getPoseMeters();
+      if (m_navigation.getRobotPosition()!=null) {
+        return m_navigation.getRobotPosition().toPose2d();
+      }
+      else {
+       return m_odometry.getPoseMeters();
+      }
     } else {
       return m_simOdometryPose;
     }

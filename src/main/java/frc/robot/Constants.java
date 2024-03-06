@@ -207,7 +207,7 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(26);
 
         public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
         // Angle between horizontal and the camera.

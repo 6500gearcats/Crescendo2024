@@ -87,6 +87,7 @@ private final Intake m_robotIntake = new Intake();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
+private final Climber m_robotClimber = new Climber();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
