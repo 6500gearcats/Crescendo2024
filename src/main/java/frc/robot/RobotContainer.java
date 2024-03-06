@@ -4,9 +4,14 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.VisionConstants.kCameraNameNote;
+import static frc.robot.Constants.VisionConstants.kCameraNameTag;
+
 import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -29,6 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.GetChosenTarget;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
@@ -69,14 +75,17 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   //private Vision visionSim;
-  
-private Vision m_simVision = new Vision();
-private final Navigation m_vision = new Navigation();
+
+private PhotonCamera cameraTag = new PhotonCamera(kCameraNameTag);
+private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote);
+private Vision m_tagVision = new Vision(cameraTag);
+private Vision m_noteVision = new Vision(cameraNote);
+
+private final Navigation m_vision = new Navigation(m_tagVision);
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
-private final Climber m_robotClimber = new Climber();
-private final NoteFinder m_NoteFinder = new NoteFinder(m_simVision);
-private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_simVision);
+private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
+private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
 
   // The driver's controller
@@ -133,7 +142,6 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
 
-    new JoystickButton(m_gunnerController, Button.kLeftBumper.value).whileTrue(new BackwardsIntake(m_robotIntake));
 
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
@@ -146,15 +154,24 @@ private final Neck m_Neck = new Neck();
         .onTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
         .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
-    new JoystickButton(m_gunnerController, Button.kX.value)
-        .onTrue(new RaiseHooks(m_robotClimber));
-        new JoystickButton(m_gunnerController, Button.kB.value)
-        .onTrue(new LowerHooks(m_robotClimber));
-
     new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
     new Trigger(() -> ( m_driverController.getRightTriggerAxis() > 0.5))
         .whileTrue(new RunCommand(() -> m_robotIntake.setFeedSpeed(), m_robotIntake));
+
+    //Gunner controls
+
+    new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
+        .whileTrue(new BackwardsIntake(m_robotIntake));
+
+    new JoystickButton(m_gunnerController, Button.kRightBumper.value)
+        .whileTrue(new GetChosenTarget(m_noteVision, m_robotDrive));
+
+    new JoystickButton(m_gunnerController, Button.kX.value)
+        .onTrue(new RaiseHooks(m_robotClimber));
+    new JoystickButton(m_gunnerController, Button.kB.value)
+        .onTrue(new LowerHooks(m_robotClimber));
+
 
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))

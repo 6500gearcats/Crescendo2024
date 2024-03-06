@@ -192,7 +192,7 @@ public final class Constants {
     public static final double kTiltPitch = 65; //11? tilt angle=
   }
 
-    public static class Vision {
+    public static class VisionConstants {
         public static final String kCameraNameTag = "Microsoft_LifeCam_HD-3000";
         public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
@@ -207,6 +207,15 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+
+        public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+        // Angle between horizontal and the camera.
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+    
+        // How far from the target we want to be
+        public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+
     }
     
     public static class ShootNoteConstants {
