@@ -170,18 +170,19 @@ private final Neck m_Neck = new Neck();
         .onTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
         .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
-    new JoystickButton(m_gunnerController, Button.kRightBumper.value)
+    new Trigger(() -> m_gunnerController.getRightY() > 0.5)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
-    /*new JoystickButton(m_gunnerController, Button.kB.value)
+    
+    new Trigger(() -> m_gunnerController.getRightY() > 0.5)
         .onTrue(new RaiseHooks(m_robotClimber));
 
     new JoystickButton(m_gunnerController, Button.kB.value)
         .onTrue(new LowerHooks(m_robotClimber));
-    */
-    new Trigger(() -> m_gunnerController.getRightX() > 0.5)
+    
+    new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
 
-    new Trigger(() -> m_gunnerController.getRightX() < -0.5)
+    new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
