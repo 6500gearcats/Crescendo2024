@@ -181,8 +181,8 @@ private final Climber m_robotClimber = new Climber();
       
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new MoveNeckUp(m_Neck));
-    new JoystickButton(m_gunnerController, Button.kA.value)
-        .whileTrue(new MoveNeckDown(m_Neck));
+   // new JoystickButton(m_gunnerController, Button.kA.value)
+       // .whileTrue(new MoveNeckDown(m_Neck));
     
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
         .onTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
