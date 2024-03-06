@@ -9,7 +9,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,10 +18,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 
 
 /**
@@ -197,7 +192,7 @@ public final class Constants {
     public static final double kTiltPitch = 65; //11? tilt angle=
   }
 
-    public static class Vision {
+    public static class VisionConstants {
         public static final String kCameraNameTag = "Microsoft_LifeCam_HD-3000";
         public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
@@ -212,6 +207,15 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+
+        public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+        // Angle between horizontal and the camera.
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+    
+        // How far from the target we want to be
+        public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
+
     }
     
     public static class ShootNoteConstants {
@@ -235,7 +239,11 @@ public final class Constants {
        public static final int kRight_ClimberMotorPort = 13;
        public static final int kLeft_ClimberMotorPort = 12;
        public static final double kMaxDriveSpeed = 0.1;
-
+       public static final double kMaxArmHeight = 7.7;
+       public static final double kMinArmHeight = 0.1; //Random filler number
+       public static final double kClimberSpeed = 0;
+       public static final double kClimberSpeedUp = 0.75;
+       public static final double kClimberSpeedDown = -0.6;
       }
     
     public static class IntakeConstants { 

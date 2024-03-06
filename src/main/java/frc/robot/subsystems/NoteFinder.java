@@ -8,7 +8,7 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Vision.kCameraNameNote;
+import static frc.robot.Constants.VisionConstants.kCameraNameNote;
 
 import org.photonvision.PhotonUtils;
 
@@ -48,7 +48,7 @@ public class NoteFinder extends SubsystemBase {
 
   public double getRotation()
   {
-    var result = m_vision.getLatestResult(kCameraNameNote);
+    var result = m_vision.getLatestResult();
     double rotation;
     if (result.hasTargets()) 
     {
@@ -66,7 +66,7 @@ public class NoteFinder extends SubsystemBase {
   // HEADER - METHOD TO FIND DISTANCE FROM TARGET
   public double getRange()
   {
-    var result = m_vision.getLatestResult(kCameraNameNote);
+    var result = m_vision.getLatestResult();
     double range;
     if (result.hasTargets()) {
                 // First calculate range
@@ -93,7 +93,7 @@ public class NoteFinder extends SubsystemBase {
 
   public double getDistance()
   {
-    var result = m_vision.getLatestResult(kCameraNameNote);
+    var result = m_vision.getLatestResult();
     double range;
     if (result.hasTargets()) {
                 // First calculate range
