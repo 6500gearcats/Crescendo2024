@@ -9,7 +9,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,10 +18,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 
 
 /**
@@ -235,7 +230,11 @@ public final class Constants {
        public static final int kRight_ClimberMotorPort = 13;
        public static final int kLeft_ClimberMotorPort = 12;
        public static final double kMaxDriveSpeed = 0.1;
-
+       public static final double kMaxArmHeight = 7.7;
+       public static final double kMinArmHeight = 0.1; //Random filler number
+       public static final double kClimberSpeed = 0;
+       public static final double kClimberSpeedUp = 0.75;
+       public static final double kClimberSpeedDown = -0.6;
       }
     
     public static class IntakeConstants { 
