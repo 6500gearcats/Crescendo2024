@@ -101,6 +101,7 @@ private final Neck m_Neck = new Neck();
     NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
     NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
+    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
