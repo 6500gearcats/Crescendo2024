@@ -150,11 +150,6 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
-    new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
-        .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
-    new Trigger(() -> ( m_driverController.getRightTriggerAxis() > 0.5))
-        .whileTrue(new RunCommand(() -> m_robotIntake.setFeedSpeed(), m_robotIntake));
-
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
         .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
@@ -169,16 +164,16 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
     
-    new Trigger(() -> m_gunnerController.getRightY() > 0.5)
+    new Trigger(() -> m_gunnerController.getRightY() < -0.5)
         .onTrue(new RaiseHooks(m_robotClimber));
         
-    new Trigger(() -> m_gunnerController.getRightY() < -0.5)
+    new Trigger(() -> m_gunnerController.getRightY() > 0.5)
         .onTrue(new LowerHooks(m_robotClimber));
     
-    new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
+    new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
 
-    new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
+    new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
