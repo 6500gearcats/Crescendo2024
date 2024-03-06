@@ -166,7 +166,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
         .whileTrue(new BackwardsIntake(m_robotIntake));
     new JoystickButton(m_gunnerController, Button.kY.value)
-        .onTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
+        .whileTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
         .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GetChosenTarget(m_noteVision, m_robotDrive));
