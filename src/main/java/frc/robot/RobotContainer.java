@@ -87,6 +87,7 @@ private final Intake m_robotIntake = new Intake();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
+private final Climber m_robotClimber = new Climber();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -168,10 +169,13 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new GetChosenTarget(m_noteVision, m_robotDrive));
 
     new JoystickButton(m_gunnerController, Button.kX.value)
-        .onTrue(new RaiseHooks(m_robotClimber));
+        .onTrue(new RaiseHooks(m_robotClimber));    
     new JoystickButton(m_gunnerController, Button.kB.value)
         .onTrue(new LowerHooks(m_robotClimber));
-
+    new JoystickButton(m_gunnerController, Button.kY.value)
+        .whileTrue(new RaiseHooks(m_robotClimber));
+    new JoystickButton(m_gunnerController, Button.kA.value)
+        .whileTrue(new LowerHooks(m_robotClimber));
 
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
