@@ -58,6 +58,7 @@ import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.NeckStable;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.ShootAMP;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -87,7 +88,7 @@ private final Intake m_robotIntake = new Intake();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
-
+private final Climber m_robotClimber = new Climber();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -171,8 +172,9 @@ private final Neck m_Neck = new Neck();
         .onTrue(new RaiseHooks(m_robotClimber));
     new JoystickButton(m_gunnerController, Button.kB.value)
         .onTrue(new LowerHooks(m_robotClimber));
-
-
+//Change to whileTrue after re-maping for climer
+    new JoystickButton(m_gunnerController, Button.kA.value)
+        .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck));
     // Basic Functions 
     new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
       .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
