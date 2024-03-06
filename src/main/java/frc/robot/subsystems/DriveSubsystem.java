@@ -102,7 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
 
-    m_gyro.setAngleAdjustment(180.0);
+    //m_gyro.setAngleAdjustment(180.0);
     m_gyro.zeroYaw();
 
     if (RobotBase.isSimulation()) {
@@ -427,10 +427,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_fieldOriented = !m_fieldOriented;
     return m_fieldOriented;
   }
-//PID Controllers
-public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
 
-public PhotonPipelineResult getLatestCameraResult() {
-  return m_simVision.getLatestResult(Constants.Vision.kCameraNameNote);
-}
+  //PID Controllers
+  public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
+
 }
