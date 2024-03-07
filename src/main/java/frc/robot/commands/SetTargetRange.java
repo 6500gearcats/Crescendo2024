@@ -16,7 +16,7 @@ public class SetTargetRange extends Command {
   public final Neck m_Neck;
   
   private double m_targetAngle = 0.0;
-  private double m_absoluteDifference = 0.0;
+  private double m_absoluteAngleOffset = 0.0;
 
   /** Creates a new SetTargetRange. */
   public SetTargetRange(Vision vision, Neck neck) {
@@ -39,9 +39,9 @@ public class SetTargetRange extends Command {
   @Override
   public void execute() {
         
-    double difference = m_Neck.getNeckAngle() - m_targetAngle;
-    m_absoluteDifference = Math.abs(difference);
-    if(m_absoluteDifference < ShooterConstants.kRangeAngleError)
+    double difference = calculateAngleDifference();
+
+    if(m_absoluteAngleOffset < ShooterConstants.kRangeAngleError)
     {
       if(difference < m_targetAngle)
         {
@@ -57,6 +57,12 @@ public class SetTargetRange extends Command {
 
   }
 
+  private double calculateAngleDifference() {
+    double difference = m_Neck.getNeckAngle() - m_targetAngle;
+    m_absoluteAngleOffset = Math.abs(difference);    
+    return difference;
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
@@ -64,6 +70,7 @@ public class SetTargetRange extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_absoluteDifference < ShooterConstants.kRangeAngleError);
+    calculateAngleDifference(); //update the current offset
+    return (m_absoluteAngleOffset < ShooterConstants.kRangeAngleError);
   }
 }
