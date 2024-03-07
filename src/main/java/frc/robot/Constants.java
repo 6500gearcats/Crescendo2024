@@ -211,7 +211,11 @@ public final class Constants {
 
         public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
         // Angle between horizontal and the camera.
-        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(290);
+
+        // The following values are used to find the robot's position.
+        public static final double VISION_CAMERA_YAW_RADIANS = Units.degreesToRadians(180);
+        public static final double VISION_CAMERA_Y_OFFSET = Units.inchesToMeters(-11);
     
         // How far from the target we want to be
         public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);

@@ -123,7 +123,9 @@ public class Navigation extends SubsystemBase {
     // Create a target object using the values of the result object
     PhotonTrackedTarget target = result.getBestTarget();
       
-    Transform3d camToRobot = new Transform3d(new Translation3d(0, 0, VisionConstants.CAMERA_HEIGHT_METERS), new Rotation3d(0, VisionConstants.CAMERA_PITCH_RADIANS, 180));
+    // This tells the robot where the camera is. VERY IMPORTANT FOR ACCURACY.
+    // TODO: We need to test this.
+    Transform3d camToRobot = new Transform3d(new Translation3d(0, VisionConstants.VISION_CAMERA_Y_OFFSET, VisionConstants.CAMERA_HEIGHT_METERS), new Rotation3d(0, VisionConstants.CAMERA_PITCH_RADIANS, VisionConstants.VISION_CAMERA_YAW_RADIANS));
     
     Optional<Pose3d> fieldRelativeAprilTagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
     
