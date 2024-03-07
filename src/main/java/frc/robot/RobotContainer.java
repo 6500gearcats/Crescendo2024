@@ -172,7 +172,9 @@ private final Neck m_Neck = new Neck();
         .onTrue(new LowerHooks(m_robotClimber));
     //Change to whileTrue after re-maping for climer
     new JoystickButton(m_gunnerController, Button.kA.value)
-        .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck));    new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
+        .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck));    
+        
+    new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
 
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
