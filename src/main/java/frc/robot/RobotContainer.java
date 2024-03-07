@@ -7,34 +7,23 @@ package frc.robot;
 import static frc.robot.Constants.VisionConstants.kCameraNameNote;
 import static frc.robot.Constants.VisionConstants.kCameraNameTag;
 
-import java.sql.JDBCType;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.simulation.JoystickSim;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.GetBestTarget;
-import frc.robot.commands.GetChosenTarget;
+import frc.robot.commands.MoveToAmp;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
@@ -107,6 +96,7 @@ private final Neck m_Neck = new Neck();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -149,7 +139,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
+        .whileTrue(new GetBestTarget(m_tagVision, m_robotDrive));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
@@ -178,7 +168,7 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+        .onTrue (new MoveToAmp(m_noteVision, m_robotDrive));
   }
 
   public Command getAutonomousCommand() {

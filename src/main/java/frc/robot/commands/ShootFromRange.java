@@ -5,8 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Vision;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.Shooter;
 
@@ -15,11 +15,11 @@ import frc.robot.subsystems.Shooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootFromRange extends SequentialCommandGroup {
   /** Creates a new ShootFromRange. */
-  public ShootFromRange(Shooter shooter, Intake intake, Navigation nav, Neck neck) {
+  public ShootFromRange(Shooter shooter, Intake intake, Vision vision, Neck neck) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetTargetRange(nav, neck),
+      new SetTargetRange(vision, neck),
       new ShootNote(shooter, intake)
     );
   }

@@ -8,22 +8,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.apriltag.AprilTag;
 import frc.robot.Constants;
 import frc.robot.Vision;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Navigation;
+import frc.robot.utility.FieldTags;
 
-public class GetChosenTarget extends Command {
+public class MoveToAmp extends Command {
   /** Creates a new GetBestTarget. */
 private final Vision m_vision;
 private final DriveSubsystem m_drive;
-private SendableChooser<Integer> m_chooser;
+
+private int m_target;
 
 final double ANGULAR_P = 0.1;
 final double ANGULAR_D = 0.0;
 PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
-  public GetChosenTarget(Vision vision, DriveSubsystem drive) {
+  public MoveToAmp(Vision vision, DriveSubsystem drive) {
     m_drive = drive;
     m_vision = vision;
     addRequirements(drive);
@@ -31,28 +37,32 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    var alliance = DriverStation.getAlliance();
+    m_target = 0;
+    if (alliance.isPresent()) {
+      if (alliance.get() == Alliance.Blue) {
+        m_target = FieldTags.blueAmp;
+      }
+      else 
+      if (alliance.get() == Alliance.Red) {
+        m_target = FieldTags.redAmp;
+      }
+
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int targetID = 5; //m_chooser.getSelected().intValue();
-    double rotation = m_vision.getChosenTargetRotation(targetID);
-    double speed = m_vision.getChosenTargetRange(targetID);
+    double rotation = m_vision.getChosenTargetRotation(m_target);
+    double range = m_vision.getChosenTargetRange(m_target);
     rotation = -turnController.calculate(rotation, 0) * Constants.kRangeSpeedOffset;
-    if(speed > 0.5)
-    {
-      speed = 0.5;
-    }
-    else if (speed < -0.5) {
-      speed = -0.5;    
-    }
-
-    SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Speed", speed);
+    SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Speed", range);
     SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Rotation", rotation);
     if(rotation != 0)
     {
-      m_drive.drive(speed, 0, rotation, false);
+      m_drive.drive( DriveConstants.kNormalSpeedMetersPerSecond, rotation, 0, false);
     }
   }
 
@@ -64,8 +74,9 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
   // Returns true when the command should end.
   //@Override
-  /*public boolean isFinished() {
-    return;
-  }*/
+  public boolean isFinished() {
+    double range = m_vision.getChosenTargetRange(m_target);
+    return range < 1;
+  }
   
 }
