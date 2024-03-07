@@ -16,20 +16,22 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PathFindToPos extends Command {
   private int x;
   private int y;
+  private Rotation2d Rotation;
   private PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
   Pose2d targetPose;
   DriveSubsystem m_drive;
   /** Creates a new PathFindToPos. */
-  public PathFindToPos(int posX, int posY, DriveSubsystem drive) {
+  public PathFindToPos(int posX, int posY, Rotation2d rot, DriveSubsystem drive) {
     x = posX;
     y = posY;
-    m_drive = drive; 
+    m_drive = drive;
+    Rotation = rot;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    targetPose = new Pose2d(x, y, Rotation2d.fromDegrees(180));
+    targetPose = new Pose2d(x, y, Rotation);
 Command pathfindingCommand = AutoBuilder.pathfindToPose(
         targetPose,
         constraints,

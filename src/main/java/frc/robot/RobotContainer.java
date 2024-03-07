@@ -20,6 +20,15 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.GetBestTarget;
+import frc.robot.commands.PickUpNote;
+import frc.robot.commands.ShootNote;
+import frc.robot.commands.climb.LowerHooks;
+import frc.robot.commands.climb.RaiseHooks;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -50,6 +59,7 @@ import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.NeckStable;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Navigation;
@@ -75,6 +85,7 @@ private Vision m_noteVision = new Vision(cameraNote);
 private final Navigation m_vision = new Navigation(m_tagVision);
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
+private final Climber m_robotClimber = new Climber();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
@@ -91,6 +102,7 @@ private final Neck m_Neck = new Neck();
     NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
     NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
+    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -133,39 +145,40 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
 
-    new JoystickButton(m_gunnerController, Button.kLeftBumper.value).whileTrue(new BackwardsIntake(m_robotIntake));
-
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
-    new JoystickButton(m_driverController, Button.kB.value)
-        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
-    new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
+    //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
-        .whileTrue(new GetChosenTarget(m_noteVision, m_robotDrive));
+        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
 
-    new Trigger(() -> ( m_driverController.getLeftTriggerAxis() > 0.5))
-        .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
-    new Trigger(() -> ( m_driverController.getRightTriggerAxis() > 0.5))
-        .whileTrue(new RunCommand(() -> m_robotIntake.setFeedSpeed(), m_robotIntake));
-
-    // Basic Functions 
-    new Trigger(() -> (m_gunnerController.getRightTriggerAxis() > 0.5))
-      .whileTrue(new ShootFromRange(m_robotShooter, m_robotIntake, m_vision, m_Neck));
+    new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
+        .whileTrue(new BackwardsIntake(m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
-        .whileTrue(new MoveNeckUp(m_Neck));
-    new JoystickButton(m_gunnerController, Button.kA.value)
-        .whileTrue(new MoveNeckDown(m_Neck));
-    
-    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .onTrue (new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+        .whileTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
+    new JoystickButton(m_gunnerController, Button.kRightBumper.value)
+        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+    
+    new Trigger(() -> m_gunnerController.getRightY() < -0.5)
+        .onTrue(new RaiseHooks(m_robotClimber));
+        
+    new Trigger(() -> m_gunnerController.getRightY() > 0.5)
+        .onTrue(new LowerHooks(m_robotClimber));
+    
+    new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
+        .whileTrue(new MoveNeckUp(m_Neck));
+
+    new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
+        .whileTrue(new MoveNeckDown(m_Neck)); 
+
+    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
+        .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
   }
 
   public Command getAutonomousCommand() {
