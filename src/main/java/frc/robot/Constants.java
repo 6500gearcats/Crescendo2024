@@ -197,7 +197,7 @@ public final class Constants {
         public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+                new Transform3d(new Translation3d(0.0, 0.2, 0.5), new Rotation3d(0, Math.toRadians(-30), 0));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =
@@ -207,11 +207,11 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(12);
 
         public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
         // Angle between horizontal and the camera.
-        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(20);
     
         // How far from the target we want to be
         public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);

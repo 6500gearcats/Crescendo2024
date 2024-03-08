@@ -64,7 +64,10 @@ public class Vision {
         m_camera = camera;
 
         photonEstimator = new PhotonPoseEstimator(
-                kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_camera, kRobotToCam);
+                kTagLayout, 
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
+                m_camera, 
+                kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         // ----- Simulation
@@ -213,7 +216,7 @@ public class Vision {
         double forwardSpeed = 0;
 
         for (PhotonTrackedTarget target : targets) {
-            if (result.hasTargets()) {
+            if (target.getFiducialId() == targetID) {                
                 range = PhotonUtils.calculateDistanceToTargetMeters(
                         CAMERA_HEIGHT_METERS, // Previously declarde
                         TARGET_HEIGHT_METERS,
@@ -223,8 +226,9 @@ public class Vision {
                 // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
                 // Use this range as the measurement we give to the PID controller.
                 // -1.0 required to ensure positive PID controller effort _increases_ range
-                forwardSpeed = -DriveSubsystem.turnController.calculate(range, VisionConstants.GOAL_RANGE_METERS);
-                forwardSpeed *= Constants.kRangeSpeedOffset;
+                return range;
+                // forwardSpeed = -DriveSubsystem.turnController.calculate(range, VisionConstants.GOAL_RANGE_METERS);
+                // forwardSpeed *= Constants.kRangeSpeedOffset;
             } else {
                 // If we have no targets, stay still
                 range = 0;
@@ -277,7 +281,7 @@ public class Vision {
     }
 
     public boolean isVisible(int m_target) {
-        var result = getLatestCameraResult();
+        var result = getLatestResult();
         List<PhotonTrackedTarget> targets = result.getTargets();
         for (PhotonTrackedTarget photonTrackedTarget : targets) {       
             if (photonTrackedTarget.getFiducialId() == m_target) {

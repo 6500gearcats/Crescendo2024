@@ -3,6 +3,7 @@ package frc.robot.commands;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,9 +50,9 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
         m_target = FieldTags.redAmp;
       }
 
-      if (!m_vision.isVisible(m_target)){
-        this.cancel();
-      }
+      // if (!m_vision.isVisible(m_target)){
+      //   this.cancel();
+      // }
     }
   }
 
@@ -60,12 +61,21 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
   public void execute() {
     double rotation = m_vision.getChosenTargetRotation(m_target);
     double range = m_vision.getChosenTargetRange(m_target);
+    double skew = (m_drive.getAngle());
+    double targetAngle = 90;
+    double turn = targetAngle - skew;
+    
+
     rotation = -turnController.calculate(rotation, 0) * Constants.kRangeSpeedOffset;
     SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Speed", range);
     SmartDashboard.putNumber("Sim-Robot (Vision) Chosen Target Rotation", rotation);
-    if(rotation != 0)
+    if((rotation != 0) || (Math.abs(range) < 0.1))
     {
-      m_drive.drive( DriveConstants.kNormalSpeedMetersPerSecond, rotation, 0, false);
+      m_drive.drive( 
+        DriveConstants.kNormalSpeedMetersPerSecond, 
+        -rotation/3, 
+        ((turn > 0) ? 0.5:-0.5), 
+        false);
     }
   }
 
@@ -79,7 +89,7 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
   //@Override
   public boolean isFinished() {
     double range = m_vision.getChosenTargetRange(m_target);
-    return range < 1;
+    return Math.abs(range) < 0.5;
   }
   
 }

@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.MoveToAmp;
 import frc.robot.commands.GrabNote;
+import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootFromRange;
@@ -141,6 +142,14 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new GetBestTarget(m_tagVision, m_robotDrive));
 
+
+    new Trigger(() -> (m_driverController.getLeftTriggerAxis() > 0.5))
+        .onTrue (new MoveToAmp(m_tagVision, m_robotDrive));        
+    // Rumble test
+    // new JoystickButton(m_driverController, Button.kY.value)
+    //     //.whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+    //     .whileTrue(new ControllerRumble(m_driverController));        
+
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
         .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
@@ -149,8 +158,12 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new BackwardsIntake(m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
-        .whileTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
+        .whileTrue(
+            Commands.sequence(
+                new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2)),
+                new ControllerRumble(m_gunnerController)
+                .withTimeout(0.5)
+                ).andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
@@ -167,8 +180,7 @@ private final Neck m_Neck = new Neck();
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
-    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .onTrue (new MoveToAmp(m_noteVision, m_robotDrive));
+
   }
 
   public Command getAutonomousCommand() {
