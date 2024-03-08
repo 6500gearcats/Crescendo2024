@@ -276,4 +276,15 @@ public class Vision {
         return pitch;
     }
 
+    public boolean isVisible(int m_target) {
+        var result = getLatestCameraResult();
+        List<PhotonTrackedTarget> targets = result.getTargets();
+        for (PhotonTrackedTarget photonTrackedTarget : targets) {       
+            if (photonTrackedTarget.getFiducialId() == m_target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

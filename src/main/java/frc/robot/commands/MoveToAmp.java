@@ -49,6 +49,9 @@ PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
         m_target = FieldTags.redAmp;
       }
 
+      if (!m_vision.isVisible(m_target)){
+        this.cancel();
+      }
     }
   }
 
