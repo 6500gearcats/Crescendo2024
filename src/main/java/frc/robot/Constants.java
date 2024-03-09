@@ -157,8 +157,8 @@ public final class Constants {
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
     public static final double kNeckReverseSpeed = -0.6;
-    public static final double kNeckForwardSpeed = 0.6;
-    public static final double kNeckForwardMaxSpeed = 0.6;
+    public static final double kNeckForwardSpeed = 0.8;
+    public static final double kNeckForwardMaxSpeed = 0.8;
     public static final double kNeckReverseMaxSpeed = -0.6;
     public static final double kNeckStableSpeed = 0.058;
 
