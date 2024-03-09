@@ -188,8 +188,8 @@ private final Neck m_Neck = new Neck();
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
-    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+    // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
+    //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
   }
 
   public void zeroDrive() {
