@@ -16,6 +16,7 @@ public class ResetClimber extends Command {
   public ResetClimber(Climber theClimber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = theClimber;
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
