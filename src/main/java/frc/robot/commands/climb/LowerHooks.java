@@ -26,7 +26,8 @@ public class LowerHooks extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ClimberSystem.setClimberSpeed(ClimberConstants.kClimberSpeedDown);
+      m_ClimberSystem.setClimberSpeed(ClimberConstants.kClimberSpeedDown);
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +39,6 @@ public class LowerHooks extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_ClimberSystem.ArmIsFullyStowed();
+    return m_ClimberSystem.getArmHeights()<=2.88;
   }
 }
