@@ -89,6 +89,10 @@ public class Climber extends SubsystemBase {
     return false;
   }
 
+  public double getArmHeights() {
+    return m_winchOdometer.getPosition();
+  }
+
   public boolean ArmIsFullyStowed() {
     if((m_LeftArmDownSensor.get()) || 
     (m_RightArmDownSensor.get())) 
