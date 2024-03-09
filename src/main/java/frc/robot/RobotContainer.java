@@ -100,7 +100,6 @@ private final Neck m_Neck = new Neck();
    */
   public RobotContainer() {
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
     NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
     NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake));
@@ -184,6 +183,10 @@ private final Neck m_Neck = new Neck();
 
     new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
         .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+  }
+
+  public void zeroDrive() {
+    m_robotDrive.zeroHeading();
   }
 
   public Command getAutonomousCommand() {

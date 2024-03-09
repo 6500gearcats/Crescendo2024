@@ -99,6 +99,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // Zero the gyro as we may not have started in the correct orientation
+    m_robotContainer.zeroDrive();
   }
 
   /** This function is called periodically during operator control. */
