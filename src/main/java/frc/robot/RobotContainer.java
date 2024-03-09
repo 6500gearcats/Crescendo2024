@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.BackwardsIntake;
+import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
@@ -164,7 +165,7 @@ private final Neck m_Neck = new Neck();
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
-        .andThen(new ControllerRumble(m_driverController)));
+        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
         .onTrue(new RaiseHooks(m_robotClimber));
