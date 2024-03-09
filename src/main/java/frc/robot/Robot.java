@@ -92,7 +92,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.zeroDrive();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -100,6 +99,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // Zero the gyro as we may not have started in the correct orientation
+    m_robotContainer.zeroDrive();
   }
 
   /** This function is called periodically during operator control. */
