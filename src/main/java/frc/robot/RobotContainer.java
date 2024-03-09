@@ -28,6 +28,7 @@ import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
+import frc.robot.commands.climb.ResetClimber;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -170,6 +171,10 @@ private final Neck m_Neck = new Neck();
         
     new Trigger(() -> m_gunnerController.getRightY() > 0.5)
         .onTrue(new LowerHooks(m_robotClimber));
+
+    new Trigger(() -> m_gunnerController.getStartButton())
+        .onTrue(new ResetClimber(m_robotClimber));
+
     //Change to whileTrue after re-maping for climer
     new JoystickButton(m_gunnerController, Button.kA.value)
         .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck));    
