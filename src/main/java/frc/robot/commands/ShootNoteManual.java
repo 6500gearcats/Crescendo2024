@@ -11,13 +11,13 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.Constants.ShootNoteConstants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class ShootNote extends Command {
+public class ShootNoteManual extends Command {
   
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
   private long seconds;
 
-  public ShootNote(Shooter theShooter, Intake theIntake) {
+  public ShootNoteManual(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     addRequirements(m_ShooterSystem);
@@ -50,8 +50,8 @@ public class ShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_IntakeSystem.NoteIsPresent();
-    //return false;
+    //return m_IntakeSystem.NoteIsPresent();
+    return false;
   }
 
   

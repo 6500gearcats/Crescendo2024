@@ -26,6 +26,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.ShootNoteManual;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
 import frc.robot.commands.climb.ResetClimber;
@@ -154,19 +155,19 @@ private final Neck m_Neck = new Neck();
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
-        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+        .whileTrue(new ShootNoteManual(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
         .whileTrue(new BackwardsIntake(m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2))
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2))
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
