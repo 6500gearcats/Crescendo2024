@@ -36,7 +36,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 3.5; //3
+    public static final double kMaxSpeedMetersPerSecond = 4.0; //3
     public static final double kNormalSpeedMetersPerSecond = 0.85; //1.5
     public static final double kMaxAngularSpeed = 0.75 * Math.PI; // radians per second (was 2)
 
@@ -72,7 +72,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
-    public static double kTurboAngularSpeed = 0.3;
+    public static double kTurboAngularSpeed = 1.2;
   }
 
   public static final class ModuleConstants {
@@ -156,8 +156,8 @@ public final class Constants {
     // These are port values (where it's located on the robot)
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
-    public static final double kNeckReverseSpeed = -0.3;
-    public static final double kNeckForwardSpeed = 0.3;
+    public static final double kNeckReverseSpeed = -0.6;
+    public static final double kNeckForwardSpeed = 0.6;
     public static final double kNeckForwardMaxSpeed = 0.6;
     public static final double kNeckReverseMaxSpeed = -0.6;
     public static final double kNeckStableSpeed = 0.058;

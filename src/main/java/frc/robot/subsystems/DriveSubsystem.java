@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.photonvision.targeting.PhotonPipelineResult;
-
 import com.kauailabs.navx.frc.AHRS;
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -33,10 +31,10 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.Vision;
-import frc.robot.Constants;
  
 
 public class DriveSubsystem extends SubsystemBase {
@@ -185,10 +183,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
 
   }
-
   
-
-  @Override
+@Override
   public void simulationPeriodic() {
     // Update the odometry in the periodic block
     REVPhysicsSim.getInstance().run();
@@ -437,5 +433,5 @@ public class DriveSubsystem extends SubsystemBase {
 
   //PID Controllers
   public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
-
+  
 }

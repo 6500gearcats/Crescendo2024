@@ -103,7 +103,7 @@ public class Navigation extends SubsystemBase {
     // This method will be called once per scheduler run
     if(m_vision.getLatestCameraResult().hasTargets())
     {
-    SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
+    //SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
     }
   }
 
