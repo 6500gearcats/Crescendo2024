@@ -26,8 +26,10 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.ShootNoteManual;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
+import frc.robot.commands.climb.ResetClimber;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.BackwardsIntake;
+import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
@@ -147,28 +150,35 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
+   // new JoystickButton(m_driverController, Button.kA.value)
+       // .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
-        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+        .whileTrue(new ShootNoteManual(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
         .whileTrue(new BackwardsIntake(m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
-        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
         .onTrue(new RaiseHooks(m_robotClimber));
         
     new Trigger(() -> m_gunnerController.getRightY() > 0.5)
         .onTrue(new LowerHooks(m_robotClimber));
+
+    new Trigger(() -> m_gunnerController.getStartButton())
+        .onTrue(new ResetClimber(m_robotClimber));
+
     //Change to whileTrue after re-maping for climer
     new JoystickButton(m_gunnerController, Button.kA.value)
         .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck));    
@@ -179,8 +189,8 @@ private final Neck m_Neck = new Neck();
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
-    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+    // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
+    //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
   }
 
   public void zeroDrive() {

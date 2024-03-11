@@ -26,7 +26,7 @@ public class ShootAMP extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new MoveNeckUp(m_Neck),
-      new ShootNote(m_shooter, m_intake).withTimeout(1.0),
+      new ShootNoteManual(m_shooter, m_intake).withTimeout(1.5),
       new MoveNeckDown(m_Neck)
     );
   }

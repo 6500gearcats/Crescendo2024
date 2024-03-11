@@ -39,7 +39,7 @@ public class NoteFinder extends SubsystemBase {
     final double LINEAR_P = 0.1;
     final double LINEAR_D = 0.0;
     PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
-    final double ANGULAR_P = 0.1;
+    final double ANGULAR_P = 0.05;
     final double ANGULAR_D = 0.0;
     PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
