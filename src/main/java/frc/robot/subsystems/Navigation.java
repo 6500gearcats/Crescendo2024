@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -22,8 +20,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Vision;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Vision;
 
 public class Navigation extends SubsystemBase {
     
@@ -36,6 +34,9 @@ public class Navigation extends SubsystemBase {
     //static PhotonCamera camera = new PhotonCamera(Constants.kCamName);
 
     // PID constants should be tuned per robot
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    String visionState = "Idle";
+
     final double LINEAR_P = 0.1;
     final double LINEAR_D = 0.0;
     PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
@@ -103,7 +104,14 @@ public class Navigation extends SubsystemBase {
     // This method will be called once per scheduler run
     if(m_vision.getLatestCameraResult().hasTargets())
     {
-    //SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
+      if(getRobotPosition() != null)
+      {
+        SmartDashboard.putNumber("X-Position", getRobotPosition().getX());
+        SmartDashboard.putNumber("Y-Position", getRobotPosition().getY());
+        SmartDashboard.putNumber("Rotation (Degrees)", Units.radiansToDegrees(getRobotPosition().getRotation().getAngle()));
+        SmartDashboard.putString("Vision State", visionState);
+      }
+      //SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
     }
   }
 
@@ -117,8 +125,7 @@ public class Navigation extends SubsystemBase {
     Pose3d robotPose = null;
 
     // Create an april tag field layout object
-    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    // Create a result object
+      // Create a result object
     var result = m_vision.getLatestCameraResult();
     // Create a target object using the values of the result object
     PhotonTrackedTarget target = result.getBestTarget();
@@ -127,16 +134,24 @@ public class Navigation extends SubsystemBase {
     // TODO: We need to test this.
     Transform3d camToRobot = new Transform3d(new Translation3d(0, VisionConstants.VISION_CAMERA_Y_OFFSET, VisionConstants.CAMERA_HEIGHT_METERS), new Rotation3d(0, VisionConstants.CAMERA_PITCH_RADIANS, VisionConstants.VISION_CAMERA_YAW_RADIANS));
     
-    Optional<Pose3d> fieldRelativeAprilTagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
+    try{
+      Optional<Pose3d> fieldRelativeAprilTagPose = aprilTagFieldLayout.getTagPose(target.getFiducialId());
     
-      
-    if(fieldRelativeAprilTagPose.isPresent() && result.hasTargets())
-    {
+      if(fieldRelativeAprilTagPose.isPresent() && result.hasTargets())
+      {
       // Use the target and april tag layout to determine the position of the robot
       // FOLLOWING CODE USING UNDIFINED TRANSFORM 3D PARAMETER, PLEASE FIND HOW TO GET
-      robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), fieldRelativeAprilTagPose.get(), camToRobot);
-    }
+        robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), fieldRelativeAprilTagPose.get(), camToRobot);
+        visionState = "Tracking position...";
+      }
     // Return the value of the robot's position
+    
+
+
+    }
+    catch (Exception e){
+      visionState = "Can't find targets!";
+    }
     return robotPose;
   }
 
