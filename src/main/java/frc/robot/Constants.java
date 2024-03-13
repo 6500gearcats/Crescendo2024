@@ -227,7 +227,8 @@ public final class Constants {
 
       // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
-      public static final double kShooterFastRPM = 2000;
+      public static final double kShooterIdleSpeed = -0.4;
+      public static final double kShooterFastRPM = 2800;
       public static final int kShooterSlowRPM = 3000;
       public static final double kShooterSpeedFast = -0.6;
       public static final double kShooterSpeed = 1.1; //0.43
