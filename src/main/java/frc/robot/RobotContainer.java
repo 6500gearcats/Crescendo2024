@@ -150,8 +150,8 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
+   // new JoystickButton(m_driverController, Button.kA.value)
+       // .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
