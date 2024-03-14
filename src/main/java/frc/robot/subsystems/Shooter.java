@@ -7,7 +7,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.REVPhysicsSim;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 // import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +27,10 @@ public class Shooter extends SubsystemBase {
 
   private final RelativeEncoder m_shooterEncoder = m_sparkMax.getEncoder();
   
-  public Shooter() {}
+  public Shooter() {
+    REVPhysicsSim.getInstance().addSparkMax(m_sparkMax, DCMotor.getNEO(1));
+
+  }
 
   @Override
   public void periodic() {
@@ -34,6 +39,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Motor speed", shooterSpeed());
 
   }
+
+
 
   public double shooterSpeed() {
     return m_ShooterMotor.get();

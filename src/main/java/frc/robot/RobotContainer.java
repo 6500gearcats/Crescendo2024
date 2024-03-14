@@ -27,6 +27,7 @@ import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.ShootNoteManual;
+import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
 import frc.robot.commands.climb.ResetClimber;
@@ -45,6 +46,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -85,12 +87,12 @@ private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote);
 private Vision m_tagVision = new Vision(cameraTag);
 private Vision m_noteVision = new Vision(cameraNote);
 
-private final Navigation m_vision = new Navigation(m_tagVision);
+private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
+private final Navigation m_vision = new Navigation(m_tagVision, m_robotDrive);
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
 private final Climber m_robotClimber = new Climber();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
-private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
 
   // The driver's controller
@@ -191,6 +193,15 @@ private final Neck m_Neck = new Neck();
 
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+
+    new Trigger(m_vision::inWing)
+    .whileTrue(new SpinUpShooter(m_robotShooter));
+    //InstantCommand(()-> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
+
+    new Trigger(m_vision::inWing)
+    .onFalse( new InstantCommand(()-> m_robotShooter.stopShooter(), m_robotShooter));
+
+
   }
 
   public void zeroDrive() {
