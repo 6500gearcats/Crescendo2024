@@ -87,8 +87,8 @@ public class DriveSubsystem extends SubsystemBase {
   private Vision m_simVision;
 
   private Pose2d m_simOdometryPose;
-  private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
-  private GenericEntry maxSpeed;
+  private ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drive");
+  private GenericEntry m_maxSpeed;
 
 
 
@@ -140,7 +140,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_simOdometryPose = m_odometry.getPoseMeters();
     SmartDashboard.putData("Field", m_field);
 
-    maxSpeed = tab.add("Max Speed", DriveConstants.kTurboModeModifier)
+    m_maxSpeed = m_driveTab.add("Max Speed", DriveConstants.kTurboModeModifier)
       .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
       .withProperties(Map.of(
         "min", DriveConstants.kTurboModeModifier, 
@@ -330,7 +330,7 @@ public class DriveSubsystem extends SubsystemBase {
     // xSpeed *= Math.signum(xSpeed)*Math.pow(xSpeed,3);
     // ySpeed *= Math.signum(ySpeed)*Math.pow(ySpeed,3);
 
-    double max = maxSpeed.getDouble(DriveConstants.kTurboModeModifier);
+    double max = m_maxSpeed.getDouble(DriveConstants.kTurboModeModifier);
     
     if (turboEnable) {
       
