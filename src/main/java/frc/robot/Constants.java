@@ -169,12 +169,6 @@ public final class Constants {
     public static final double kEncoderUpperThreshold = 0.30;
     public static final double kEncoderLowerThreshold = 0.01;
     public static final double KEncoderDeadbandThreshold = 0.01;
-    public static final double kNeckStowAngle = 0.8;
-    public static final double kNeckFloorAngle = 0;
-    public static final double kNeckHighAngle = 0.315; //good
-    public static final double kNeckMidAngle = 0.37; //good
-    public static final double kNeckLowAngle = 0.70;
-    public static final double kLoadingStation = 0.36;
 
     //Controller constants
     public static final double kNeck_kS = 1.7;

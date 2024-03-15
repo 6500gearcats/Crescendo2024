@@ -100,7 +100,7 @@ private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
 private ShuffleboardTab m_neckTab = Shuffleboard.getTab("Neck");
-private GenericEntry m_neckAngle;
+public GenericEntry m_neckAngle;
 
 
 
@@ -203,7 +203,7 @@ private GenericEntry m_neckAngle;
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
 
-    m_neckAngle = m_neckTab.add("Max Speed", 0)
+    m_neckAngle = m_neckTab.add("Neck Angle", 0)
       .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
       .withProperties(Map.of(
         "min", 0, 

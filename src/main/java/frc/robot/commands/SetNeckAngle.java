@@ -31,17 +31,18 @@ public class SetNeckAngle extends Command {
   @Override
   public void initialize() {
     //Insert the get distance from speaker than this subsystem should set neck angle
-    
+    SmartDashboard.putNumber("Target Neck Angle", m_neckAngle); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_neckAngle > NeckConstants.KEncoderDeadbandThreshold)
+    if((m_neckAngle > NeckConstants.KEncoderDeadbandThreshold)
+    && (m_neckAngle < NeckConstants.kEncoderUpperThreshold))
     {
       Rotation2d target = Rotation2d.fromDegrees(m_neckAngle);
       m_Neck.moveTo(target);
-      SmartDashboard.putString("RunningNeck:", "MovingToAngle");
+      SmartDashboard.putString("RunningNeck:", "MovingToAngle " + m_neckAngle);
     }
     /*
     else
