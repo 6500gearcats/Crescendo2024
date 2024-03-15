@@ -10,22 +10,19 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
-import frc.robot.commands.MoveNeckDown;
-import frc.robot.commands.MoveNeckUp;
 import frc.robot.subsystems.Neck;
-import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class SetNeckAngle extends Command {
   // Get rid of later
-  private static final double kDefaultNeckSetAngle = 1;
   /** Creates a new SetNeckAngle. */
   private final Neck m_Neck;
   Rotation2d m_target;
-  private double m_angle;
+  private double m_neckAngle;
 
   public SetNeckAngle(Neck Neck, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_angle = angle;
+    m_neckAngle = angle;
     m_Neck = Neck;
     addRequirements(m_Neck);
   }
@@ -40,9 +37,10 @@ public class SetNeckAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_angle > NeckConstants.KEncoderDeadbandThreshold)
+    if(m_neckAngle > NeckConstants.KEncoderDeadbandThreshold)
     {
-      m_Neck.moveTo(m_target);
+      Rotation2d target = Rotation2d.fromDegrees(m_neckAngle);
+      m_Neck.moveTo(target);
       SmartDashboard.putString("RunningNeck:", "MovingToAngle");
     }
     /*

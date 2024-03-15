@@ -10,6 +10,7 @@ import static frc.robot.Constants.VisionConstants.kCameraNameTag;
 import java.sql.JDBCType;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.photonvision.PhotonCamera;
 
@@ -18,13 +19,19 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.NeckConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
+import frc.robot.commands.SetNeckAngle;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.ShootNoteManual;
 import frc.robot.commands.climb.LowerHooks;
@@ -92,6 +99,10 @@ private final Climber m_robotClimber = new Climber();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
+private ShuffleboardTab m_neckTab = Shuffleboard.getTab("Neck");
+private GenericEntry m_neckAngle;
+
+
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -191,6 +202,15 @@ private final Neck m_Neck = new Neck();
 
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+
+    m_neckAngle = m_neckTab.add("Max Speed", 0)
+      .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
+      .withProperties(Map.of(
+        "min", 0, 
+        "max", NeckConstants.kEncoderUpperThreshold)) // specify widget properties here
+      .getEntry();
+
+      SmartDashboard.putData("MoveNeck", new SetNeckAngle(m_Neck, m_neckAngle.getDouble(0.0)));
   }
 
   public void zeroDrive() {
