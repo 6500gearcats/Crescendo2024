@@ -17,6 +17,7 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,6 +25,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -224,11 +226,18 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public Pose2d getPose() {
     if (Robot.isReal()) {
+      Pose3d robotPose = m_navigation.getRobotPosition();
       if (m_navigation.getRobotPosition()!=null) {
-        return m_navigation.getRobotPosition().toPose2d();
+        SmartDashboard.putNumber("APRIL TAG: X-Position", robotPose.getX());
+        SmartDashboard.putNumber("APRIL TAG: Y-Position", robotPose.getY());
+        SmartDashboard.putNumber("APRIL TAG: Rotation (Degrees)", Units.radiansToDegrees(robotPose.getRotation().getAngle()));
+        return robotPose.toPose2d();
       }
       else {
-       return m_odometry.getPoseMeters();
+        SmartDashboard.putNumber("GYRO: X-Position", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("GYRO: Y-Position", m_odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("GYRO: Rotation (Degrees)", m_odometry.getPoseMeters().getRotation().getDegrees());
+        return m_odometry.getPoseMeters();
       }
     } else {
       return m_simOdometryPose;
@@ -344,7 +353,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, DriveConstants.kAutoSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);

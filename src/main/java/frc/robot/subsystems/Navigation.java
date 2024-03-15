@@ -36,6 +36,8 @@ public class Navigation extends SubsystemBase {
     // PID constants should be tuned per robot
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     String visionState = "Idle";
+    Pose3d robotPose = null;
+    int robotPoseEstimateCounter = 0;
 
     final double LINEAR_P = 0.1;
     final double LINEAR_D = 0.0;
@@ -104,14 +106,21 @@ public class Navigation extends SubsystemBase {
     // This method will be called once per scheduler run
     if(m_vision.getLatestCameraResult().hasTargets())
     {
-      if(getRobotPosition() != null)
+      robotPose = getRobotPosition();
+
+      if(robotPose != null)
       {
-        SmartDashboard.putNumber("X-Position", getRobotPosition().getX());
-        SmartDashboard.putNumber("Y-Position", getRobotPosition().getY());
-        SmartDashboard.putNumber("Rotation (Degrees)", Units.radiansToDegrees(getRobotPosition().getRotation().getAngle()));
-        SmartDashboard.putString("Vision State", visionState);
+        SmartDashboard.putNumber("X-Position", robotPose.getX());
+        SmartDashboard.putNumber("Y-Position", robotPose.getY());
+        SmartDashboard.putNumber("Rotation (Degrees)", Units.radiansToDegrees(robotPose.getRotation().getAngle()));
+      }
+      else
+      {
+        visionState = "NO TARGETS FOUND";
       }
       //SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
+      SmartDashboard.putString("Vision state", visionState);
+      SmartDashboard.putNumber("Times Calculated Pose", robotPoseEstimateCounter);
     }
   }
 

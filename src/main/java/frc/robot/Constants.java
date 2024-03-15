@@ -37,6 +37,7 @@ public final class Constants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.6; //4.5
+    public static final double kAutoSpeedMetersPerSecond = .2;
     public static final double kNormalSpeedMetersPerSecond = 0.85; //1.5
     public static final double kMaxAngularSpeed = 0.75 * Math.PI; // radians per second (was 2)
 
@@ -211,7 +212,7 @@ public final class Constants {
 
         public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
         // Angle between horizontal and the camera.
-        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(116);
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(40);
 
         // The following values are used to find the robot's position.
         public static final double VISION_CAMERA_YAW_RADIANS = Units.degreesToRadians(180);
