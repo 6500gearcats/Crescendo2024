@@ -14,7 +14,7 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   private final DigitalInput m_noteSensor = new DigitalInput(9);
-  private final DigitalInput m_noteSwitch = new DigitalInput(2); //TODO: Put this on correct channel
+  private final DigitalInput m_noteSwitch = new DigitalInput(8); //TODO: Put this on correct channel
   /** Creates a new Intake. */
 public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
 
@@ -32,7 +32,7 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   }
 
   public boolean NoteIsPresent() {
-    boolean ringIsPresent = !m_noteSwitch.get();
+    boolean ringIsPresent = m_noteSwitch.get();
     // Use ColorSensor to determine if true
     return ringIsPresent;
   }
