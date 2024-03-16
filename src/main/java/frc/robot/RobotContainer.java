@@ -26,7 +26,6 @@ import frc.robot.commands.climb.ResetClimber;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.MoveToAmp;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.PickUpNote;
