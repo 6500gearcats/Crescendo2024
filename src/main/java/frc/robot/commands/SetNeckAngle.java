@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
 import frc.robot.subsystems.Neck;
+import frc.robot.commands.MoveNeckDown;
+import frc.robot.commands.MoveNeckUp;
 import frc.robot.RobotContainer;
 
 public class SetNeckAngle extends Command {
@@ -40,8 +42,12 @@ public class SetNeckAngle extends Command {
     if((m_neckAngle > NeckConstants.KEncoderDeadbandThreshold)
     && (m_neckAngle < NeckConstants.kEncoderUpperThreshold))
     {
-      Rotation2d target = Rotation2d.fromRadians(m_neckAngle);
-      m_Neck.moveToAngle(target);
+      if(m_Neck.getNeckAngle() > m_neckAngle) {
+        m_Neck.move(NeckConstants.kNeckReverseSpeed);
+      }
+      if(m_Neck.getNeckAngle() < m_neckAngle) {
+        m_Neck.move(NeckConstants.kNeckForwardSpeed);
+      }
       SmartDashboard.putString("RunningNeck:", "MovingToAngle " + m_neckAngle);
     }
     else
