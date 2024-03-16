@@ -24,21 +24,17 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.VisionConstants.*;
-
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.DriveSubsystem;
+import static frc.robot.Constants.VisionConstants.CAMERA_HEIGHT_METERS;
+import static frc.robot.Constants.VisionConstants.CAMERA_PITCH_RADIANS;
+import static frc.robot.Constants.VisionConstants.TARGET_HEIGHT_METERS;
+import static frc.robot.Constants.VisionConstants.kMultiTagStdDevs;
+import static frc.robot.Constants.VisionConstants.kRobotToCam;
+import static frc.robot.Constants.VisionConstants.kSingleTagStdDevs;
+import static frc.robot.Constants.VisionConstants.kTagLayout;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -50,18 +46,48 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Constants.ApritagCameraConstants;
+import frc.robot.Constants.NoteCameraConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.DriveSubsystem;
+
 public class Vision {
     private final PhotonCamera m_camera;
     // private final PhotonCamera cameraNote;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;
+    
+    private double camOffset;
+    private double camPitch;
+    private double camHeight;
 
     // Simulation
     private PhotonCameraSim cameraSim;
     private VisionSystemSim visionSim;
 
-    public Vision(PhotonCamera camera) {
+    public Vision(PhotonCamera camera, String camType) {
         m_camera = camera;
+        
+        if(camType.equals("Tag"))
+        {
+            camHeight = ApritagCameraConstants.CAMERA_HEIGHT_METERS;
+            camOffset = ApritagCameraConstants.CAMERA_OFFSET_METERS;
+            camPitch = ApritagCameraConstants.CAMERA_PITCH_RADIANS;
+        }
+        else
+        {
+            camHeight = NoteCameraConstants.CAMERA_HEIGHT_METERS;
+            camOffset = NoteCameraConstants.CAMERA_OFFSET_METERS;
+            camPitch = NoteCameraConstants.CAMERA_PITCH_RADIANS;
+        }
 
         photonEstimator = new PhotonPoseEstimator(
                 kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_camera, kRobotToCam);

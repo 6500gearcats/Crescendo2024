@@ -217,6 +217,20 @@ public final class Constants {
         public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
 
     }
+
+    public static class ApritagCameraConstants
+    {
+      public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+      public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+      public static final double CAMERA_OFFSET_METERS = Units.inchesToMeters(0);
+    }
+
+    public static class NoteCameraConstants
+    {
+      public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+      public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+      public static final double CAMERA_OFFSET_METERS = Units.inchesToMeters(0);
+    }
     
     public static class ShootNoteConstants {
       public static final long kmiliSeconds = 1000;

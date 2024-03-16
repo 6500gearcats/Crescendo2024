@@ -51,6 +51,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AlignToSpeaker;
+import frc.robot.commands.AlignToSpeakerManual;
 import frc.robot.commands.BackwardsIntake;
 import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
@@ -82,8 +84,8 @@ public class RobotContainer {
 
 private PhotonCamera cameraTag = new PhotonCamera(kCameraNameTag);
 private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote);
-private Vision m_tagVision = new Vision(cameraTag);
-private Vision m_noteVision = new Vision(cameraNote);
+private Vision m_tagVision = new Vision(cameraTag, "Tag");
+private Vision m_noteVision = new Vision(cameraNote, "Note");
 
 private final Navigation m_vision = new Navigation(m_tagVision);
 private final Shooter m_robotShooter = new Shooter();
@@ -160,6 +162,11 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whileTrue(new AlignToSpeakerManual(m_tagVision, m_robotDrive));
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new AlignToSpeaker(m_tagVision, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
