@@ -4,12 +4,12 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Vision;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Navigation;
 
 public class AlignToSpeakerManual extends Command {
   Vision m_vision;
@@ -32,13 +32,15 @@ public class AlignToSpeakerManual extends Command {
     double rotation;
     var alliance = DriverStation.getAlliance();
 
-    if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) // TODO Best logic
+    if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
     {
-      rotation = m_vision.getChosenTargetRotation(3);
+      // Returns degrees
+      rotation = m_vision.getChosenTargetRotation(3) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(3));
     }
     else
     {
-      rotation = m_vision.getChosenTargetRotation(7);
+      // Returns degrees
+      rotation = m_vision.getChosenTargetRotation(7) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(7));
     }
 
     

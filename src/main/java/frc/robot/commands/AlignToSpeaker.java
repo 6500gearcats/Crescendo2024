@@ -32,18 +32,18 @@ public class AlignToSpeaker extends Command {
     double rotation;
     var alliance = DriverStation.getAlliance();
 
-    if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) // TODO Best logic
+    if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
     {
+      // Returns degrees
       rotation = m_vision.getChosenTargetRotation(3) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(3));
     }
     else
     {
+      // Returns degrees
       rotation = m_vision.getChosenTargetRotation(7) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(7));
     }
 
-    m_drive.drive(0, 0, -rotation * .5, false);
-
-    if(Math.abs(rotation) < .001)
+    if(Math.abs(rotation) < .0)
     {
       SmartDashboard.putNumber("Align to Speaker Rotation", rotation); 
     }
@@ -51,6 +51,9 @@ public class AlignToSpeaker extends Command {
     {
       rotation = 0;
     }
+
+    m_drive.drive(0, 0, -rotation * .01, false);
+  
   }
 
   // Called once the command ends or is interrupted.
