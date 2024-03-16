@@ -44,12 +44,10 @@ public class SetNeckAngle extends Command {
       m_Neck.moveTo(target);
       SmartDashboard.putString("RunningNeck:", "MovingToAngle " + m_neckAngle);
     }
-    /*
     else
     {
       m_Neck.stop();
     }
-    */
   }
 
     
@@ -62,7 +60,6 @@ public class SetNeckAngle extends Command {
   @Override
   public void end(boolean interrupted) {
     m_Neck.stop();
-
   }
 
   // Returns true when the command should end.
