@@ -41,7 +41,7 @@ public class SetNeckAngle extends Command {
     && (m_neckAngle < NeckConstants.kEncoderUpperThreshold))
     {
       Rotation2d target = Rotation2d.fromRadians(m_neckAngle);
-      m_Neck.moveTo(target);
+      m_Neck.moveToAngle(target);
       SmartDashboard.putString("RunningNeck:", "MovingToAngle " + m_neckAngle);
     }
     else

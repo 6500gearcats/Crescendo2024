@@ -118,6 +118,13 @@ public void moveTo(Rotation2d target) {
                 target.getRadians(),
                 ControlType.kPosition,
                 0);
+}
+public void moveToAngle(Rotation2d target) {
+  neckPIDcontroller.setReference(
+                target.getRadians(),
+                ControlType.kPosition,
+                0, 
+                armFeedforward.calculate(target.getRadians(), 0.15));
   
 }
 
