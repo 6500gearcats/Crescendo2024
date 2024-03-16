@@ -40,7 +40,7 @@ public class SetNeckAngle extends Command {
     if((m_neckAngle > NeckConstants.KEncoderDeadbandThreshold)
     && (m_neckAngle < NeckConstants.kEncoderUpperThreshold))
     {
-      Rotation2d target = Rotation2d.fromDegrees(m_neckAngle);
+      Rotation2d target = Rotation2d.fromRadians(m_neckAngle);
       m_Neck.moveTo(target);
       SmartDashboard.putString("RunningNeck:", "MovingToAngle " + m_neckAngle);
     }
@@ -60,12 +60,14 @@ public class SetNeckAngle extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_Neck.getNeckAngle() > m_neckAngle;
   }
 
 
