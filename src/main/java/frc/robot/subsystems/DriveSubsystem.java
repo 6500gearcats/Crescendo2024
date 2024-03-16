@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import org.photonvision.targeting.PhotonPipelineResult;
+import java.util.Map;
 
 import com.kauailabs.navx.frc.AHRS;
 // Path Planner Imports
@@ -26,18 +26,21 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.Vision;
-import frc.robot.Constants;
- 
 
 public class DriveSubsystem extends SubsystemBase {
   public boolean turboEnable = false;
@@ -73,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
   private SimBoolean m_calibrating;
   private boolean m_fieldOriented;
   private Rotation2d simRotation = new Rotation2d();
-      
+
   private ChassisSpeeds m_lastSpeeds;
 
   // Odometry class for tracking robot pose
@@ -84,12 +87,19 @@ public class DriveSubsystem extends SubsystemBase {
   private Vision m_simVision;
 
   private Pose2d m_simOdometryPose;
+  private ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drive");
+  private GenericEntry m_maxSpeed;
+
+
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Vision vision) {
     m_simVision = vision;
     try {
-      /* Communicate w/navX-MXP via theimport com.kauailabs.navx.frc.AHRS;A MXP SPI Bus. */
+      /*
+       * Communicate w/navX-MXP via theimport com.kauailabs.navx.frc.AHRS;A MXP SPI
+       * Bus.
+       */
       /* Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB */
       /*
        * See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for
@@ -102,11 +112,11 @@ public class DriveSubsystem extends SubsystemBase {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
 
-    //m_gyro.setAngleAdjustment(180.0);
+    // m_gyro.setAngleAdjustment(180.0);
     m_gyro.zeroYaw();
 
     if (RobotBase.isSimulation()) {
-      m_gyroSim  = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+      m_gyroSim = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
       m_simAngle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_gyroSim, "Yaw"));
       m_connected = new SimBoolean(SimDeviceDataJNI.getSimValueHandle(m_gyroSim, "Connected"));
       m_calibrating = new SimBoolean(SimDeviceDataJNI.getSimValueHandle(m_gyroSim, "Calibrating"));
@@ -125,37 +135,46 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         }, new Pose2d(0.0, 0.0, new Rotation2d()));
 
-        m_lastSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,0.0, 0.0, Rotation2d.fromDegrees(0.0));
+    m_lastSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
     m_simOdometryPose = m_odometry.getPoseMeters();
     SmartDashboard.putData("Field", m_field);
 
-    // MODIFIED TEMPLATE CODE: Configure AutoBuilder last
-        AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(10.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    m_maxSpeed = m_driveTab.add("Max Speed", DriveConstants.kTurboModeModifier)
+      .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
+      .withProperties(Map.of(
+        "min", DriveConstants.kTurboModeModifier, 
+        "max", DriveConstants.kTurboModeModifier*2)) // specify widget properties here
+      .getEntry();
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
+    
+    // MODIFIED TEMPLATE CODE: Configure AutoBuilder last
+    AutoBuilder.configureHolonomic(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(10.0, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
   }
 
   @Override
@@ -165,8 +184,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     if (Robot.isReal()) {
       m_field.setRobotPose(m_odometry.getPoseMeters());
-    }
-    else{
+    } else {
       m_field.setRobotPose(m_simOdometryPose);
 
       Pose2d CurrentPos = m_simOdometryPose;
@@ -176,7 +194,6 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Position: Y", yPos);
     }
 
-
     SmartDashboard.putNumber("NavX Pitch", m_gyro.getPitch());
     SmartDashboard.putNumber("NavX Yaw angle", getAngle());
 
@@ -184,42 +201,40 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  
-
   @Override
   public void simulationPeriodic() {
     // Update the odometry in the periodic block
     REVPhysicsSim.getInstance().run();
 
+    // Update camera simulation
+    m_simVision.simulationPeriodic(this.getPose());
 
-        // Update camera simulation
-        m_simVision.simulationPeriodic(this.getPose());
+    var debugField = m_simVision.getSimDebugField();
+    debugField.getObject("EstimatedRobot").setPose(this.getPose());
+    // debugField.getObject("EstimatedRobotModules").setPoses(this.getModulePoses());
 
-        var debugField = m_simVision.getSimDebugField();
-        debugField.getObject("EstimatedRobot").setPose(this.getPose());
-        //debugField.getObject("EstimatedRobotModules").setPoses(this.getModulePoses());
-
-
-    //angle.set(5.0);
+    // angle.set(5.0);
     // From NavX example
-    //int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
-  //  SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    // int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    // SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev,
+    // "Yaw"));
     // NavX expects clockwise positive, but sim outputs clockwise negative
-    
-    // navxSimAngle = -drivetrainSim.getHeading().getDegrees();
-    //double angle = getPose().getRotation().getDegrees();
 
-    //double angle = m_gyro.getAngle() - Math.toDegrees(m_lastSpeeds.omegaRadiansPerSecond) * 0.20 ;
+    // navxSimAngle = -drivetrainSim.getHeading().getDegrees();
+    // double angle = getPose().getRotation().getDegrees();
+
+    // double angle = m_gyro.getAngle() -
+    // Math.toDegrees(m_lastSpeeds.omegaRadiansPerSecond) * 0.20 ;
     double angle = m_simOdometryPose.getRotation().getDegrees();
-    
-    double newangle =  Math.IEEEremainder(angle, 360);
+
+    double newangle = Math.IEEEremainder(angle, 360);
     m_simAngle.set(newangle);
 
-    SmartDashboard.putNumber("SimAngle",m_simAngle.get());
-  
+    SmartDashboard.putNumber("SimAngle", m_simAngle.get());
+
   }
 
-  /** 
+  /**
    * Returns the currently-estimated pose of the robot.
    *
    * @return The pose.
@@ -248,13 +263,13 @@ public class DriveSubsystem extends SubsystemBase {
         },
         pose);
 
-        m_simOdometryPose = pose;
+    m_simOdometryPose = pose;
   }
 
   // Dependency for the AutoBuilder.ConfigureHolonomic method
   public ChassisSpeeds getChassisSpeed() {
-      return m_lastSpeeds;
-    }
+    return m_lastSpeeds;
+  }
 
   /**
    * Updates the odometry of the robot using the swerve module states and the gyro
@@ -272,24 +287,23 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
     if (Robot.isSimulation()) {
-      SwerveModuleState[] measuredStates =
-          new SwerveModuleState[] {
+      SwerveModuleState[] measuredStates = new SwerveModuleState[] {
           m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState()
       };
-      //ChassisSpeeds speeds = DriveConstants.kDriveKinematics.toChassisSpeeds(measuredStates);
+      // ChassisSpeeds speeds =
+      // DriveConstants.kDriveKinematics.toChassisSpeeds(measuredStates);
       ChassisSpeeds speeds = m_lastSpeeds;
 
       Twist2d twist = new Twist2d(
-        speeds.vxMetersPerSecond * .02,
-        speeds.vyMetersPerSecond * .02,
-        speeds.omegaRadiansPerSecond * .02);
+          speeds.vxMetersPerSecond * .02,
+          speeds.vyMetersPerSecond * .02,
+          speeds.omegaRadiansPerSecond * .02);
 
-      m_simOdometryPose =
-          m_simOdometryPose.exp(twist);
+      m_simOdometryPose = m_simOdometryPose.exp(twist);
 
-      SmartDashboard.putNumber("new x", twist.dx );
-      SmartDashboard.putNumber("new y ", twist.dy );
-      SmartDashboard.putNumber("new theta ", twist.dtheta );
+      SmartDashboard.putNumber("new x", twist.dx);
+      SmartDashboard.putNumber("new y ", twist.dy);
+      SmartDashboard.putNumber("new theta ", twist.dtheta);
 
     }
   }
@@ -310,21 +324,24 @@ public class DriveSubsystem extends SubsystemBase {
     // Adjust input based on max speed
     xSpeed *= DriveConstants.kNormalSpeedMetersPerSecond;
     ySpeed *= DriveConstants.kNormalSpeedMetersPerSecond;
-    
+
     rot *= DriveConstants.kMaxAngularSpeed;
     // Non linear speed set
-    //xSpeed *= Math.signum(xSpeed)*Math.pow(xSpeed,3);
-    //ySpeed *= Math.signum(ySpeed)*Math.pow(ySpeed,3);
+    // xSpeed *= Math.signum(xSpeed)*Math.pow(xSpeed,3);
+    // ySpeed *= Math.signum(ySpeed)*Math.pow(ySpeed,3);
+
+    double max = m_maxSpeed.getDouble(DriveConstants.kTurboModeModifier);
     
-    if(turboEnable)
-    {
-      xSpeed *= DriveConstants.kTurboModeModifier;
-      ySpeed *= DriveConstants.kTurboModeModifier;
+    if (turboEnable) {
+      
+      xSpeed *= max;
+      ySpeed *= max;
       rot *= DriveConstants.kTurboAngularSpeed;
     }
-  
-    m_lastSpeeds =  (fieldRelative) ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getAngle()))
-                                    : new ChassisSpeeds(xSpeed, ySpeed, rot);
+
+    m_lastSpeeds = (fieldRelative)
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getAngle()))
+        : new ChassisSpeeds(xSpeed, ySpeed, rot);
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(m_lastSpeeds);
 
@@ -347,7 +364,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-    m_lastSpeeds =  speeds;
+    m_lastSpeeds = speeds;
 
   }
 
@@ -413,22 +430,20 @@ public class DriveSubsystem extends SubsystemBase {
 
   /* Return the NavX yaw angle */
   public double getAngle() {
-    //return -m_gyro.getYaw();
+    // return -m_gyro.getYaw();
     if (Robot.isReal()) {
       return -m_gyro.getAngle();
-    }
-    else {
+    } else {
       return m_simAngle.get();
     }
   }
-
 
   public boolean toggleFieldOriented() {
     m_fieldOriented = !m_fieldOriented;
     return m_fieldOriented;
   }
 
-  //PID Controllers
+  // PID Controllers
   public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
 
 }

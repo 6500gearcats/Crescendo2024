@@ -4,25 +4,20 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Navigation;
-import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.Shooter;
-import frc.robot.Constants.NeckConstants;
 import frc.robot.Constants.ShootNoteConstants;
-import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class ShootNote extends Command {
+public class ShootNoteManual extends Command {
   
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
   private long seconds;
 
-  public ShootNote(Shooter theShooter, Intake theIntake) {
+  public ShootNoteManual(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     addRequirements(m_ShooterSystem);
@@ -34,7 +29,6 @@ public class ShootNote extends Command {
   public void initialize() {
     m_ShooterSystem.setShooterSpeedFast();
     seconds = System.currentTimeMillis();
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +37,7 @@ public class ShootNote extends Command {
     m_ShooterSystem.setShooterSpeedFast();
     if (m_ShooterSystem.shooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
-    }
+  }
   }
 
   // Called once the command ends or is interrupted.
@@ -56,8 +50,8 @@ public class ShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_IntakeSystem.NoteIsPresent();
-    //return false;
+    //return m_IntakeSystem.NoteIsPresent();
+    return false;
   }
 
   

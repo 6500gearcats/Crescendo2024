@@ -19,8 +19,11 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.ShootNoteManual;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
+import frc.robot.commands.climb.ResetClimber;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.MoveToAmp;
@@ -40,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.BackwardsIntake;
+import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.GetBestTarget;
@@ -48,6 +52,7 @@ import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.NeckStable;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.ShootAMP;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -79,6 +84,7 @@ private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
 
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -88,7 +94,6 @@ private final Neck m_Neck = new Neck();
    */
   public RobotContainer() {
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("DemoCommand", Commands.print("Ran Demo Command"));
     NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
     NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake));
@@ -100,7 +105,16 @@ private final Neck m_Neck = new Neck();
     // Configure the button bindings
     configureButtonBindings();
 
+    
+    SmartDashboard.putData(m_Neck);
+    SmartDashboard.putData(m_robotDrive);
+    SmartDashboard.putData(m_robotShooter);
+    SmartDashboard.putData(m_robotIntake);
+
     m_vision.setDriveController(m_robotDrive);
+
+    SmartDashboard.putData("Neck: up", new MoveNeckUp(m_Neck));
+    SmartDashboard.putData("Neck: down", new MoveNeckDown(m_Neck));
 
     
 
@@ -138,37 +152,51 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new GetBestTarget(m_tagVision, m_robotDrive));
+   // new JoystickButton(m_driverController, Button.kA.value)
+       // .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
-        .whileTrue(new ShootNote(m_robotShooter, m_robotIntake));
+        .whileTrue(new ShootNoteManual(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
         .whileTrue(new BackwardsIntake(m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake).andThen(new WaitCommand(.2))
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.2)));
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
-        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
+        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
+        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
         .onTrue(new RaiseHooks(m_robotClimber));
         
     new Trigger(() -> m_gunnerController.getRightY() > 0.5)
         .onTrue(new LowerHooks(m_robotClimber));
-    
+
+    new Trigger(() -> m_gunnerController.getStartButton())
+        .onTrue(new ResetClimber(m_robotClimber));
+
+    //Change to whileTrue after re-maping for climer
+    new JoystickButton(m_gunnerController, Button.kA.value)
+        .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck));    
+        
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
 
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
-    new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
-        .onTrue (new MoveToAmp(m_noteVision, m_robotDrive));
+    // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
+    //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+  }
+
+  public void zeroDrive() {
+    m_robotDrive.zeroHeading();
   }
 
   public Command getAutonomousCommand() {
