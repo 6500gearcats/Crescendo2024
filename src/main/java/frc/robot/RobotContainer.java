@@ -186,7 +186,7 @@ private final Neck m_Neck = new Neck();
         .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck)); 
 
     new JoystickButton(m_gunnerController, Button.kX.value)
-        .onTrue(new SetNeckAngle(m_Neck, 0.0887));     
+        .onTrue(new SetNeckAngle(m_Neck, 0.0887+0.004));     
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));

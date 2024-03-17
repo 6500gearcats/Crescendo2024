@@ -184,6 +184,9 @@ public final class Constants {
     public static final double kNeck_kP = 0.0;
     public static final double kNeck_kI = 0.0;
     public static final double kNeck_kD = 0.0;
+    public static final double kNeck_kP2 = 2;
+    public static final double kNeck_kI2 = 0;
+    public static final double kNeck_kD2 = 0;
 
 
   }
