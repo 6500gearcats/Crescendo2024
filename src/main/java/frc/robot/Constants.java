@@ -156,8 +156,8 @@ public final class Constants {
     // These are port values (where it's located on the robot)
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
-    public static final double kNeckReverseSpeed = -0.15; 
-    public static final double kNeckForwardSpeed = 0.15; //Was 0.6
+    public static final double kNeckReverseSpeed = -0.4; 
+    public static final double kNeckForwardSpeed = 0.4; //Was 0.6
     public static final double kNeckForwardMaxSpeed = 0.15;
     public static final double kNeckReverseMaxSpeed = -0.15;
     public static final double kNeckStableSpeed = 0.058;
