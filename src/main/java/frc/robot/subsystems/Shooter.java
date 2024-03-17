@@ -57,4 +57,8 @@ public class Shooter extends SubsystemBase {
     m_ShooterMotor.set(-ShooterConstants.kShooterSpeedSlow);
   }
 
+  public void reverseMotorFast() {
+    m_ShooterMotor.set(-ShooterConstants.kShooterSpeedSlow);
+  }
+
 }
