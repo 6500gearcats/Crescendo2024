@@ -99,7 +99,9 @@ public boolean AtMinHeight() {
 }
 
 public double getNeckAngle() {
-  return m_neckEncoder.getPosition();
+  double angle = m_neckEncoder.getPosition();
+  if (angle > 0.9) angle = 0;
+  return angle;
 }
 
 public AbsoluteEncoder getNeckEncoder()
