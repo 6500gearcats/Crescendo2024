@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftToLeft"
+            "pathName": "TopToTop"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftToLeft-Return"
+            "pathName": "TopToLeft-Return"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftToMiddle"
+            "pathName": "TopToMiddle"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftToMiddle-Return"
+            "pathName": "TopToMiddle-Return"
           }
         },
         {
@@ -68,7 +68,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftToTaxi"
+            "pathName": "TopToTaxi"
           }
         }
       ]
