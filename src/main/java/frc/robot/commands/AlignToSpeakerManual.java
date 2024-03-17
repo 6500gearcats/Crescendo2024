@@ -35,12 +35,12 @@ public class AlignToSpeakerManual extends Command {
     if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
     {
       // Returns degrees
-      rotation = m_vision.getChosenTargetRotation(3) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(3));
+      rotation = m_vision.getChosenTargetRotation(3) + Units.inchesToMeters(-11)/Math.atan(m_vision.getChosenTargetRange(3));
     }
     else
     {
       // Returns degrees
-      rotation = m_vision.getChosenTargetRotation(7) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(7));
+      rotation = m_vision.getChosenTargetRotation(7) + Units.inchesToMeters(-11)/Math.atan(m_vision.getChosenTargetRange(7));
     }
 
     

@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,30 +28,44 @@ public class AlignToSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotation;
+    double rotation = 0;
     var alliance = DriverStation.getAlliance();
+
+    double bSquared;
+    double a = -11;
+    double b;
+    double c;
 
     if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
     {
       // Returns degrees
-      rotation = m_vision.getChosenTargetRotation(3) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(3));
+      rotation = m_vision.getChosenTargetRotation(3);
+      c = m_vision.getChosenTargetDistance(3);
+      bSquared = Math.pow(a, 2) + Math.pow(c, 2) -2 * (c*a) * Math.cos(rotation + 90);
+      b = Math.sqrt(bSquared);
+      rotation -= Math.asin((Math.sin(rotation + 90) *a)/b);
     }
     else
     {
       // Returns degrees
-      rotation = m_vision.getChosenTargetRotation(7) + Units.inchesToMeters(-11)/Math.acos(m_vision.getChosenTargetRange(7));
+      
+      rotation = m_vision.getChosenTargetRotation(3);
+      c = m_vision.getChosenTargetDistance(7);
+      bSquared = Math.pow(a, 2) + Math.pow(c, 2) -2 * (c*a) * Math.cos(rotation + 90);
+      b = Math.sqrt(bSquared);
+      rotation -= Math.asin((Math.sin(rotation + 90) *a)/b);
     }
 
-    if(Math.abs(rotation) < .0)
+    if(Math.abs(rotation) > .1)
     {
-      SmartDashboard.putNumber("Align to Speaker Rotation", rotation); 
+      SmartDashboard.putNumber("Align to Speaker Rotation", rotation);
     }
     else
     {
       rotation = 0;
     }
 
-    m_drive.drive(0, 0, -rotation * .01, false);
+    m_drive.drive(0, 0, -rotation * .05, false);
   
   }
 
