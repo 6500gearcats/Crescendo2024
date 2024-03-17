@@ -42,10 +42,10 @@ public class SetNeckAngle extends Command {
     if((m_neckAngle > NeckConstants.KEncoderDeadbandThreshold)
     && (m_neckAngle < NeckConstants.kEncoderUpperThreshold))
     {
-      if(m_Neck.getNeckAngle() > m_neckAngle) {
+      if((m_Neck.getNeckAngle() > m_neckAngle)&& getError() > 0.002) {
         m_Neck.move(NeckConstants.kNeckReverseSpeed);
       }
-      if(m_Neck.getNeckAngle() < m_neckAngle) {
+      if((m_Neck.getNeckAngle() < m_neckAngle)&& getError() > 0.002) {
         m_Neck.move(NeckConstants.kNeckForwardSpeed);
       }
       SmartDashboard.putString("RunningNeck:", "MovingToAngle " + m_neckAngle);
@@ -71,7 +71,14 @@ public class SetNeckAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Neck.getNeckAngle() > m_neckAngle;
+    getError();
+    return Math.abs(m_Neck.getNeckAngle() - m_neckAngle) < 0.002;
+  }
+
+  private double getError() {
+    double error = Math.abs(m_Neck.getNeckAngle() - m_neckAngle) ;
+    SmartDashboard.putNumber("Neck Error", error);
+    return error;
   }
 
 
