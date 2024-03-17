@@ -239,6 +239,33 @@ public class Vision {
 
     return forwardSpeed; 
   }
+
+  public double getChosenTargetDistance(int targetID)
+  {
+    var result = getLatestCameraResult();
+    List<PhotonTrackedTarget> targets = result.getTargets();
+    double range = 0;
+
+    for(PhotonTrackedTarget target : targets)
+    {
+      if(result.hasTargets())
+      {
+        range =
+                        PhotonUtils.calculateDistanceToTargetMeters(
+                                CAMERA_HEIGHT_METERS, // Previously declarde
+                                TARGET_HEIGHT_METERS,
+                                CAMERA_PITCH_RADIANS,
+                                Units.degreesToRadians(target.getPitch()));
+      }
+      else
+      {
+        // If we have no targets, stay still
+        range = 0;
+      }
+    }
+
+    return range; 
+  }
     // public double getChosenTargetRotation(int targetID) {
     // // TODO Auto-generated method stub
     // throw new UnsupportedOperationException("Unimplemented method
