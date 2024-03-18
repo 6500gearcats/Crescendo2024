@@ -21,7 +21,6 @@ public class Shooter extends SubsystemBase {
   private CANSparkMax m_sparkMax = new CANSparkMax(ShooterConstants.kShooterMotorPort, MotorType.kBrushless);
 
   public final MotorController m_ShooterMotor = m_sparkMax;
-
   private boolean m_bNoteFired = false; 
   private boolean m_bShooterAtSpeed = false;
 

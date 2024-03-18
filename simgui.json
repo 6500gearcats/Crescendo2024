@@ -12,7 +12,13 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/DriveSubsystem": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Intake": "Subsystem",
+      "/SmartDashboard/Neck": "Subsystem",
+      "/SmartDashboard/Neck: down": "Command",
+      "/SmartDashboard/Neck: up": "Command",
+      "/SmartDashboard/Shooter": "Subsystem",
       "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"
     },
     "windows": {
@@ -58,10 +64,15 @@
       "open": true
     },
     "Server": {
+      "open": true
+    },
+    "shuffleboard@1": {
       "Publishers": {
         "open": true
       },
-      "open": true
+      "Subscribers": {
+        "open": true
+      }
     },
     "visible": true
   },
