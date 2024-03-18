@@ -199,12 +199,12 @@ private final Neck m_Neck = new Neck();
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
 
-    new Trigger(m_nav::inWing)
-    .whileTrue(new SpinUpShooter(m_robotShooter));
-    //InstantCommand(()-> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
+    // new Trigger(m_nav::inWing)
+    // .whileTrue(new SpinUpShooter(m_robotShooter));
+    // //InstantCommand(()-> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
 
-    new Trigger(m_nav::inWing)
-    .onFalse( new InstantCommand(()-> m_robotShooter.stopShooter(), m_robotShooter));
+    // new Trigger(m_nav::inWing)
+    // .onFalse( new InstantCommand(()-> m_robotShooter.stopShooter(), m_robotShooter));
 
 
   }
@@ -212,6 +212,15 @@ private final Neck m_Neck = new Neck();
   public void zeroDrive() {
     m_robotDrive.zeroHeading();
   }
+
+  public void AutoShooterRun() {
+    m_robotShooter.setDefaultCommand(new SpinUpShooter(m_robotShooter));  
+  }
+
+  public void RunShooterOff() {
+    m_robotShooter.removeDefaultCommand();
+  }
+
 
   public Command getAutonomousCommand() {
     /**Code to run a singular path

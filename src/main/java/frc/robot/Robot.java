@@ -81,7 +81,9 @@ public class Robot extends TimedRobot {
       System.out.println("Starting Autonomous");
       m_autonomousCommand.schedule();
     }
-    }
+
+    m_robotContainer.AutoShooterRun();
+  }
   
 
   /** This function is called periodically during autonomous. */
@@ -101,6 +103,8 @@ public class Robot extends TimedRobot {
     }
     // Zero the gyro as we may not have started in the correct orientation
     m_robotContainer.zeroDrive();
+
+    m_robotContainer.RunShooterOff();
   }
 
   /** This function is called periodically during operator control. */
