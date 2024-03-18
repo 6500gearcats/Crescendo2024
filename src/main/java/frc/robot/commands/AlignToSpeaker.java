@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import javax.lang.model.util.ElementScanner14;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +19,8 @@ public class AlignToSpeaker extends Command {
   private static int kBlueSpeaker = 7;
 
   private int m_target = 0;
+  private double m_targetAngle =0.0;
+  private double m_targetDistance =0.0;
 
   Vision m_vision;
   DriveSubsystem m_drive;
@@ -46,11 +49,20 @@ public class AlignToSpeaker extends Command {
       else if ( myAlliance.equals(DriverStation.Alliance.Blue) ) {
         m_target = kBlueSpeaker;
       }
+
+      m_targetAngle = m_vision.getChosenTargetRotation(m_target);
+      m_targetDistance = m_vision.getChosenTargetDistance(m_target);
     }
-    else {
+
+
+    if ((m_target==0) || closeEnough(m_targetAngle) ) {
       m_target = 0;
       this.cancel();
     }
+  }
+
+  private boolean closeEnough(double target) {
+    return Math.abs(target) < 1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -65,18 +77,20 @@ public class AlignToSpeaker extends Command {
 
     // Returns degrees
 
-    rotation = m_vision.getChosenTargetRotation(m_target);
+    Pose2d now = m_drive.getPose();
+    double robotAngle = now.getRotation().getDegrees();
+    rotation = robotAngle - m_targetAngle;
 
     if (rotation != 0) {
 
-      c = m_vision.getChosenTargetDistance(m_target);
+      c = m_targetDistance;
       bSquared = Math.pow(a, 2) + Math.pow(c, 2) - 2 * (c * a) * Math.cos(rotation + 90);
       b = Math.sqrt(bSquared);
       d = Math.asin((Math.sin(rotation + 90) * a) / b);
       rotation -= d;
     }
 
-    if (Math.abs(rotation) > .1) {
+    if (!closeEnough(Math.abs(rotation))) {
       SmartDashboard.putNumber("Align to Speaker Rotation", rotation);
     } else {
       rotation = 0;
@@ -95,8 +109,10 @@ public class AlignToSpeaker extends Command {
   @Override
   public boolean isFinished() {
 
-    var rot = Math.abs(m_vision.getChosenTargetRotation(m_target));
-    return (rot + d) < 1;
+    Pose2d now = m_drive.getPose();
+    double rot = now.getRotation().getDegrees();
+    
+    return closeEnough(rot + d);
 
   }
 }
