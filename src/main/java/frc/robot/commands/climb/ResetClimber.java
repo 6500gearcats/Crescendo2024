@@ -36,8 +36,9 @@ public class ResetClimber extends Command {
   }
 
   // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return m_climber.ArmIsFullyStowed();
+  //@Override
+  //public boolean isFinished() {
+    //return m_climber.ArmIsFullyStowed();
+    //return false;
   }
-}
+
