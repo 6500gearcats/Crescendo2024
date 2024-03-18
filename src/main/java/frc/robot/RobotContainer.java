@@ -76,7 +76,7 @@ private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote);
 private Vision m_tagVision = new Vision(cameraTag);
 private Vision m_noteVision = new Vision(cameraNote);
 
-private final Navigation m_vision = new Navigation(m_tagVision);
+private final Navigation m_nav = new Navigation(m_tagVision);
 private final Shooter m_robotShooter = new Shooter();
 private final Intake m_robotIntake = new Intake();
 private final Climber m_robotClimber = new Climber();
@@ -111,7 +111,7 @@ private final Neck m_Neck = new Neck();
     SmartDashboard.putData(m_robotShooter);
     SmartDashboard.putData(m_robotIntake);
 
-    m_vision.setDriveController(m_robotDrive);
+    m_nav.setDriveController(m_robotDrive);
 
     SmartDashboard.putData("Neck: up", new MoveNeckUp(m_Neck));
     SmartDashboard.putData("Neck: down", new MoveNeckDown(m_Neck));
@@ -153,7 +153,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
-       // .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
+       // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
