@@ -104,9 +104,9 @@ private final Neck m_Neck = new Neck();
    */
   public RobotContainer() {
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
+    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(2.0));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
-    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake));
+    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake).withTimeout(2.0));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
