@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
+import frc.robot.commands.NeckRaiseAndShoot;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootFromRange;
 import frc.robot.commands.ShootNote;
@@ -186,7 +187,7 @@ private final Neck m_Neck = new Neck();
         .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck)); 
 
     new JoystickButton(m_gunnerController, Button.kX.value)
-        .onTrue(new SetNeckAngle(m_Neck, 0.0887+0.004));     
+        .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
