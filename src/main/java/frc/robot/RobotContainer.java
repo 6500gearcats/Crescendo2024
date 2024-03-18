@@ -165,8 +165,9 @@ private final Neck m_Neck = new Neck();
     
     new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new AlignToSpeakerManual(m_tagVision, m_robotDrive));
+
     new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new AlignToSpeaker(m_tagVision, m_robotDrive));
+        .onTrue(new AlignToSpeaker(m_tagVision, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_vision, m_robotDrive));
 
