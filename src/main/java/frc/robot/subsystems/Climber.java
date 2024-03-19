@@ -3,16 +3,24 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.NeckConstants;
 import frc.robot.utility.EncoderOdometer;
 
 
@@ -29,8 +37,11 @@ public class Climber extends SubsystemBase {
     //private RelativeEncoder m_winchEncoder;
   private RelativeEncoder m_winchEncoder;
   private EncoderOdometer m_winchOdometer;
-  
 
+  private SparkPIDController leftPIDcontroller;
+  private SparkPIDController rightPIDcontroller;
+  private ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(NeckConstants.kNeck_kS, NeckConstants.kNeck_kG, NeckConstants.kNeck_kV);
+  
   public Climber() {
 
     m_RightClimberMotor.setInverted(true);
@@ -42,7 +53,15 @@ public class Climber extends SubsystemBase {
     m_winchEncoder = m_LeftClimberMotor.getEncoder();
     m_winchOdometer = new EncoderOdometer(m_winchEncoder);
 
+    leftPIDcontroller = m_LeftClimberMotor.getPIDController();
+    leftPIDcontroller.setP(NeckConstants.kNeck_kP);
+    leftPIDcontroller.setI(NeckConstants.kNeck_kI);
+    leftPIDcontroller.setD(NeckConstants.kNeck_kD);
 
+    rightPIDcontroller = m_RightClimberMotor.getPIDController();
+    rightPIDcontroller.setP(NeckConstants.kNeck_kP);
+    rightPIDcontroller.setI(NeckConstants.kNeck_kI);
+    rightPIDcontroller.setD(NeckConstants.kNeck_kD);
   }
 
   @Override
@@ -103,4 +122,16 @@ public class Climber extends SubsystemBase {
     return true;
   }
 
+  public void moveTo(double target) {
+  leftPIDcontroller.setReference(
+                target,
+                ControlType.kPosition,
+                0,
+                elevatorFeedforward.calculate(target, 0));
+  rightPIDcontroller.setReference(
+                target,
+                ControlType.kPosition,
+                0,
+                elevatorFeedforward.calculate(target, 0));
+  }
 }

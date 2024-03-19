@@ -53,6 +53,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.BackwardsIntake;
+import frc.robot.commands.ClimberStable;
 import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
@@ -139,7 +140,8 @@ private final Neck m_Neck = new Neck();
                 !m_driverController.getRightBumper()),
             m_robotDrive));
 
-    m_Neck.setDefaultCommand(new NeckStable(m_Neck));  
+    m_Neck.setDefaultCommand(new NeckStable(m_Neck));
+    m_robotClimber.setDefaultCommand(new ClimberStable(m_robotClimber)); 
   }
   
 
