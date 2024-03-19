@@ -25,7 +25,10 @@ public class NeckStable extends Command {
   @Override
   public void initialize() {
     // Use the current angle as the target
+
     m_target = Rotation2d.fromDegrees(m_Neck.getNeckAngle());
+    SmartDashboard.putNumber("Neck Stable Target Radians", m_target.getRadians()); 
+    SmartDashboard.putNumber("Neck Stable Target Degrees", m_target.getDegrees()); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
