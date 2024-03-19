@@ -21,6 +21,7 @@ import frc.robot.commands.PickUpNote;
 import frc.robot.commands.SetNeckAngle;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.ShootNoteManual;
+import frc.robot.commands.ShootNoteReverse;
 import frc.robot.commands.climb.LowerHooks;
 import frc.robot.commands.climb.RaiseHooks;
 import frc.robot.commands.climb.ResetClimber;
@@ -44,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.BackwardsIntake;
+import frc.robot.commands.ClimberStable;
 import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
@@ -131,7 +133,8 @@ private final Neck m_Neck = new Neck();
                 !m_driverController.getRightBumper()),
             m_robotDrive));
 
-    m_Neck.setDefaultCommand(new NeckStable(m_Neck));  
+    m_Neck.setDefaultCommand(new NeckStable(m_Neck));
+   // m_robotClimber.setDefaultCommand(new ClimberStable(m_robotClimber)); 
   }
   
 
@@ -160,6 +163,9 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_gunnerController, Button.kB.value)
         .whileTrue(new ShootNoteManual(m_robotShooter, m_robotIntake));
 
+    new JoystickButton(m_gunnerController, Button.kBack.value)
+        .whileTrue(new ShootNoteReverse(m_robotShooter, m_robotIntake));
+
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
         .whileTrue(new BackwardsIntake(m_robotIntake));
 
@@ -178,10 +184,10 @@ private final Neck m_Neck = new Neck();
         .onTrue(new RaiseHooks(m_robotClimber));
         
     new Trigger(() -> m_gunnerController.getRightY() > 0.5)
-        .onTrue(new LowerHooks(m_robotClimber));
+        .onTrue(new LowerHooks(m_robotClimber).andThen(new ClimberStable(m_robotClimber).withTimeout(1.0)));
 
     new Trigger(() -> m_gunnerController.getStartButton())
-        .onTrue(new ResetClimber(m_robotClimber));
+        .whileTrue(new ResetClimber(m_robotClimber));
 
     //Change to whileTrue after re-maping for climer
     new JoystickButton(m_gunnerController, Button.kA.value)
