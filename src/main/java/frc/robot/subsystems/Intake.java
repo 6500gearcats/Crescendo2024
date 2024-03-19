@@ -24,7 +24,7 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Note Sensor", m_noteSensor.get());
-    SmartDashboard.putBoolean("Note Switch", m_noteSwitch.get());
+    SmartDashboard.putBoolean("Note Switch", !m_noteSwitch.get());
 
   }
    public void setPickupSpeed() {
@@ -32,7 +32,7 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   }
 
   public boolean NoteIsPresent() {
-    boolean ringIsPresent = m_noteSwitch.get();
+    boolean ringIsPresent = !m_noteSwitch.get();
     // Use ColorSensor to determine if true
     return ringIsPresent;
   }
