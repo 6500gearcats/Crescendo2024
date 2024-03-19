@@ -56,21 +56,10 @@ public class ShootNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_IntakeSystem.NoteIsPresent();
+    return !m_IntakeSystem.NoteIsPresent();
     //return false;
   }
 
-  
-  private boolean secondPast() {
-    long currentSeconds = System.currentTimeMillis();
-
-    return (currentSeconds - seconds) >= ShootNoteConstants.kmiliSeconds; 
-  }
-
-  //For sensor, not added yet
-  private boolean sensorPast() {
-    return false;
-  }
 
   }
 
