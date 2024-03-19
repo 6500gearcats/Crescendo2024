@@ -93,6 +93,7 @@ private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
 
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -102,9 +103,9 @@ private final Neck m_Neck = new Neck();
    */
   public RobotContainer() {
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
-    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(1.5));
+    NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(2.0));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
-    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake));
+    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake).withTimeout(2.0));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -112,7 +113,16 @@ private final Neck m_Neck = new Neck();
     // Configure the button bindings
     configureButtonBindings();
 
+    
+    SmartDashboard.putData(m_Neck);
+    SmartDashboard.putData(m_robotDrive);
+    SmartDashboard.putData(m_robotShooter);
+    SmartDashboard.putData(m_robotIntake);
+
     m_vision.setDriveController(m_robotDrive);
+
+    SmartDashboard.putData("Neck: up", new MoveNeckUp(m_Neck));
+    SmartDashboard.putData("Neck: down", new MoveNeckDown(m_Neck));
 
     
 
