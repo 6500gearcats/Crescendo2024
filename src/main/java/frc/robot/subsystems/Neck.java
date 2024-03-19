@@ -91,11 +91,11 @@ public class Neck extends SubsystemBase {
 
 
 public boolean AtMaxHeight() {
-  return m_neckEncoder.getPosition() > NeckConstants.kEncoderUpperThreshold;
+  return getNeckAngle() > NeckConstants.kEncoderUpperThreshold;
 }
 
 public boolean AtMinHeight() {
-  return m_neckEncoder.getPosition() < NeckConstants.kEncoderLowerThreshold;
+  return getNeckAngle() < NeckConstants.kEncoderLowerThreshold;
 }
 
 public double getNeckAngle() {
