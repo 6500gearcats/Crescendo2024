@@ -24,7 +24,7 @@ public class ClimberStable extends Command {
   @Override
   public void initialize() {
     // Use the current height as the target
-    m_target = m_Climber.getArmHeights();
+    m_target = m_Climber.getArmHeightsEncoder();
     SmartDashboard.putNumber("Climber Stable", m_target);
   }
 

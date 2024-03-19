@@ -54,12 +54,12 @@ public class Climber extends SubsystemBase {
     m_winchOdometer = new EncoderOdometer(m_winchEncoder);
 
     leftPIDcontroller = m_LeftClimberMotor.getPIDController();
-    leftPIDcontroller.setP(NeckConstants.kNeck_kP);
+    leftPIDcontroller.setP(.5);
     leftPIDcontroller.setI(NeckConstants.kNeck_kI);
     leftPIDcontroller.setD(NeckConstants.kNeck_kD);
 
     rightPIDcontroller = m_RightClimberMotor.getPIDController();
-    rightPIDcontroller.setP(NeckConstants.kNeck_kP);
+    rightPIDcontroller.setP(.5);
     rightPIDcontroller.setI(NeckConstants.kNeck_kI);
     rightPIDcontroller.setD(NeckConstants.kNeck_kD);
   }
@@ -110,6 +110,10 @@ public class Climber extends SubsystemBase {
 
   public double getArmHeights() {
     return m_winchOdometer.getPosition();
+  }
+
+  public double getArmHeightsEncoder() {
+    return m_winchEncoder.getPosition();
   }
 
   public boolean ArmIsFullyStowed() {

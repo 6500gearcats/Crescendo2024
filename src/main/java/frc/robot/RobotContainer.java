@@ -141,7 +141,7 @@ private final Neck m_Neck = new Neck();
             m_robotDrive));
 
     m_Neck.setDefaultCommand(new NeckStable(m_Neck));
-    m_robotClimber.setDefaultCommand(new ClimberStable(m_robotClimber)); 
+   // m_robotClimber.setDefaultCommand(new ClimberStable(m_robotClimber)); 
   }
   
 
@@ -190,7 +190,7 @@ private final Neck m_Neck = new Neck();
         .onTrue(new RaiseHooks(m_robotClimber));
         
     new Trigger(() -> m_gunnerController.getRightY() > 0.5)
-        .onTrue(new LowerHooks(m_robotClimber));
+        .onTrue(new LowerHooks(m_robotClimber).andThen(new ClimberStable(m_robotClimber).withTimeout(1.0)));
 
     new Trigger(() -> m_gunnerController.getStartButton())
         .whileTrue(new ResetClimber(m_robotClimber));
