@@ -37,7 +37,7 @@ public class AlignToSpeaker extends Command {
     m_drive = theDrive;
     addRequirements(m_drive);
     
-    turnController = new PIDController(2.0, 0.0, 0.0);
+    turnController = new PIDController(0.8, 0.0, 0.0);
   }
 
   // Called when the command is initially scheduled.
@@ -84,7 +84,7 @@ public class AlignToSpeaker extends Command {
     Pose2d now = m_drive.getPose();
     double robotAngle = now.getRotation().getDegrees();
     //Update our target angle based on robot movement feedback
-    m_targetAngle += robotAngle; // robot angle is +ve CCW
+    m_targetAngle -= robotAngle; // robot angle is +ve CCW
 
     rotation = m_targetAngle;
 
@@ -100,12 +100,12 @@ public class AlignToSpeaker extends Command {
     rotation = turnController.calculate(rotation, m_targetAngle);
     SmartDashboard.putNumber("Align to Speaker Rotation", rotation);
 
-    if (closeEnough(Math.abs(rotation))) {
-      rotation = 0;
-      m_targetAngle = 0;
-    }
+    //if (closeEnough(Math.abs(rotation))) {
+      //rotation = 0;
+    //  m_targetAngle = 0;
+    //}
 
-    m_drive.drive(0, 0, -rotation * .01, false);
+    m_drive.drive(0, 0, rotation , false);
 
   }
 
@@ -121,7 +121,7 @@ public class AlignToSpeaker extends Command {
     // Pose2d now = m_drive.getPose();
     // double rot = now.getRotation().getDegrees();
     
-    return closeEnough(m_targetAngle + d);
+    return closeEnough(m_targetAngle);
 
   }
 }
