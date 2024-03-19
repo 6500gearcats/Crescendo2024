@@ -7,7 +7,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 // import edu.wpi.first.wpilibj.DigitalInput;
@@ -53,7 +55,8 @@ public class Neck extends SubsystemBase {
     private double NeckPosition;
     //private boolean lowerLimit;
 
-    private SparkPIDController neckPIDcontroller;
+    private PIDController neckPIDcontroller2;
+    private SparkPIDController neckPIDcontroller1;
 
   public Neck() {
     m_neckEncoder = m_neckMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -68,11 +71,11 @@ public class Neck extends SubsystemBase {
 
     if (RobotBase.isSimulation()) {
       REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); }
-    neckPIDcontroller = m_neckMotor.getPIDController();
-    neckPIDcontroller.setP(NeckConstants.kNeck_kP);
-    neckPIDcontroller.setI(NeckConstants.kNeck_kI);
-    neckPIDcontroller.setD(NeckConstants.kNeck_kD);
-
+    neckPIDcontroller2 = new PIDController(NeckConstants.kNeck_kP2, NeckConstants.kNeck_kI2, NeckConstants.kNeck_kD2);
+    neckPIDcontroller1 = m_neckMotor.getPIDController();
+    neckPIDcontroller1.setP(NeckConstants.kNeck_kP);
+    neckPIDcontroller1.setP(NeckConstants.kNeck_kI);
+    neckPIDcontroller1.setP(NeckConstants.kNeck_kD);
   }
 
   @Override
@@ -88,15 +91,22 @@ public class Neck extends SubsystemBase {
 
 
 public boolean AtMaxHeight() {
-  return m_neckEncoder.getPosition() > NeckConstants.kEncoderUpperThreshold;
+  return getNeckAngle() > NeckConstants.kEncoderUpperThreshold;
 }
 
 public boolean AtMinHeight() {
-  return m_neckEncoder.getPosition() < NeckConstants.kEncoderLowerThreshold;
+  return getNeckAngle() < NeckConstants.kEncoderLowerThreshold;
 }
 
 public double getNeckAngle() {
-  return m_neckEncoder.getPosition();
+  double angle = m_neckEncoder.getPosition();
+  if (angle > 0.9) angle = 0;
+  return angle;
+}
+
+public AbsoluteEncoder getNeckEncoder()
+{
+  return m_neckEncoder;
 }
 
 public void stop() {
@@ -107,14 +117,19 @@ public void move(double kneckreversespeed) {
   m_neckMotor.set(kneckreversespeed);
 }
 
-public void moveTo(Rotation2d target) {
-  neckPIDcontroller.setReference(
-                target.getRadians(),
-                ControlType.kPosition,
-                0,
-                armFeedforward.calculate(target.getRadians(), 0));
-  
+ public void moveTo(Rotation2d target) {
+   neckPIDcontroller1.setReference(
+                 target.getRadians(),
+                 ControlType.kPosition,
+                 0,
+                 armFeedforward.calculate(target.getRadians(), 0));
+ }
+
+public void moveTo(double target) {
+  move(neckPIDcontroller2.calculate(getNeckAngle(), target)*NeckConstants.kNeckForwardSpeed*10);
 }
+
+
 
 }
 

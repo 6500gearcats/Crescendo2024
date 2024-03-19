@@ -10,15 +10,15 @@ import org.photonvision.PhotonCamera;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Vision;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Navigation;
 
 public class GetBestTarget extends Command {
   /** Creates a new GetBestTarget. */
-private final Navigation m_vision;
+private final Vision m_vision;
 private final DriveSubsystem m_drive;
 
-  public GetBestTarget(Navigation vision, DriveSubsystem drive) {
+  public GetBestTarget(Vision vision, DriveSubsystem drive) {
     m_drive = drive;
     m_vision = vision;
   }
@@ -30,7 +30,7 @@ private final DriveSubsystem m_drive;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotation = m_vision.getRotation();
+    double rotation = m_vision.getYaw();
     double speed = m_vision.getRange();
 
     if(speed > 0.5)
