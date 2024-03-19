@@ -18,6 +18,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.simulation.JoystickSim;
@@ -199,6 +200,9 @@ private final Neck m_Neck = new Neck();
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
         .whileTrue(new MoveNeckDown(m_Neck)); 
 
+    //new Trigger(DriverStation::isAutonomous)
+      //  .whileTrue(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
+
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
   }
@@ -221,5 +225,14 @@ private final Neck m_Neck = new Neck();
     */
     return autoChooser.getSelected();
 }
+
+    public void runShooterAuto() {
+       m_robotShooter.setDefaultCommand(new RunCommand(() -> m_robotShooter.setShooterSpeedFast(), m_robotShooter));
+}
+
+public void runShooterOff() {
+       m_robotShooter.removeDefaultCommand();
+}
+
 
 }
