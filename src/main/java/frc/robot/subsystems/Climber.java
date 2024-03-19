@@ -126,12 +126,10 @@ public class Climber extends SubsystemBase {
   leftPIDcontroller.setReference(
                 target,
                 ControlType.kPosition,
-                0,
-                elevatorFeedforward.calculate(target, 0));
+                0);
   rightPIDcontroller.setReference(
                 target,
                 ControlType.kPosition,
-                0,
-                elevatorFeedforward.calculate(target, 0));
+                0);
   }
 }
