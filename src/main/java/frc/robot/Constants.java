@@ -230,14 +230,17 @@ public final class Constants {
 
       // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
-      public static final double kShooterFastRPM = 3000;
-      public static final int kShooterSlowRPM = 3000;
-      public static final double kShooterSpeedFast = -0.75;
+      public static final double kShooterFastRPM = 2800;
+      public static final int kShooterSlowRPM = 2800;
+      public static final double kShooterSpeedFast = -0.6;
       public static final double kShooterReverseFast = 0.8;
-      public static final double kShooterSpeed = 1.1; //0.43
+      public static final double kShooterSpeed = 0.8; //0.43
       public static final double kBallFiredThreshold = 0.1;
       public static final int kShooterEncoderPort = 10;
       public static final double kShooterDistanceFactor = 12.391;
+      public static final double kShooterSpeedFastDis = -0.75;
+      public static final double kShooterFastRPMDis = 3000;
+      public static final int kShooterSlowRPMDis = 3000;
 
     public static final double kRangeAngleError = 0.02;
     }

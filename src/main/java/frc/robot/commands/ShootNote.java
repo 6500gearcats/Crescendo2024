@@ -21,10 +21,24 @@ public class ShootNote extends Command {
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
   private long seconds;
+  private double ShooterSpeed;
+  private double speedWant;
+
 
   public ShootNote(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
+    ShooterSpeed = ShooterConstants.kShooterSpeedFast;
+    speedWant = ShooterConstants.kShooterFastRPM;
+    addRequirements(m_ShooterSystem);
+    addRequirements(m_IntakeSystem);
+  }
+
+  public ShootNote(Shooter theShooter, Intake theIntake, double Speed, double speedWant) {
+    m_ShooterSystem = theShooter;
+    m_IntakeSystem = theIntake;
+    ShooterSpeed = Speed;
+    this.speedWant = speedWant;
     addRequirements(m_ShooterSystem);
     addRequirements(m_IntakeSystem);
   }
@@ -32,7 +46,7 @@ public class ShootNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ShooterSystem.setShooterSpeedFast();
+    m_ShooterSystem.setShooterSpeed(ShooterSpeed);
     seconds = System.currentTimeMillis();
     
   }
@@ -40,8 +54,8 @@ public class ShootNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSystem.setShooterSpeedFast();
-    if (m_ShooterSystem.shooterSpeedSetFast()){
+    m_ShooterSystem.setShooterSpeed(ShooterSpeed);
+    if (m_ShooterSystem.shooterSpeedSet(speedWant)){
       m_IntakeSystem.setFeedSpeed();
     }
   }

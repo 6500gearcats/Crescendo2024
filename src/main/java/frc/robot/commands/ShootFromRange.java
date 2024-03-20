@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Vision;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.Shooter;
@@ -20,7 +21,7 @@ public class ShootFromRange extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetTargetRange(vision, neck),
-      new ShootNote(shooter, intake)
+      new ShootNote(shooter, intake, ShooterConstants.kShooterSpeedFastDis, ShooterConstants.kShooterFastRPMDis)
     );
   }
 }
