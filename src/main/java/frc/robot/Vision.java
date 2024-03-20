@@ -206,49 +206,74 @@ public class Vision {
         return rotation;
     }
 
-    public double getChosenTargetRange(int targetID)
-  {
-    var result = getLatestCameraResult();
-    List<PhotonTrackedTarget> targets = result.getTargets();
-    double range = 0;
-    double forwardSpeed = 0;
+    public double getChosenTargetRange(int targetID) {
+        var result = getLatestCameraResult();
+        List<PhotonTrackedTarget> targets = result.getTargets();
+        double range = 0;
+        double forwardSpeed = 0;
 
-    for(PhotonTrackedTarget target : targets)
-    {
-      if(result.hasTargets())
-      {
-        range =
-                        PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
-                                Units.degreesToRadians(target.getPitch()));
+        for (PhotonTrackedTarget target : targets) {
+            if (result.hasTargets()) {
+                range = PhotonUtils.calculateDistanceToTargetMeters(
+                        CAMERA_HEIGHT_METERS, // Previously declarde
+                        TARGET_HEIGHT_METERS,
+                        CAMERA_PITCH_RADIANS,
+                        Units.degreesToRadians(target.getPitch()));
 
                 // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
                 // Use this range as the measurement we give to the PID controller.
                 // -1.0 required to ensure positive PID controller effort _increases_ range
                 forwardSpeed = -DriveSubsystem.turnController.calculate(range, VisionConstants.GOAL_RANGE_METERS);
                 forwardSpeed *= Constants.kRangeSpeedOffset;
-      }
-      else
-      {
-        // If we have no targets, stay still
-        range = 0;
-      }
+            } else {
+                // If we have no targets, stay still
+                range = 0;
+            }
+        }
+
+        return forwardSpeed;
     }
 
-    return forwardSpeed; 
-  }
-    // public double getChosenTargetRotation(int targetID) {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method
-    // 'getChosenTargetRotation'");
-    // }
+    public double getRange() {
+        var result = getLatestResult();
+        double range;
+        if (result.hasTargets()) {
+            // First calculate range
+            range = PhotonUtils.calculateDistanceToTargetMeters(
+                    CAMERA_HEIGHT_METERS, // Previously declarde
+                    TARGET_HEIGHT_METERS,
+                    CAMERA_PITCH_RADIANS,
+                    Units.degreesToRadians(result.getBestTarget().getPitch()));
+            return range;
 
-    // public double getChosenTargetRange(int targetID) {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method
-    // 'getChosenTargetRange'");
-    // }
+        } else {
+            // If we have no targets, stay still.
+            return 0;
+            // When this is implemented - DO NOTHING IF RANGE IS 0
+        }
+    }
+
+    public double getYaw() {
+        var result = getLatestCameraResult();
+        double yaw = 0.0;
+        if (result.hasTargets()) {
+            // Calculate angular turn power
+            // Remove -1.0 because it was inverting results.
+            yaw = result.getBestTarget().getYaw();
+        }
+        return yaw;
+    }
+
+    public double getPitch() {
+        var result = getLatestCameraResult();
+        double pitch = 0.0;
+        if (result.hasTargets()) {
+            // Calculate angular turn power
+            // Remove -1.0 because it was inverting results.
+            pitch = result.getBestTarget().getPitch();
+        }
+
+        return pitch;
+    }
 
 }

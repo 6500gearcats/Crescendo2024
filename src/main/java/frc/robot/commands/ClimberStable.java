@@ -4,47 +4,43 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
-import frc.robot.subsystems.Neck;
+import frc.robot.subsystems.Climber;
 
-public class NeckStable extends Command {
-  /** Creates a new NeckStable. */
-  Neck m_Neck;
-  Rotation2d m_target;
+public class ClimberStable extends Command {
+  /** Creates a new ClimberStable. */
+  Climber m_Climber;
+  double m_target;
 
-  public NeckStable(Neck theNeck) {
+  public ClimberStable(Climber theClimber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_Neck = theNeck;
-    addRequirements(m_Neck);
+    m_Climber = theClimber;
+    addRequirements(m_Climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Use the current angle as the target
-
-    m_target = Rotation2d.fromDegrees(m_Neck.getNeckAngle());
-    SmartDashboard.putNumber("Neck Stable Target Radians", m_target.getRadians()); 
-    SmartDashboard.putNumber("Neck Stable Target Degrees", m_target.getDegrees()); 
+    // Use the current height as the target
+    m_target = m_Climber.getArmHeightsEncoder();
+    SmartDashboard.putNumber("Climber Stable", m_target);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_target.getDegrees() > NeckConstants.KEncoderDeadbandThreshold)
+    if(!m_Climber.ArmIsFullyStowed())
     {
-      m_Neck.moveTo(m_target);
-      SmartDashboard.putString("RunningArm:", "Stabilizing");
+      m_Climber.moveTo(m_target);
+      SmartDashboard.putString("RunningClimber:", "Stabilizing");
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_Neck.stop();
   }
 
   // Returns true when the command should end.

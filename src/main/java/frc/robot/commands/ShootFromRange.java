@@ -4,30 +4,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.MoveNeckUp;
-import frc.robot.commands.ShootNote;
-import frc.robot.commands.MoveNeckDown;
-import frc.robot.subsystems.Shooter;
+import frc.robot.Vision;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Neck;
-
-
+import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootAMP extends SequentialCommandGroup {
-  //This class will raise the neck, shoot the note, then lower the neck for the AMP
-  /** Creates a new ShootAMP. */
-  public ShootAMP(Shooter m_shooter, Intake m_intake, Neck m_Neck) {
+public class ShootFromRange extends SequentialCommandGroup {
+  /** Creates a new ShootFromRange. */
+  public ShootFromRange(Shooter shooter, Intake intake, Vision vision, Neck neck) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveNeckUp(m_Neck),
-      new ShootNote(m_shooter, m_intake).withTimeout(3),
-      new MoveNeckDown(m_Neck)
+      new SetTargetRange(vision, neck),
+      new ShootNote(shooter, intake)
     );
   }
 }

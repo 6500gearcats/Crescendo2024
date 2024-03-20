@@ -57,7 +57,7 @@ public class Navigation extends SubsystemBase {
   }
 
   // HEADER - METHOD TO FIND DISTANCE FROM TARGET
-  public double getRange()
+  public double driveToTarget()
   {
     var result = m_vision.getLatestCameraResult();
     double range;
