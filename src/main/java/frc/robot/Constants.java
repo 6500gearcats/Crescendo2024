@@ -42,7 +42,8 @@ public final class Constants {
 
     //turbo
     public static final double kTurboModeModifier = 7.0;
-
+    public static double kTurboAngularSpeed = 2.0;
+    
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
@@ -72,7 +73,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
-    public static double kTurboAngularSpeed = 2.0;
+
   }
 
   public static final class ModuleConstants {
