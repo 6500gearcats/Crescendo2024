@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.SetNeckAngle;
 import frc.robot.commands.ShootNote;
@@ -22,7 +23,7 @@ public class NeckRaiseAndShoot extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetNeckAngle(neck, angle),
+      new SetNeckAngle(neck, angle).deadlineWith(new InstantCommand(() -> shooter.setShooterSpeedFast(),shooter)),
       new ShootNote(shooter, intake)
     );
   }
