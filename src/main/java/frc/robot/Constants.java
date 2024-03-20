@@ -230,7 +230,7 @@ public final class Constants {
       public static final double kShooterFastRPM = 2000;
       public static final int kShooterSlowRPM = 3000;
       public static final double kShooterSpeedFast = -0.6;
-      public static final double kShooterSpeed = 0.43; //0.43
+      public static final double kShooterSpeed = 0.8; //0.43
       public static final double kBallFiredThreshold = 0.1;
       public static final int kShooterEncoderPort = 10;
     }
