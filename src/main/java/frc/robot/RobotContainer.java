@@ -49,6 +49,7 @@ import frc.robot.commands.ClimberStable;
 import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
+import frc.robot.commands.FullTrapSequence;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
@@ -156,6 +157,8 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whileTrue(new FullTrapSequence(m_robotShooter, m_robotIntake, m_robotClimber, m_Neck, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
 
