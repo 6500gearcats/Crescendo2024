@@ -446,4 +446,10 @@ public class DriveSubsystem extends SubsystemBase {
   // PID Controllers
   public static PIDController turnController = new PIDController(Constants.ANGULAR_P, 0, Constants.ANGULAR_D);
 
+  public void setDriveCoast() {
+    m_frontLeft.setCoast();
+    m_rearLeft.setCoast();
+    m_frontRight.setCoast();
+    m_rearRight.setCoast();
+  }
 }
