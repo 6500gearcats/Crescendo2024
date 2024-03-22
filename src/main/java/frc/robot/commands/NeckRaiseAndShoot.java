@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SetNeckAngle;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.Neck;
@@ -16,13 +18,14 @@ import frc.robot.subsystems.Intake;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class NeckRaiseAndShoot extends ParallelCommandGroup {
+public class NeckRaiseAndShoot extends SequentialCommandGroup {
   /** Creates a new NeckRaiseAndShoot. */
   public NeckRaiseAndShoot(Neck neck, double angle, Shooter shooter, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetNeckAngle(neck, angle),
+      new SetNeckAngle(neck, angle)
+      .deadlineWith(new InstantCommand(() -> shooter.setShooterSpeedFast(),shooter)),
       new ShootNote(shooter, intake)
     );
   }
