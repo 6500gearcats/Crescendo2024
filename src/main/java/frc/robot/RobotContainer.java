@@ -170,7 +170,7 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new ShootNoteReverse(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
-        .whileTrue(new BackwardsIntake(m_robotIntake));
+        .whileTrue(new BackwardsIntake(m_robotIntake, m_robotShooter));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake)
@@ -180,7 +180,7 @@ private final Neck m_Neck = new Neck();
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
