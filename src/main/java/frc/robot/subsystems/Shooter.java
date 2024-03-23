@@ -43,12 +43,21 @@ public class Shooter extends SubsystemBase {
     m_ShooterMotor.set(ShooterConstants.kShooterSpeedFast);
   }
 
+  public void setDistanceShooterSpeedFast(){
+    m_ShooterMotor.set(ShooterConstants.kDistanceShooterSpeedFast);
+  }
+
   public void setShooterSpeedFastReverse() {
     m_ShooterMotor.set(ShooterConstants.kShooterReverseFast);
   }
 
   public boolean shooterSpeedSetFast(){
     m_bShooterAtSpeed = Math.abs(m_shooterEncoder.getVelocity()) >= ShooterConstants.kShooterFastRPM;
+    return m_bShooterAtSpeed;
+  }
+
+  public boolean distanceShooterSpeedSetFast(){
+    m_bShooterAtSpeed = Math.abs(m_shooterEncoder.getVelocity()) >= ShooterConstants.kDistanceShooterRPM;
     return m_bShooterAtSpeed;
   }
 
