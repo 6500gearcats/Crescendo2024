@@ -35,7 +35,7 @@ public class ShootNoteReverse extends Command {
   @Override
   public void execute() {
     m_ShooterSystem.setShooterSpeedFastReverse();
-    if (m_ShooterSystem.shooterSpeedSetFast()){
+    if (m_ShooterSystem.trapSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
   }
   }

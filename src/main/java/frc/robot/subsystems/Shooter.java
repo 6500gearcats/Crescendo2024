@@ -52,6 +52,11 @@ public class Shooter extends SubsystemBase {
     return m_bShooterAtSpeed;
   }
 
+  public boolean trapSpeedSetFast(){
+    m_bShooterAtSpeed = Math.abs(m_shooterEncoder.getVelocity()) >= ShooterConstants.kShooterTrapRPM;
+    return m_bShooterAtSpeed;
+  }
+
   public void stopShooter() {
     m_ShooterMotor.stopMotor();
   }
