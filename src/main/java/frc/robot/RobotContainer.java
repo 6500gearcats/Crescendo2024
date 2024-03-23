@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -161,6 +162,8 @@ private final Neck m_Neck = new Neck();
         .onTrue(new FullTrapSequence(m_robotShooter, m_robotIntake, m_robotClimber, m_Neck, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
+       new Trigger(() -> m_driverController.getStartButton())
+        .onTrue(new InstantCommand(() -> zeroDrive()));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
@@ -174,8 +177,8 @@ private final Neck m_Neck = new Neck();
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake)
-        //.andThen(new WaitCommand(.2))
-        //.andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new WaitCommand(.2))
+        .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.15))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
@@ -203,7 +206,7 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new MoveNeckUp(m_Neck));
 
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
-        .whileTrue(new MoveNeckDown(m_Neck)); 
+        .whileTrue(new MoveNeckDown(m_Neck));
 
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
