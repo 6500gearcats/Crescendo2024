@@ -44,7 +44,8 @@ public class FullTrapSequence extends SequentialCommandGroup {
       new ShootWhileStable(m_climber, m_shooter, m_intake),
       new MoveNeckUp(m_Neck)
       ),
-      new RaiseHooks(m_climber).withTimeout(2.0)
+      new RaiseHooks(m_climber).withTimeout(0.75),
+      new ClimberStable(m_climber)
     );
   }
 }
