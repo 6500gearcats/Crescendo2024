@@ -73,8 +73,7 @@ import frc.robot.subsystems.Shooter;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final SendableChooser<Command> autoChooser;
-  //private Vision visionSim;
+    //private Vision visionSim;
 
 private PhotonCamera cameraTag = new PhotonCamera(kCameraNameTag);
 private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote);
@@ -89,7 +88,7 @@ private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
 
-
+private final SendableChooser<Command> autoChooser;
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
@@ -103,7 +102,7 @@ private final Neck m_Neck = new Neck();
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
     NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake).withTimeout(2.0));
     // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser("ShootNote");
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
 

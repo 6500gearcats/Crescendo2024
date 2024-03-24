@@ -48,6 +48,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "TopToTaxi2"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "MoveToClosestNote"
@@ -68,7 +74,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TopToTaxi"
+            "pathName": "TopToTop"
           }
         }
       ]

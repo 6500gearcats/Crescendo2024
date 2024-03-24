@@ -48,6 +48,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "BottomToTaxi2"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "MoveToClosestNote"
@@ -63,6 +69,12 @@
           "type": "named",
           "data": {
             "name": "ShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom2"
           }
         }
       ]
