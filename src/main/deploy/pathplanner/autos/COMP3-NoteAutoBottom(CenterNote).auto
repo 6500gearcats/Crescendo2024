@@ -48,12 +48,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "BottomToTaxi2"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "MoveToClosestNote"
