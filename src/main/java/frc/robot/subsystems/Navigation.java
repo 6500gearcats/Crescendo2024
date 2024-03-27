@@ -95,9 +95,18 @@ public class Navigation extends SubsystemBase {
   public double getDistanceFromSpeaker()
   {
     double distance = 0.0;
-    var result = m_vision.getLatestCameraResult();
+    var alliance = DriverStation.getAlliance();
 
-    m_vision.getChosenTargetRange(4);
+    if(alliance.get() == DriverStation.Alliance.Red)
+    {
+        distance = m_vision.getChosenTargetRange(4);
+    }
+    else
+    {
+      distance = m_vision.getChosenTargetDistance(8);
+    }
+
+    distance = Math.sqrt(Units.inchesToMeters(Math.pow(distance, 2) - Math.pow(27.875, 2)));
 
     return distance;
   }

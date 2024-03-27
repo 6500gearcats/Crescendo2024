@@ -253,6 +253,29 @@ public class Vision {
         }
     }
 
+    public double getChosenTargetDistance(int targetID)
+    {
+        var result = getLatestCameraResult();
+        List<PhotonTrackedTarget> targets = result.getTargets();
+        double range = 0;
+
+        for (PhotonTrackedTarget target : targets) {
+            if (result.hasTargets() && target.getFiducialId() == targetID) {
+                range = PhotonUtils.calculateDistanceToTargetMeters(
+                        CAMERA_HEIGHT_METERS, // Previously declarde
+                        TARGET_HEIGHT_METERS,
+                        CAMERA_PITCH_RADIANS,
+                        Units.degreesToRadians(target.getPitch()));
+                return range;
+            } else {
+                // If we have no targets, stay still
+                range = 0;
+            }
+        }
+
+        return range;
+    }
+
     public double getYaw() {
         var result = getLatestCameraResult();
         double yaw = 0.0;
