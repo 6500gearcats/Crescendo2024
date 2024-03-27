@@ -19,7 +19,7 @@ public class ShootWhileStable extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ClimberStable(m_climber).withTimeout(1.0),
-      new ShootNoteReverse(m_shooter, m_intake)
+      new ShootNoteReverse(m_shooter, m_intake).withTimeout(4.5)
     );
   }
 }
