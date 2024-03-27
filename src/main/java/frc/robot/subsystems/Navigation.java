@@ -96,17 +96,28 @@ public class Navigation extends SubsystemBase {
   {
     double distance = 0.0;
     var alliance = DriverStation.getAlliance();
+    double rotation = 0.0;
 
     if(alliance.get() == DriverStation.Alliance.Red)
     {
         distance = m_vision.getChosenTargetRange(4);
+        rotation = m_vision.getChosenTargetRotation(4);
     }
     else
     {
       distance = m_vision.getChosenTargetDistance(8);
+      rotation = m_vision.getChosenTargetRotation(8);
     }
 
-    distance = Math.sqrt(Units.inchesToMeters(Math.pow(distance, 2) - Math.pow(27.875, 2)));
+    if(m_vision.getLatestCameraResult().hasTargets())
+    {
+      double cameraOffset = -9;
+      distance = Math.sqrt(Units.inchesToMeters(Math.pow(distance, 2) - Math.pow(27.875, 2)));
+      double bSquared = Math.pow(cameraOffset, 2) + Math.pow(distance, 2) -2 * (distance*cameraOffset) * Math.cos(rotation + 90);
+      double b = Math.sqrt(bSquared);
+    
+      distance = b;
+    }
 
     return distance;
   }
