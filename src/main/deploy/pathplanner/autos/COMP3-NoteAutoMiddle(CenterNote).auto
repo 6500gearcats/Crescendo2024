@@ -48,6 +48,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "DefaultMiddle2"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "MoveToClosestNote"
