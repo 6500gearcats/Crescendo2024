@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.GrabNote;
+import frc.robot.commands.LineUpAmp;
+import frc.robot.commands.LineUpAndShootAmpSequence;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.NeckRaiseAndShoot;
 import frc.robot.commands.PickUpNote;
@@ -196,7 +198,7 @@ private final SendableChooser<Command> autoChooser;
 
     //Change to whileTrue after re-maping for climer
     new JoystickButton(m_gunnerController, Button.kA.value)
-        .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck)); 
+        .onTrue(new LineUpAmp(m_robotDrive).andThen(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck))); 
 
     new JoystickButton(m_gunnerController, Button.kX.value)
         .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     

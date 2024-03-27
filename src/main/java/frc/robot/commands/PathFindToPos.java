@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class PathFindToPos extends Command {
-  private int x;
-  private int y;
+  private double x;
+  private double y;
   private Rotation2d Rotation;
-  private PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+  private PathConstraints constraints = new PathConstraints(2.0, 2.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
   Pose2d targetPose;
   DriveSubsystem m_drive;
   /** Creates a new PathFindToPos. */
-  public PathFindToPos(int posX, int posY, Rotation2d rot, DriveSubsystem drive) {
+  public PathFindToPos(double posX, double posY, Rotation2d rot, DriveSubsystem drive) {
     x = posX;
     y = posY;
     m_drive = drive;
@@ -32,17 +32,18 @@ public class PathFindToPos extends Command {
   @Override
   public void initialize() {
     targetPose = new Pose2d(x, y, Rotation);
-Command pathfindingCommand = AutoBuilder.pathfindToPose(
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    AutoBuilder.pathfindToPose(
         targetPose,
         constraints,
         0.0, // Goal end velocity in meters/sec
         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
 );
   }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
