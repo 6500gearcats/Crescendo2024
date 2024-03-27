@@ -4,19 +4,15 @@
 
 package frc.robot.subsystems;
 
-import java.util.List;
-
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Vision;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Vision;
 
 public class Navigation extends SubsystemBase {
     
@@ -94,10 +90,16 @@ public class Navigation extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(m_vision.getLatestCameraResult().hasTargets())
-    {
-    //SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
-    }
+  }
+
+  public double getDistanceFromSpeaker()
+  {
+    double distance = 0.0;
+    var result = m_vision.getLatestCameraResult();
+
+    m_vision.getChosenTargetRange(4);
+
+    return distance;
   }
 
   public void setDriveController(DriveSubsystem robotDrive) {
