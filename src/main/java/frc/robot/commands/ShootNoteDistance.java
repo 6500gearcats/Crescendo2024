@@ -4,20 +4,25 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Navigation;
+import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.NeckConstants;
 import frc.robot.Constants.ShootNoteConstants;
+import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class ShootNoteReverse extends Command {
+public class ShootNoteDistance extends Command {
   
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
   private long seconds;
 
-  public ShootNoteReverse(Shooter theShooter, Intake theIntake) {
+  public ShootNoteDistance(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     addRequirements(m_ShooterSystem);
@@ -27,17 +32,18 @@ public class ShootNoteReverse extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ShooterSystem.setShooterSpeedFastReverse();
+    m_ShooterSystem.setDistanceShooterSpeedFast();
     seconds = System.currentTimeMillis();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSystem.setShooterSpeedFastReverse();
-    if (m_ShooterSystem.trapSpeedSetFast()){
+    m_ShooterSystem.setDistanceShooterSpeedFast();
+    if (m_ShooterSystem.distanceShooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
-  }
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -50,21 +56,10 @@ public class ShootNoteReverse extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return m_IntakeSystem.NoteIsPresent();
-    return false;
+    return !m_IntakeSystem.NoteIsPresent();
+    //return false;
   }
 
-  
-  private boolean secondPast() {
-    long currentSeconds = System.currentTimeMillis();
-
-    return (currentSeconds - seconds) >= ShootNoteConstants.kmiliSeconds; 
-  }
-
-  //For sensor, not added yet
-  private boolean sensorPast() {
-    return false;
-  }
 
   }
 

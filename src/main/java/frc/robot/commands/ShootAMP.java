@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.ShootNote;
@@ -21,13 +22,13 @@ import frc.robot.subsystems.Neck;
 public class ShootAMP extends SequentialCommandGroup {
   //This class will raise the neck, shoot the note, then lower the neck for the AMP
   /** Creates a new ShootAMP. */
-  public ShootAMP(Shooter m_shooter, Intake m_intake, Neck m_Neck) {
+  public ShootAMP(Shooter shooter, Intake intake, Neck neck) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveNeckUp(m_Neck),
-      new ShootNote(m_shooter, m_intake).withTimeout(3),
-      new MoveNeckDown(m_Neck)
+      new MoveNeckUp(neck).deadlineWith(new InstantCommand(() -> shooter.setShooterSpeedFast(),shooter)),
+      new ShootNote(shooter, intake).withTimeout(3),
+      new MoveNeckDown(neck)
     );
   }
 }

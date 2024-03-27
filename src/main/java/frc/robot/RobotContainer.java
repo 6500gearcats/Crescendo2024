@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -49,6 +50,7 @@ import frc.robot.commands.ClimberStable;
 import frc.robot.commands.ControllerRumble;
 import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
+import frc.robot.commands.FullTrapSequence;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
@@ -156,8 +158,12 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    new JoystickButton(m_driverController, Button.kY.value)
+        .onTrue(new FullTrapSequence(m_robotShooter, m_robotIntake, m_robotClimber, m_Neck, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
+       new Trigger(() -> m_driverController.getStartButton())
+        .onTrue(new InstantCommand(() -> zeroDrive()));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
@@ -167,17 +173,17 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new ShootNoteReverse(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
-        .whileTrue(new BackwardsIntake(m_robotIntake));
+        .whileTrue(new BackwardsIntake(m_robotIntake, m_robotShooter));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake)
-        //.andThen(new WaitCommand(.2))
-        //.andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new WaitCommand(.2))
+        .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.15))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
-        .andThen(new BackwardsIntake(m_robotIntake).withTimeout(.1))
+        .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
@@ -200,7 +206,7 @@ private final Neck m_Neck = new Neck();
         .whileTrue(new MoveNeckUp(m_Neck));
 
     new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
-        .whileTrue(new MoveNeckDown(m_Neck)); 
+        .whileTrue(new MoveNeckDown(m_Neck));
 
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));

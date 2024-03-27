@@ -11,9 +11,11 @@ import frc.robot.subsystems.Shooter;
 
 public class BackwardsIntake extends Command {
   private final Intake m_IntakeSystem;
+  private final Shooter m_ShooterSystem;
   /** Creates a new BackwardsIntake. */
-  public BackwardsIntake(Intake theIntake) {
+  public BackwardsIntake(Intake theIntake, Shooter theShooter) {
     m_IntakeSystem = theIntake;
+    m_ShooterSystem = theShooter;
     addRequirements(m_IntakeSystem);
   }
 
@@ -26,11 +28,13 @@ public class BackwardsIntake extends Command {
   @Override
   public void execute() {
     m_IntakeSystem.setReverseSpeed();
+    m_ShooterSystem.reverseShooter();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_IntakeSystem.stop();
+    m_ShooterSystem.stopShooter();
   }
 }

@@ -123,7 +123,7 @@ public final class Constants {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int kDrivingMotorCurrentLimit = 50; // amps
+    public static final int kDrivingMotorCurrentLimit = 40; // amps
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
@@ -158,7 +158,7 @@ public final class Constants {
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
     public static final double kNeckReverseSpeed = -0.4; 
-    public static final double kNeckForwardSpeed = 0.4; //Was 0.6
+    public static final double kNeckForwardSpeed = 0.6; //Was 0.6
     public static final double kNeckForwardMaxSpeed = 0.15;
     public static final double kNeckReverseMaxSpeed = -0.15;
     public static final double kNeckStableSpeed = 0.058;
@@ -231,10 +231,14 @@ public final class Constants {
 
       // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
-      public static final double kShooterFastRPM = 3000;
-      public static final int kShooterSlowRPM = 3000;
-      public static final double kShooterSpeedFast = -0.75;
-      public static final double kShooterReverseFast = 0.8;
+      public static final double kBackwardsShooter = 0.2;
+      public static final double kShooterFastRPM = 2100;
+      //public static final int kShooterSlowRPM = 3000;
+      public static final int kDistanceShooterRPM = 3000;
+      public static final int kShooterTrapRPM = 3000;
+      public static final double kShooterSpeedFast = -0.6;
+      public static final double kDistanceShooterSpeedFast = -0.75;
+      public static final double kShooterReverseFast = 1;
       public static final double kShooterSpeed = 1.1; //0.43
       public static final double kBallFiredThreshold = 0.1;
       public static final int kShooterEncoderPort = 10;

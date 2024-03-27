@@ -4,29 +4,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.SetNeckAngle;
-import frc.robot.commands.ShootNote;
-import frc.robot.subsystems.Neck;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
-
-
+import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class NeckRaiseAndShoot extends SequentialCommandGroup {
-  /** Creates a new NeckRaiseAndShoot. */
-  public NeckRaiseAndShoot(Neck neck, double angle, Shooter shooter, Intake intake) {
+public class ShootWhileStable extends ParallelCommandGroup {
+  /** Creates a new ResetClimberWhileStable. */
+  public ShootWhileStable(Climber m_climber, Shooter m_shooter, Intake m_intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetNeckAngle(neck, angle)
-      .deadlineWith(new InstantCommand(() -> shooter.setDistanceShooterSpeedFast(), shooter)),
-      new ShootNoteDistance(shooter, intake)
+      new ClimberStable(m_climber).withTimeout(1.0),
+      new ShootNoteReverse(m_shooter, m_intake).withTimeout(4.5)
     );
   }
 }
