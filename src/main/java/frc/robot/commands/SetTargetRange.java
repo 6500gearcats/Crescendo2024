@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Vision;
 import frc.robot.Constants.NeckConstants;
@@ -30,8 +32,20 @@ public class SetTargetRange extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    double distance = m_vision.getChosenTargetRange(1);
+    //Determine alliance color
+    double distance = 0.0;
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      if(alliance.get() == DriverStation.Alliance.Red)
+      {
+        distance = m_vision.getChosenTargetRange(4);
+      }
+      else
+      {
+        distance = m_vision.getChosenTargetRange(7);
+      }
+    }
+
     m_targetAngle = distance * ShooterConstants.kShooterDistanceFactor;
   }
 
@@ -53,8 +67,6 @@ public class SetTargetRange extends Command {
         }
         else this.cancel();
     }
-
-
   }
 
   private double calculateAngleDifference() {

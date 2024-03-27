@@ -60,6 +60,5 @@ public class ShootNoteDistance extends Command {
     //return false;
   }
 
-
   }
 

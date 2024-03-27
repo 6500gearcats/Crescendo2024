@@ -164,6 +164,10 @@ private final Neck m_Neck = new Neck();
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
        new Trigger(() -> m_driverController.getStartButton())
         .onTrue(new InstantCommand(() -> zeroDrive()));
+    
+    //FOR TESTING SHOOT DISTANCE ONLY
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new ShootFromRange(m_robotShooter, m_robotIntake, m_tagVision, m_Neck));
 
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)

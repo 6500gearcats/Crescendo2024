@@ -20,7 +20,7 @@ public class ShootFromRange extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetTargetRange(vision, neck),
-      new ShootNote(shooter, intake)
+      new ShootNoteDistance(shooter, intake)
     );
   }
 }
