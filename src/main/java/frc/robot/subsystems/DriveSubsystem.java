@@ -437,11 +437,11 @@ public class DriveSubsystem extends SubsystemBase {
   /* Return the NavX yaw angle */
   public double getAngle() {
     // return -m_gyro.getYaw();
-    if (Robot.isReal()) {
+    // if (Robot.isReal()) {
       return -m_gyro.getAngle();
-    } else {
-      return m_simAngle.get();
-    }
+    // } else {
+    //   return m_simAngle.get();
+    // }
   }
 
   public boolean toggleFieldOriented() {
