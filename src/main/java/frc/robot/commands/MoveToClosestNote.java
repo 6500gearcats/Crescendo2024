@@ -16,6 +16,8 @@ public class MoveToClosestNote extends Command {
   private final DriveSubsystem m_drive;
   private final Intake m_IntakeSystem;
 
+  private boolean m_noteDetected = true;
+
   public MoveToClosestNote(NoteFinder finder, DriveSubsystem drive, Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
@@ -27,15 +29,16 @@ public class MoveToClosestNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() { 
-    // This stops the command if note finder can't find note; Seth is forcing me to write fancy.
-    if(m_NoteFinder.getRotation() == 0 && m_NoteFinder.getRange() == 0) {
-      this.cancel();
-    }
+     m_noteDetected =  m_NoteFinder.isNoteDetected();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    if (!m_noteDetected) return;
+
+
     double rotation = m_NoteFinder.getRotation(); 
     double speed = m_NoteFinder.getRange();
 

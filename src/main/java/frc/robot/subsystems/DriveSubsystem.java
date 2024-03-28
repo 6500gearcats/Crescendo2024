@@ -296,6 +296,8 @@ public class DriveSubsystem extends SubsystemBase {
       SwerveModuleState[] measuredStates = new SwerveModuleState[] {
           m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState()
       };
+
+
       // ChassisSpeeds speeds =
       // DriveConstants.kDriveKinematics.toChassisSpeeds(measuredStates);
       ChassisSpeeds speeds = m_lastSpeeds;
@@ -370,8 +372,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-    m_lastSpeeds = speeds;
-
+    m_lastSpeeds = DriveConstants.kDriveKinematics.toChassisSpeeds(swerveModuleStates);
   }
 
   /**

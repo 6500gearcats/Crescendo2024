@@ -20,99 +20,93 @@ import frc.robot.Constants;
 import frc.robot.Vision;
 
 public class NoteFinder extends SubsystemBase {
-    final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(12);
-    final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
-    // Angle between horizontal and the camera.
-    final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(12);
+  final double TARGET_HEIGHT_METERS = Units.feetToMeters(0);
+  // Angle between horizontal and the camera.
+  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
 
-    // How far from the target we want to be
-    final double GOAL_RANGE_METERS = Units.feetToMeters(0);
+  // How far from the target we want to be
+  final double GOAL_RANGE_METERS = Units.feetToMeters(0);
 
-    // Change this to match the name of your camera
-    // CHANGED CAMERA NAME TO A CONSTANT
+  // Change this to match the name of your camera
+  // CHANGED CAMERA NAME TO A CONSTANT
 
-    //static PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
+  // static PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
 
-    //static PhotonCamera camera = new PhotonCamera(Constants.kCamName);
+  // static PhotonCamera camera = new PhotonCamera(Constants.kCamName);
 
-    // PID constants should be tuned per robot
-    final double LINEAR_P = 0.1;
-    final double LINEAR_D = 0.0;
-    PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
-    final double ANGULAR_P = 0.05;
-    final double ANGULAR_D = 0.0;
-    PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
+  // PID constants should be tuned per robot
+  final double LINEAR_P = 0.1;
+  final double LINEAR_D = 0.0;
+  PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
+  final double ANGULAR_P = 0.05;
+  final double ANGULAR_D = 0.0;
+  PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
-    DriveSubsystem m_drive;
-    Vision m_vision;
+  DriveSubsystem m_drive;
+  Vision m_vision;
 
-  public double getRotation()
-  {
+  public double getRotation() {
     var result = m_vision.getLatestResult();
     double rotation;
-    if (result.hasTargets()) 
-    {
+    if (result.hasTargets()) {
       // Calculate angular turn power
       // Remove -1.0 because it was inverting results.
       rotation = -turnController.calculate(result.getBestTarget().getYaw(), 0) * Constants.kRangeSpeedOffset;
 
-  } else {
+    } else {
       // If we have no targets, stay still.
       rotation = 0;
-  }
+    }
     return rotation;
   }
 
   // HEADER - METHOD TO FIND DISTANCE FROM TARGET
-  public double getRange()
-  {
+  public double getRange() {
     var result = m_vision.getLatestResult();
     double range;
     if (result.hasTargets()) {
-                // First calculate range
-                range =
-                        PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
-                                Units.degreesToRadians(result.getBestTarget().getPitch()));
+      // First calculate range
+      range = PhotonUtils.calculateDistanceToTargetMeters(
+          CAMERA_HEIGHT_METERS, // Previously declarde
+          TARGET_HEIGHT_METERS,
+          CAMERA_PITCH_RADIANS,
+          Units.degreesToRadians(result.getBestTarget().getPitch()));
 
-                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
-                // Use this range as the measurement we give to the PID controller.
-                // -1.0 required to ensure positive PID controller effort _increases_ range
-                double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
-                return forwardSpeed * Constants.kRangeSpeedOffset;
-            } else {
-                // If we have no targets, stay still.
-                return 0;
-                // When this is implemented - DO NOTHING IF RANGE IS 0
-            }
+      // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
+      // Use this range as the measurement we give to the PID controller.
+      // -1.0 required to ensure positive PID controller effort _increases_ range
+      double forwardSpeed = -DriveSubsystem.turnController.calculate(range, GOAL_RANGE_METERS);
+      return forwardSpeed * Constants.kRangeSpeedOffset;
+    } else {
+      // If we have no targets, stay still.
+      return 0;
+      // When this is implemented - DO NOTHING IF RANGE IS 0
+    }
   }
-  
-// This is a method it get distance
 
-  public double getDistance()
-  {
+  // This is a method it get distance
+
+  public double getDistance() {
     var result = m_vision.getLatestResult();
     double range;
     if (result.hasTargets()) {
-                // First calculate range
-                range =
-                        PhotonUtils.calculateDistanceToTargetMeters(
-                                CAMERA_HEIGHT_METERS, // Previously declarde
-                                TARGET_HEIGHT_METERS,
-                                CAMERA_PITCH_RADIANS,
-                                Units.degreesToRadians(result.getBestTarget().getPitch()));
+      // First calculate range
+      range = PhotonUtils.calculateDistanceToTargetMeters(
+          CAMERA_HEIGHT_METERS, // Previously declarde
+          TARGET_HEIGHT_METERS,
+          CAMERA_PITCH_RADIANS,
+          Units.degreesToRadians(result.getBestTarget().getPitch()));
 
-                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
-                // Use this range as the measurement we give to the PID controller.
-                // -1.0 required to ensure positive PID controller effort _increases_ range
-            } else {
-                // If we have no targets, stay still.
-                return 0;
-                // When this is implemented - DO NOTHING IF RANGE IS 0
-            }
-      return range;
+      // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
+      // Use this range as the measurement we give to the PID controller.
+      // -1.0 required to ensure positive PID controller effort _increases_ range
+    } else {
+      // If we have no targets, stay still.
+      return 0;
+      // When this is implemented - DO NOTHING IF RANGE IS 0
+    }
+    return range;
   }
 
   /** Creates a new Navigation object when used. */
@@ -134,5 +128,10 @@ public class NoteFinder extends SubsystemBase {
 
   public int NearestNotePosition() {
     return 1; // Placeholder for when vision is utilized in here to find a notes position
+  }
+
+  public boolean isNoteDetected() {
+    var result = m_vision.getLatestResult();
+    return result.hasTargets();
   }
 }

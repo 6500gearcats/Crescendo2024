@@ -36,7 +36,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.6; //4.5
+    public static final double kMaxSpeedMetersPerSecond = 3; //4.5
     public static final double kNormalSpeedMetersPerSecond = 1.5; //0.85
     public static final double kMaxAngularSpeed = 1 * Math.PI; // radians per second (was 0.75)
 
@@ -55,10 +55,15 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
-    public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+
+    // caclulate front wheel offset angles using math. Similar angles means we can just use width/length as opposite/adjacent
+    public static final double moduleAngleFromOrigin = Math.atan((kTrackWidth)/(kWheelBase));
+
+    // Now use trig to figure out other angles
+    public static final double kFrontLeftChassisAngularOffset = -moduleAngleFromOrigin;
+    public static final double kFrontRightChassisAngularOffset = moduleAngleFromOrigin;
+    public static final double kBackLeftChassisAngularOffset = -(Math.PI - moduleAngleFromOrigin);
+    public static final double kBackRightChassisAngularOffset = Math.PI - moduleAngleFromOrigin;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1; 
@@ -133,7 +138,7 @@ public final class Constants {
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
