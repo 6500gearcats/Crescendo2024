@@ -44,9 +44,9 @@ public final class Constants {
     public static final double kTurboModeModifier = 7.0;
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(28.5);
+    public static final double kTrackWidth = Units.inchesToMeters(23.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23.5);
+    public static final double kWheelBase = Units.inchesToMeters(28.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -54,11 +54,19 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+    // caclulate front wheel offset angles using math. Similar angles means we can just use width/length as opposite/adjacent
+    public static final double theta  = Math.atan((kTrackWidth)/(kWheelBase));
+
+    // Now use trig to figure out other angles
+    // public static final double kFrontLeftChassisAngularOffset = -moduleAngleFromOrigin;
+    // public static final double kFrontRightChassisAngularOffset = moduleAngleFromOrigin;
+    // public static final double kBackLeftChassisAngularOffset = -(Math.PI - moduleAngleFromOrigin);
+    // public static final double kBackRightChassisAngularOffset = Math.PI - moduleAngleFromOrigin;
+
+    public static final double kFrontLeftChassisAngularOffset = - theta * 2;
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+    public static final double kBackRightChassisAngularOffset = Math.PI - 2 * theta;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1; 
