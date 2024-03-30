@@ -7,6 +7,7 @@ package frc.robot.commands;
 import javax.lang.model.util.ElementScanner14;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.Neck;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.RobotContainer;
+import frc.robot.Vision;
 
 public class SetNeckAngleTest extends Command {
   // Get rid of later
@@ -22,22 +24,34 @@ public class SetNeckAngleTest extends Command {
   private final Neck m_Neck;
   Rotation2d m_target;
   private double m_neckAngle;
-  private Navigation m_Navigation;
+  private Vision m_Vision;
 
-  public SetNeckAngleTest(Neck neck, Navigation navigation) {
+  public SetNeckAngleTest(Neck neck, Vision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Neck = neck;
-    m_Navigation = navigation;
+    m_Vision = vision;
     addRequirements(m_Neck);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    double distance = 0;
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      if(alliance.get() == DriverStation.Alliance.Red)
+      {
+        distance = m_Vision.getChosenTargetRange(4);
+      }
+      else
+      {
+        distance = m_Vision.getChosenTargetRange(7);
+      }
+    }
     //Insert the get distance from speaker than this subsystem should set neck angle
     m_neckAngle = m_Neck.getFromDashboard();
     SmartDashboard.putNumber("Target Neck Angle", m_neckAngle); 
-    m_Navigation.
+    SmartDashboard.putNumber("Speaker Distance", distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

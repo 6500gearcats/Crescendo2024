@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.VisionConstants.kCameraNameGlobal;
 import static frc.robot.Constants.VisionConstants.kCameraNameNote;
 import static frc.robot.Constants.VisionConstants.kCameraNameTag;
 
@@ -85,9 +86,10 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   //private Vision visionSim;
 
-private PhotonCamera cameraTag = new PhotonCamera(kCameraNameTag);
-private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote);
-private Vision m_tagVision = new Vision(cameraTag);
+private PhotonCamera cameraTag = new PhotonCamera(kCameraNameTag); //Not used right now
+private PhotonCamera cameraNote = new PhotonCamera(kCameraNameNote); //Note
+private PhotonCamera globalCamera = new PhotonCamera(kCameraNameGlobal); //Tag
+private Vision m_tagVision = new Vision(globalCamera);
 private Vision m_noteVision = new Vision(cameraNote);
 
 private final Navigation m_nav = new Navigation(m_tagVision);
@@ -212,7 +214,7 @@ private final Neck m_Neck = new Neck();
 
     new JoystickButton(m_gunnerController, Button.kX.value)
        // .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     
-       .onTrue(new SetNeckAngleTest(m_Neck).withTimeout(2)
+       .onTrue(new SetNeckAngleTest(m_Neck, m_tagVision).withTimeout(2)
        .andThen(new ShootDistanceStable(m_Neck, m_robotShooter, m_robotIntake)));
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)

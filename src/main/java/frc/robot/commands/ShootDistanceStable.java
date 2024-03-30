@@ -20,7 +20,7 @@ public class ShootDistanceStable extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new NeckStable(neck).withTimeout(2.0),
-      new ShootNoteDistance(shooter, intake).withTimeout(2)
+      new ShootNoteDistance(shooter, intake).withTimeout(3)
     );
   }
 }
