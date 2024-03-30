@@ -7,14 +7,20 @@ package frc.robot;
 import static frc.robot.Constants.VisionConstants.kCameraNameNote;
 import static frc.robot.Constants.VisionConstants.kCameraNameTag;
 
+import java.util.Map;
+
 import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
@@ -94,6 +100,11 @@ private final Neck m_Neck = new Neck();
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_gunnerController = new XboxController(OIConstants.kGunnerControllerPort);
 
+  private ShuffleboardTab m_neckTab = Shuffleboard.getTab("Neck");
+
+private GenericEntry m_neckAngle;
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -121,7 +132,13 @@ private final Neck m_Neck = new Neck();
     SmartDashboard.putData("Neck: up", new MoveNeckUp(m_Neck));
     SmartDashboard.putData("Neck: down", new MoveNeckDown(m_Neck));
 
-    
+    m_neckAngle = m_neckTab.add("Max Speed", 0.01)
+      .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
+      .withProperties(Map.of(
+        "min", 0.0, 
+        "max", 0.5)) // specify widget properties here
+      .getEntry();
+
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -200,7 +217,7 @@ private final Neck m_Neck = new Neck();
         .onTrue(new ShootAMP(m_robotShooter, m_robotIntake, m_Neck)); 
 
     new JoystickButton(m_gunnerController, Button.kX.value)
-        .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     
+        .onTrue(new NeckRaiseAndShoot(m_Neck, neckAngle(), m_robotShooter, m_robotIntake));     
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
@@ -214,6 +231,10 @@ private final Neck m_Neck = new Neck();
 
   public void zeroDrive() {
     m_robotDrive.zeroHeading();
+  }
+
+  public double neckAngle() {
+    return m_neckAngle.getDouble(0.0);
   }
 
   public Command getAutonomousCommand() {
