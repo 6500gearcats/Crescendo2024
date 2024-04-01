@@ -39,5 +39,7 @@ public class ResetClimber extends Command {
   @Override
   public boolean isFinished() {
     return m_climber.ArmIsFullyStowed();
+    //return false;
   }
 }
+

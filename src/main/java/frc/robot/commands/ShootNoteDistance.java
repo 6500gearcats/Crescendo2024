@@ -16,13 +16,13 @@ import frc.robot.Constants.ShootNoteConstants;
 import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class ShootNote extends Command {
+public class ShootNoteDistance extends Command {
   
   private final Shooter m_ShooterSystem;
   private final Intake m_IntakeSystem;
   private long seconds;
 
-  public ShootNote(Shooter theShooter, Intake theIntake) {
+  public ShootNoteDistance(Shooter theShooter, Intake theIntake) {
     m_ShooterSystem = theShooter;
     m_IntakeSystem = theIntake;
     addRequirements(m_ShooterSystem);
@@ -32,7 +32,7 @@ public class ShootNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ShooterSystem.setShooterSpeedFast();
+    m_ShooterSystem.setDistanceShooterSpeedFast();
     seconds = System.currentTimeMillis();
     
   }
@@ -40,8 +40,8 @@ public class ShootNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSystem.setShooterSpeedFast();
-    if (m_ShooterSystem.shooterSpeedSetFast()){
+    m_ShooterSystem.setDistanceShooterSpeedFast();
+    if (m_ShooterSystem.distanceShooterSpeedSetFast()){
       m_IntakeSystem.setFeedSpeed();
     }
   }

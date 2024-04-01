@@ -8,33 +8,38 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
+public class DepositTrap extends Command {
+  /** Creates a new DepositTrap. */
+  Shooter m_robotShooter;
+  Intake m_Intake;
 
-public class BackwardsIntake extends Command {
-  private final Intake m_IntakeSystem;
-  private final Shooter m_ShooterSystem;
-  /** Creates a new BackwardsIntake. */
-  public BackwardsIntake(Intake theIntake, Shooter theShooter) {
-    m_IntakeSystem = theIntake;
-    m_ShooterSystem = theShooter;
-    addRequirements(m_IntakeSystem);
+  public DepositTrap(Shooter theShooter, Intake theIntake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_robotShooter = theShooter;
+    m_Intake = theIntake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeSystem.setReverseSpeed();
-    m_ShooterSystem.reverseShooter();
+    m_Intake.setPickupSpeed();
+    m_robotShooter.reverseMotor();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_IntakeSystem.stop();
-    m_ShooterSystem.stopShooter();
+    m_Intake.stop();
+    m_robotShooter.stopShooter();
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 }

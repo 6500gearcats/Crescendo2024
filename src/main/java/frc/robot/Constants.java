@@ -42,23 +42,27 @@ public final class Constants {
 
     //turbo
     public static final double kTurboModeModifier = 7.0;
-
+    public static double kTurboAngularSpeed = 2.0;
+    
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23.5);
+    public static final double kTrackWidth = Units.inchesToMeters(23.5);
     // Distance between front and back wheels on robot
+    public static final double kWheelBase = Units.inchesToMeters(28.5);
+
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+    // caclulate front wheel offset angles using math. Similar angles means we can just use width/length as opposite/adjacent
+    public static final double theta  = Math.atan((kTrackWidth)/(kWheelBase));
+
+    public static final double kFrontLeftChassisAngularOffset = - theta * 2;
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+    public static final double kBackRightChassisAngularOffset = Math.PI - 2 * theta;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1; 
@@ -72,7 +76,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
-    public static double kTurboAngularSpeed = 2.0;
+
   }
 
   public static final class ModuleConstants {
@@ -122,7 +126,7 @@ public final class Constants {
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int kDrivingMotorCurrentLimit = 50; // amps
+    public static final int kDrivingMotorCurrentLimit = 40; // amps
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
@@ -157,7 +161,7 @@ public final class Constants {
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
     public static final double kNeckReverseSpeed = -0.4; 
-    public static final double kNeckForwardSpeed = 0.4; //Was 0.6
+    public static final double kNeckForwardSpeed = 0.6; //Was 0.6
     public static final double kNeckForwardMaxSpeed = 0.15;
     public static final double kNeckReverseMaxSpeed = -0.15;
     public static final double kNeckStableSpeed = 0.058;
@@ -230,9 +234,14 @@ public final class Constants {
 
       // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
-      public static final double kShooterFastRPM = 3000;
-      public static final int kShooterSlowRPM = 3000;
-      public static final double kShooterSpeedFast = -0.75;
+      public static final double kBackwardsShooter = 0.2;
+      public static final double kShooterFastRPM = 2100;
+      //public static final int kShooterSlowRPM = 3000;
+      public static final int kDistanceShooterRPM = 3000;
+      public static final int kShooterTrapRPM = 3000;
+      public static final double kShooterSpeedFast = -0.6;
+      public static final double kDistanceShooterSpeedFast = -0.75;
+      public static final double kShooterReverseFast = 1;
       public static final double kShooterSpeed = 1.1; //0.43
       public static final double kBallFiredThreshold = 0.1;
       public static final int kShooterEncoderPort = 10;
