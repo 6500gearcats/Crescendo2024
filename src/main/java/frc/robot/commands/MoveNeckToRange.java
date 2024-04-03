@@ -19,7 +19,7 @@ import frc.robot.commands.MoveNeckUp;
 import frc.robot.RobotContainer;
 import frc.robot.Vision;
 
-public class SetNeckAngleTest extends Command {
+public class MoveNeckToRange extends Command {
   // Get rid of later
   /** Creates a new SetNeckAngle. */
   private final Neck m_Neck;
@@ -28,7 +28,7 @@ public class SetNeckAngleTest extends Command {
   private Vision m_Vision;
   private RangeFinder m_range;
 
-  public SetNeckAngleTest(Neck neck, Vision vision, RangeFinder range) {
+  public MoveNeckToRange(Neck neck, Vision vision, RangeFinder range) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Neck = neck;
     m_Vision = vision;

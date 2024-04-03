@@ -26,7 +26,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.SetNeckAngle;
-import frc.robot.commands.SetNeckAngleTest;
+import frc.robot.commands.MoveNeckToRange;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.ShootNoteDistance;
 import frc.robot.commands.ShootNoteManual;
@@ -219,7 +219,7 @@ private final RangeFinder m_Range = new RangeFinder();
 
     new JoystickButton(m_gunnerController, Button.kX.value)
        // .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     
-       .onTrue(new SetNeckAngleTest(m_Neck, m_tagVision, m_Range).withTimeout(2)
+       .onTrue(new MoveNeckToRange(m_Neck, m_tagVision, m_Range).withTimeout(2)
        .andThen(new ShootDistanceStable(m_Neck, m_robotShooter, m_robotIntake)));
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
