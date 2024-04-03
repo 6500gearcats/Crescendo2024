@@ -28,11 +28,11 @@ public class MoveNeckToRange extends Command {
   private Vision m_Vision;
   private RangeFinder m_range;
 
-  public MoveNeckToRange(Neck neck, Vision vision, RangeFinder range) {
+  public MoveNeckToRange(Neck neck, Vision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Neck = neck;
     m_Vision = vision;
-    m_range = range;
+    m_range = new RangeFinder();
     addRequirements(m_Neck);
   }
 
@@ -94,8 +94,7 @@ public class MoveNeckToRange extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    getError();
-    return Math.abs(m_Neck.getNeckAngle() - m_neckAngle) < 0.001;
+    return getError() < 0.002;
   }
 
   private double getError() {

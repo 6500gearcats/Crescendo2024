@@ -41,7 +41,6 @@ import frc.robot.commands.GrabNote;
 import frc.robot.commands.MoveToClosestNote;
 import frc.robot.commands.NeckRaiseAndShoot;
 import frc.robot.commands.PickUpNote;
-import frc.robot.commands.ShootFromRange;
 import frc.robot.commands.ShootNote;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -219,8 +218,7 @@ private final RangeFinder m_Range = new RangeFinder();
 
     new JoystickButton(m_gunnerController, Button.kX.value)
        // .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     
-       .onTrue(new MoveNeckToRange(m_Neck, m_tagVision, m_Range).withTimeout(2)
-       .andThen(new ShootDistanceStable(m_Neck, m_robotShooter, m_robotIntake)));
+       .onTrue(new NeckRaiseAndShoot(m_Neck, m_robotShooter, m_robotIntake, m_noteVision));
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)
         .whileTrue(new MoveNeckUp(m_Neck));
