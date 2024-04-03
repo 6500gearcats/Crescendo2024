@@ -75,6 +75,7 @@ import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.NoteFinder;
 import frc.robot.subsystems.Shooter;
+import frc.robot.utility.RangeFinder;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -99,6 +100,7 @@ private final Climber m_robotClimber = new Climber();
 private final NoteFinder m_NoteFinder = new NoteFinder(m_noteVision);
 private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_tagVision);
 private final Neck m_Neck = new Neck();
+private final RangeFinder m_Range = new RangeFinder();
 
 
   // The driver's controller
@@ -214,7 +216,7 @@ private final Neck m_Neck = new Neck();
 
     new JoystickButton(m_gunnerController, Button.kX.value)
        // .onTrue(new NeckRaiseAndShoot(m_Neck, 0.0887+0.004, m_robotShooter, m_robotIntake));     
-       .onTrue(new SetNeckAngleTest(m_Neck, m_tagVision).withTimeout(2)
+       .onTrue(new SetNeckAngleTest(m_Neck, m_tagVision, m_Range).withTimeout(2)
        .andThen(new ShootDistanceStable(m_Neck, m_robotShooter, m_robotIntake)));
         
     new Trigger(() -> m_gunnerController.getLeftY() < -0.5)

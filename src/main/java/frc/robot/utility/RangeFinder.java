@@ -9,7 +9,8 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 /** Add your docs here. */
 public class RangeFinder {
     private InterpolatingDoubleTreeMap m_map;
-    RangeFinder() {
+    public RangeFinder() {
+        m_map = new InterpolatingDoubleTreeMap();
         //(distance, neck angle)
         m_map.put(-3.665,0.0887);
         m_map.put(-3.712,0.0954);

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.NeckConstants;
 import frc.robot.subsystems.Navigation;
 import frc.robot.subsystems.Neck;
+import frc.robot.utility.RangeFinder;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.RobotContainer;
@@ -25,11 +26,13 @@ public class SetNeckAngleTest extends Command {
   Rotation2d m_target;
   private double m_neckAngle;
   private Vision m_Vision;
+  private RangeFinder m_range;
 
-  public SetNeckAngleTest(Neck neck, Vision vision) {
+  public SetNeckAngleTest(Neck neck, Vision vision, RangeFinder range) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Neck = neck;
     m_Vision = vision;
+    m_range = range;
     addRequirements(m_Neck);
   }
 
@@ -48,10 +51,12 @@ public class SetNeckAngleTest extends Command {
         distance = m_Vision.getChosenTargetRange(7);
       }
     }
+    
+    m_neckAngle = m_range.getNeckAngle(distance);
     //Insert the get distance from speaker than this subsystem should set neck angle
-    m_neckAngle = m_Neck.getFromDashboard();
-    SmartDashboard.putNumber("Target Neck Angle", m_neckAngle); 
-    SmartDashboard.putNumber("Speaker Distance", distance);
+    //m_neckAngle = m_Neck.getFromDashboard();
+    //SmartDashboard.putNumber("Target Neck Angle", m_neckAngle); 
+    //SmartDashboard.putNumber("Speaker Distance", distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
