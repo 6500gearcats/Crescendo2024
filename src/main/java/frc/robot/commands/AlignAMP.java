@@ -31,7 +31,7 @@ public class AlignAMP extends Command {
   public void execute() {
     double xTransform;
     var alliance = DriverStation.getAlliance();
-    if (alliance.equals(DriverStation.Alliance.Red)) {
+    if (alliance.get() == DriverStation.Alliance.Red) {
           xTransform = m_vision.getChosenTargetRotation(12);
     }
     else {
