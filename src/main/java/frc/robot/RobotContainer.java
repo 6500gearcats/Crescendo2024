@@ -169,9 +169,9 @@ private final Neck m_Neck = new Neck();
     //Gunner controls
     new JoystickButton(m_gunnerController, Button.kB.value)
         .whileTrue(new ShootNoteManual(m_robotShooter, m_robotIntake));
-
-    new JoystickButton(m_gunnerController, Button.kBack.value)
-        .whileTrue(new ShootNoteReverse(m_robotShooter, m_robotIntake));
+//Commented out
+    //new JoystickButton(m_gunnerController, Button.kBack.value)
+       // .whileTrue(new ShootNoteReverse(m_robotShooter, m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kLeftBumper.value)
         .whileTrue(new BackwardsIntake(m_robotIntake, m_robotShooter));
