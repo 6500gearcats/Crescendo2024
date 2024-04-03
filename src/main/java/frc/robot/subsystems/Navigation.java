@@ -93,10 +93,11 @@ public class Navigation extends SubsystemBase {
 
   @Override
   public void periodic() {
+    var results = m_vision.getLatestCameraResult();
     // This method will be called once per scheduler run
-    if(m_vision.getLatestCameraResult().hasTargets())
+    if(results.hasTargets())
     {
-    //SmartDashboard.putNumber("Current Fiducial Id:", m_vision.getLatestCameraResult().getBestTarget().getFiducialId());
+      SmartDashboard.putNumber("Current Fiducial Id:", results.getBestTarget().getFiducialId());
     }
   }
 
