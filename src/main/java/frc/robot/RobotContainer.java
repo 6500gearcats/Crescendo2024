@@ -192,7 +192,7 @@ private final RangeFinder m_Range = new RangeFinder();
         .whileTrue(new BackwardsIntake(m_robotIntake, m_robotShooter));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
-        .onTrue(new PickUpNote(m_robotIntake)
+        .whileTrue(new PickUpNote(m_robotIntake)
         .andThen(new NoteInPlace(m_robotIntake))
         .andThen(new WaitCommand(.2))
         .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.15))
