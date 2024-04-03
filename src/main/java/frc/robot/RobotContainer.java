@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AlignAMP;
 import frc.robot.commands.BackwardsIntake;
 import frc.robot.commands.ClimberStable;
 import frc.robot.commands.ControllerRumble;
@@ -159,7 +160,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new FullTrapSequence(m_robotShooter, m_robotIntake, m_robotClimber, m_Neck, m_robotDrive));
+        .onTrue(new AlignAMP(m_tagVision, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
        new Trigger(() -> m_driverController.getStartButton())
