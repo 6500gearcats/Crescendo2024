@@ -64,6 +64,7 @@ import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.NeckStable;
+import frc.robot.commands.NoteInPlace;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.ShootAMP;
@@ -192,12 +193,14 @@ private final RangeFinder m_Range = new RangeFinder();
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .onTrue(new PickUpNote(m_robotIntake)
+        .andThen(new NoteInPlace(m_robotIntake))
         .andThen(new WaitCommand(.2))
         .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.15))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
         .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
+        .andThen(new NoteInPlace(m_robotIntake))
         .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
     

@@ -42,23 +42,27 @@ public final class Constants {
 
     //turbo
     public static final double kTurboModeModifier = 7.0;
-
+    public static double kTurboAngularSpeed = 2.0;
+    
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23.5);
+    public static final double kTrackWidth = Units.inchesToMeters(23.5);
     // Distance between front and back wheels on robot
+    public static final double kWheelBase = Units.inchesToMeters(28.5);
+
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-    // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+    // caclulate front wheel offset angles using math. Similar angles means we can just use width/length as opposite/adjacent
+    public static final double theta  = Math.atan((kTrackWidth)/(kWheelBase));
+
+    public static final double kFrontLeftChassisAngularOffset = - theta * 2;
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+    public static final double kBackRightChassisAngularOffset = Math.PI - 2 * theta;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1; 
@@ -72,7 +76,7 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
-    public static double kTurboAngularSpeed = 2.0;
+
   }
 
   public static final class ModuleConstants {
@@ -263,7 +267,7 @@ public final class Constants {
       public static final double kFeedSpeed = 0.50;
       public static final double kReverseFeedSpeed = -0.1;
       public static final double kPickUpSpeed = 0.6;
-      
+      public static final double kPickUpSpeedSlow = 0.2;
     }
       
       //values
