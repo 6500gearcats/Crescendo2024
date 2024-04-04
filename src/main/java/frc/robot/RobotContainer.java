@@ -32,6 +32,7 @@ import frc.robot.commands.DriveNormal;
 import frc.robot.commands.DriveTurbo;
 import frc.robot.commands.FullTrapSequence;
 import frc.robot.commands.GrabNote;
+import frc.robot.commands.GrabNoteAuto;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.NeckRaiseAndShoot;
@@ -91,7 +92,7 @@ private final SendableChooser<Command> autoChooser;
     // Named commands must be registered before the creation of any PathPlanner Autos or Paths.
     NamedCommands.registerCommand("ShootNote", new ShootNote(m_robotShooter, m_robotIntake).withTimeout(2.0));
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
-    NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake).withTimeout(2.0));
+    NamedCommands.registerCommand("MoveToClosestNote", new GrabNoteAuto(m_NoteFinder,m_robotDrive,m_robotIntake,m_robotShooter,m_gunnerController).withTimeout(2.0));
     NamedCommands.registerCommand("ShootDistance", new NeckRaiseAndShoot(m_Neck, m_robotShooter, m_robotIntake, m_noteVision));
     NamedCommands.registerCommand("NoteInPlace", new NoteInPlace(m_robotIntake));
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -199,14 +200,17 @@ private final SendableChooser<Command> autoChooser;
 
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
-    new Trigger(() -> m_robotIntake.NoteIsPresent())
-    .onTrue(new NoteInPlace(m_robotIntake)
-    .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
-    .alongWith(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
   }
 
   public void zeroDrive() {
     m_robotDrive.zeroHeading();
+  }
+
+  public void enableNoteTrigger() {
+    new Trigger(() -> m_robotIntake.NoteIsPresent())
+    .onTrue(new NoteInPlace(m_robotIntake)
+    .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
+    .alongWith(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
   }
 
   public Command getAutonomousCommand() {
