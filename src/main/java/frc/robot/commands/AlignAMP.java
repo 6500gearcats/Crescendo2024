@@ -37,10 +37,10 @@ public class AlignAMP extends Command {
     else {
        xTransform = m_vision.getChosenTargetRotation(6);
     }
+
     if (xTransform != 0) {
-      m_DriveSubsystem.drive(-xTransform ,0, 0, false);
+      m_DriveSubsystem.drive(-xTransform, -xTransform, -xTransform, false);
     }
- 
     }
   
 
