@@ -93,6 +93,7 @@ private final SendableChooser<Command> autoChooser;
     NamedCommands.registerCommand("RunIntake", new PickUpNote(m_robotIntake));
     NamedCommands.registerCommand("MoveToClosestNote", new GrabNote(m_NoteFinder,m_robotDrive,m_robotIntake).withTimeout(2.0));
     NamedCommands.registerCommand("ShootDistance", new NeckRaiseAndShoot(m_Neck, m_robotShooter, m_robotIntake, m_noteVision));
+    NamedCommands.registerCommand("NoteInPlace", new NoteInPlace(m_robotIntake));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser("ShootNote");
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -168,17 +169,10 @@ private final SendableChooser<Command> autoChooser;
         .whileTrue(new BackwardsIntake(m_robotIntake, m_robotShooter));
 
     new JoystickButton(m_gunnerController, Button.kY.value)
-        .whileTrue(new PickUpNote(m_robotIntake)
-        .andThen(new NoteInPlace(m_robotIntake))
-        .andThen(new WaitCommand(.2))
-        .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.15))
-        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
+        .whileTrue(new PickUpNote(m_robotIntake));
 
     new JoystickButton(m_gunnerController, Button.kRightBumper.value)
-        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake)
-        .andThen(new NoteInPlace(m_robotIntake))
-        .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
-        .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
+        .whileTrue(new GrabNote(m_NoteFinder, m_robotDrive, m_robotIntake));
     
     new Trigger(() -> m_gunnerController.getRightY() < -0.5)
         .onTrue(new RaiseHooks(m_robotClimber));
@@ -205,6 +199,10 @@ private final SendableChooser<Command> autoChooser;
 
     // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))
     //     .onTrue (new GetChosenTarget(m_noteVision, m_robotDrive));
+    new Trigger(() -> m_robotIntake.NoteIsPresent())
+    .onTrue(new NoteInPlace(m_robotIntake)
+    .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.1))
+    .alongWith(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
   }
 
   public void zeroDrive() {

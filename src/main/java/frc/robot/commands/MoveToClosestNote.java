@@ -21,7 +21,8 @@ public class MoveToClosestNote extends Command {
     m_drive = drive;
     m_NoteFinder = finder;
     m_IntakeSystem = intake;
-    ;
+    addRequirements(drive);
+    addRequirements(finder);
   }
 
   // Called when the command is initially scheduled.
