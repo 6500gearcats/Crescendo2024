@@ -62,12 +62,6 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootDistance"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "ShootNote"
           }
         }

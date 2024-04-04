@@ -27,8 +27,9 @@ public class NeckRaiseAndShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveNeckToRange(neck, vision), 
-      //.withTimeout(2.0),
+      new MoveNeckToRange(neck, vision)
+      .alongWith(new InstantCommand(() -> shooter.setDistanceShooterSpeedFast(), shooter)) 
+      .withTimeout(2.0),
       //new InstantCommand(() -> shooter.setDistanceShooterSpeedFast(), shooter)
       //.deadlineWith(),
       new ShootDistanceStable(neck, shooter, intake)

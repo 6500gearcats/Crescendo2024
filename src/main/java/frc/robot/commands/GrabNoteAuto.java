@@ -20,7 +20,8 @@ public class GrabNoteAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GrabNote(NoteFinder, Drive, Intake).andThen(new NoteInPlace(Intake))
+      new GrabNote(NoteFinder, Drive, Intake)
+      .andThen(new NoteInPlace(Intake))
       .andThen(new BackwardsIntake(Intake, Shooter).withTimeout(.1))
       .andThen(new ControllerRumble(GunnerController).withTimeout(0.2)));
   }
