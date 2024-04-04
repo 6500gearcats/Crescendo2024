@@ -14,6 +14,7 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class AlignAMP extends Command {
   /** Creates a new AlignAMP. */
+  double yTransform;
   Vision m_vision;
   DriveSubsystem m_DriveSubsystem;
 
@@ -21,6 +22,7 @@ public class AlignAMP extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_vision = m_Vision;
     m_DriveSubsystem = m_driveSubsystem;
+    addRequirements(m_driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,31 +32,31 @@ public class AlignAMP extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xTransform;
     var alliance = DriverStation.getAlliance();
     if (alliance.get() == DriverStation.Alliance.Red) {
-          xTransform = m_vision.getChosenTargetRotation(5);
+      yTransform = m_vision.getChosenTargetRotation(5);
     }
     else {
-       xTransform = m_vision.getChosenTargetRotation(6);
+      yTransform = m_vision.getChosenTargetRotation(6);
     }
 
-    if (xTransform != 0) {
-      m_DriveSubsystem.drive(-xTransform, 0, 0, false);
+    if (yTransform != 0) {
+      m_DriveSubsystem.drive(0, -yTransform * 0.6, 0, false);
     }
 
-    SmartDashboard.putNumber("X-transform", xTransform);
+    SmartDashboard.putNumber("Y-transform", yTransform);
   }
   
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    this.cancel();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(yTransform) < 0.05 || yTransform == 0;
   }
 }

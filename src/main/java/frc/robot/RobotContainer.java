@@ -160,7 +160,7 @@ private final Neck m_Neck = new Neck();
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
     new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new AlignAMP(m_tagVision, m_robotDrive));
+        .whileTrue(new AlignAMP(m_tagVision, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
        new Trigger(() -> m_driverController.getStartButton())
