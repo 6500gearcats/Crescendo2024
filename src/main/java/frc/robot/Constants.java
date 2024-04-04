@@ -188,7 +188,7 @@ public final class Constants {
     public static final double kNeck_kP = 0.0;
     public static final double kNeck_kI = 0.0;
     public static final double kNeck_kD = 0.0;
-    public static final double kNeck_kP2 = 2;
+    public static final double kNeck_kP2 = 1;
     public static final double kNeck_kI2 = 0;
     public static final double kNeck_kD2 = 0;
 
@@ -202,6 +202,7 @@ public final class Constants {
     public static class VisionConstants {
         public static final String kCameraNameTag = "Microsoft_LifeCam_HD-3000";
         public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
+        public static final String kCameraNameGlobal = "Global_Shutter_Camera";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
                 new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
@@ -214,11 +215,11 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+        public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(27);
 
         public static final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
         // Angle between horizontal and the camera.
-        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+        public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(-28);
     
         // How far from the target we want to be
         public static final double GOAL_RANGE_METERS = Units.feetToMeters(3);
@@ -237,10 +238,10 @@ public final class Constants {
       public static final double kBackwardsShooter = 0.2;
       public static final double kShooterFastRPM = 2100;
       //public static final int kShooterSlowRPM = 3000;
-      public static final int kDistanceShooterRPM = 3000;
+      public static final int kDistanceShooterRPM = 2500; //Was 3000
       public static final int kShooterTrapRPM = 3000;
       public static final double kShooterSpeedFast = -0.6;
-      public static final double kDistanceShooterSpeedFast = -0.75;
+      public static final double kDistanceShooterSpeedFast = -0.8; //was -0.75
       public static final double kShooterReverseFast = 1;
       public static final double kShooterSpeed = 1.1; //0.43
       public static final double kBallFiredThreshold = 0.1;
@@ -263,10 +264,10 @@ public final class Constants {
     
     public static class IntakeConstants { 
       public static final int kIntakeMotorPort = 9;
-      public static final double kFeedSpeed = 0.5;
+      public static final double kFeedSpeed = 0.50;
       public static final double kReverseFeedSpeed = -0.1;
       public static final double kPickUpSpeed = 0.6;
-      
+      public static final double kPickUpSpeedSlow = 0.2;
     }
       
       //values
