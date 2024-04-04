@@ -41,7 +41,7 @@ public class AlignAMP extends Command {
     }
 
     if (yTransform != 0) {
-      m_DriveSubsystem.drive(0, -yTransform * 0.6, 0, false);
+      m_DriveSubsystem.drive(0, yTransform * 0.3, 0, false);
     }
 
     SmartDashboard.putNumber("Y-transform", yTransform);
