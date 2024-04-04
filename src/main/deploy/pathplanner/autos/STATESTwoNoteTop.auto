@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7617537186293887,
-      "y": 4.512802721665481
+      "x": 0.7632625194328401,
+      "y": 6.557248291801549
     },
-    "rotation": -60.94539590092283
+    "rotation": 59.264512298079936
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BottomToBottom"
+            "pathName": "TopToTop"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BottomToBottom-Return"
+            "pathName": "TopToLeft-Return"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2NoteBottomToTaxi"
+            "pathName": "TopToTaxi"
           }
         }
       ]
