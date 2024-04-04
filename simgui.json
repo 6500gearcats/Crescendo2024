@@ -89,7 +89,11 @@
     },
     "visible": true
   },
-  "NetworkTables View": {
-    "visible": false
+  "Plot": {
+    "Plot <0>": {
+      "window": {
+        "visible": false
+      }
+    }
   }
 }

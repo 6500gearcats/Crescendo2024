@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Navigation;
 import frc.robot.Vision;
@@ -32,22 +33,23 @@ public class AlignAMP extends Command {
     double xTransform;
     var alliance = DriverStation.getAlliance();
     if (alliance.get() == DriverStation.Alliance.Red) {
-          xTransform = m_vision.getChosenTargetRotation(12);
+          xTransform = m_vision.getChosenTargetRotation(5);
     }
     else {
        xTransform = m_vision.getChosenTargetRotation(6);
     }
 
     if (xTransform != 0) {
-      m_DriveSubsystem.drive(-xTransform, -xTransform, -xTransform, false);
+      m_DriveSubsystem.drive(-xTransform, 0, 0, false);
     }
-    }
+
+    SmartDashboard.putNumber("X-transform", xTransform);
+  }
   
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_DriveSubsystem.drive(0,0,0,false);
   }
 
   // Returns true when the command should end.
