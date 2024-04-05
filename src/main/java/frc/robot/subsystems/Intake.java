@@ -47,12 +47,6 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
     return ringInPlace;
   }
 
-  public boolean NoteInPlace() {
-    boolean ringInPlace = !m_noteSensor.get();
-    // Uses vision sensor to determine if true
-    return ringInPlace;
-  }
-
   public void stop() {
     m_intakeMotor.stopMotor();
   }
