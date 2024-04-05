@@ -210,19 +210,28 @@ public class Vision {
         var result = getLatestCameraResult();
         List<PhotonTrackedTarget> targets = result.getTargets();
         double range = 0;
-        if (result.hasTargets()) {
-            for (PhotonTrackedTarget target : targets) {
-                if (target.getFiducialId() == targetID) {
-                    range = PhotonUtils.calculateDistanceToTargetMeters(
-                            CAMERA_HEIGHT_METERS, // Previously declarde
-                            TARGET_HEIGHT_METERS,
-                            CAMERA_PITCH_RADIANS,
-                            Units.degreesToRadians(target.getPitch()));
-                    return range;
-                }
+        double forwardSpeed = 0;
+
+        for (PhotonTrackedTarget target : targets) {
+            if (result.hasTargets()) {
+                range = PhotonUtils.calculateDistanceToTargetMeters(
+                        CAMERA_HEIGHT_METERS, // Previously declarde
+                        TARGET_HEIGHT_METERS,
+                        CAMERA_PITCH_RADIANS,
+                        Units.degreesToRadians(target.getPitch()));
+
+                // THE FOLLOWING EQUATION CAN BE USED TO CALCULATE FORWARD SPEED
+                // Use this range as the measurement we give to the PID controller.
+                // -1.0 required to ensure positive PID controller effort _increases_ range
+                forwardSpeed = -DriveSubsystem.turnController.calculate(range, VisionConstants.GOAL_RANGE_METERS);
+                forwardSpeed *= Constants.kRangeSpeedOffset;
+            } else {
+                // If we have no targets, stay still
+                range = 0;
             }
         }
-        return 0;
+
+        return forwardSpeed;
     }
 
     public double getRange() {

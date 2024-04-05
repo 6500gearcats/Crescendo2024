@@ -27,8 +27,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -92,7 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
   private ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drive");
   private GenericEntry m_maxSpeed;
 
-  private final StructArrayPublisher<SwerveModuleState> publisher;  
+
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Vision vision) {
@@ -177,10 +175,6 @@ public class DriveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
     );
-
-    publisher = NetworkTableInstance.getDefault()
-      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
-
   }
 
   @Override
@@ -204,14 +198,6 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("NavX Yaw angle", getAngle());
 
     SmartDashboard.putBoolean("Field Oriented", m_fieldOriented);
-
-    publisher.set(new SwerveModuleState[] {
-        m_frontLeft.getState(), 
-        m_frontRight.getState(), 
-        m_rearLeft.getState(), 
-        m_rearRight.getState()
-    });
-
 
   }
 
