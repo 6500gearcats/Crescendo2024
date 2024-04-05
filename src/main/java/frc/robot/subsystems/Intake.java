@@ -37,8 +37,14 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
 
   public boolean NoteIsPresent() {
     boolean ringIsPresent = !m_noteSwitch.get();
-    // Use ColorSensor to determine if true
+    // Uses switches on sides to determine if true
     return ringIsPresent;
+  }
+
+  public boolean NoteInPlace() {
+    boolean ringInPlace = !m_noteSensor.get();
+    // Uses vision sensor to determine if true
+    return ringInPlace;
   }
 
   public boolean NoteInPlace() {

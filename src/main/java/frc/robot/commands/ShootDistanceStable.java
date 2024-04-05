@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Vision;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Neck;
 import frc.robot.subsystems.Shooter;
@@ -13,14 +13,14 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootFromRange extends SequentialCommandGroup {
-  /** Creates a new ShootFromRange. */
-  public ShootFromRange(Shooter shooter, Intake intake, Vision vision, Neck neck) {
+public class ShootDistanceStable extends ParallelCommandGroup {
+  /** Creates a new ResetClimberWhileStable. */
+  public ShootDistanceStable(Neck neck, Shooter shooter, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetTargetRange(vision, neck),
-      new ShootNote(shooter, intake)
+      new NeckStable(neck).withTimeout(2.0),
+      new ShootNoteDistance(shooter, intake).withTimeout(3)
     );
   }
 }
