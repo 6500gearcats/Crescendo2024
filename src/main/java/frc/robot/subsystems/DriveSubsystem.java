@@ -194,6 +194,11 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Position: Y", yPos);
     }
 
+
+    var currentCommand = this.getCurrentCommand();
+    if (currentCommand != null) {
+      SmartDashboard.putString("Current Drive Command", currentCommand.getName());
+    }
     SmartDashboard.putNumber("NavX Pitch", m_gyro.getPitch());
     SmartDashboard.putNumber("NavX Yaw angle", getAngle());
 

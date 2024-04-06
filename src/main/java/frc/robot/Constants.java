@@ -196,7 +196,7 @@ public final class Constants {
   }
 
     public static class VisionConstants {
-        public static final String kCameraNameTag = "Microsoft_LifeCam_HD-3000";
+        public static final String kCameraNameTag = "Global_Shutter_Camera";
         public static final String kCameraNameNote = "Microsoft_LifeCam_VX-5000";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =

@@ -21,7 +21,8 @@ public class MoveToClosestNote extends Command {
     m_drive = drive;
     m_NoteFinder = finder;
     m_IntakeSystem = intake;
-    ;
+    addRequirements(m_drive);
+    addRequirements(m_NoteFinder);
   }
 
   // Called when the command is initially scheduled.
@@ -40,6 +41,9 @@ public class MoveToClosestNote extends Command {
     double speed = m_NoteFinder.getRange();
 
     
+if(rotation == 0 && speed == 0) {
+      this.cancel();
+    }
 
     if(speed > 4)
     {
