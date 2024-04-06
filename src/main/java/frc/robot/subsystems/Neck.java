@@ -12,13 +12,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.networktables.GenericEntry;
 // import edu.wpi.first.wpilibj.DigitalInput;
 // import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj.Encoder;
 //import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,9 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.SparkPIDController;
-
-import java.util.Map;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -65,11 +58,6 @@ public class Neck extends SubsystemBase {
     private PIDController neckPIDcontroller2;
     private SparkPIDController neckPIDcontroller1;
 
-    private ShuffleboardTab m_neckTab = Shuffleboard.getTab("Neck");
-    private GenericEntry m_neckAngle;
-
-
-
   public Neck() {
     m_neckEncoder = m_neckMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
@@ -78,12 +66,6 @@ public class Neck extends SubsystemBase {
     double startAngle = 0;
     double valueAtEndAngle =0;
 
-    m_neckAngle = m_neckTab.add("Max Speed", 0.01)
-      .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
-      .withProperties(Map.of(
-        "min", 0.0, 
-        "max", 0.5)) // specify widget properties here
-      .getEntry();
 
     m_neckEncoder.setPositionConversionFactor((endAngle - startAngle) / valueAtEndAngle);    
 
@@ -145,10 +127,6 @@ public void move(double kneckreversespeed) {
 
 public void moveTo(double target) {
   move(neckPIDcontroller2.calculate(getNeckAngle(), target)*NeckConstants.kNeckForwardSpeed*10);
-}
-
-public double getFromDashboard() {
-  return m_neckAngle.getDouble(0.0);
 }
 
 
