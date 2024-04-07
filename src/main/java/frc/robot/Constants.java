@@ -262,7 +262,7 @@ public final class Constants {
       public static final double kFeedSpeed = 0.5;
       public static final double kReverseFeedSpeed = -0.1;
       public static final double kPickUpSpeed = 0.6;
-      
+      public static final double kPickUpSpeedSlow = 0.2;
     }
       
       //values

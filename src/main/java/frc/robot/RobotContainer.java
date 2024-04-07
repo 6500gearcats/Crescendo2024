@@ -55,6 +55,7 @@ import frc.robot.commands.GetBestTarget;
 import frc.robot.commands.MoveNeckDown;
 import frc.robot.commands.MoveNeckUp;
 import frc.robot.commands.NeckStable;
+import frc.robot.commands.NoteInPlace;
 import frc.robot.commands.PickUpNote;
 import frc.robot.commands.ShootNote;
 import frc.robot.commands.ShootAMP;
@@ -158,8 +159,8 @@ private final Neck m_Neck = new Neck();
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
-    new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new FullTrapSequence(m_robotShooter, m_robotIntake, m_robotClimber, m_Neck, m_robotDrive));
+    //new JoystickButton(m_driverController, Button.kY.value)
+      //  .onTrue(new FullTrapSequence(m_robotShooter, m_robotIntake, m_robotClimber, m_Neck, m_robotDrive));
    // new JoystickButton(m_driverController, Button.kA.value)
        // .whileTrue(new GetBestTarget(m_nav, m_robotDrive));
        new Trigger(() -> m_driverController.getStartButton())
@@ -177,6 +178,7 @@ private final Neck m_Neck = new Neck();
 
     new JoystickButton(m_gunnerController, Button.kY.value)
         .whileTrue(new PickUpNote(m_robotIntake)
+        .andThen(new NoteInPlace(m_robotIntake))
         .andThen(new WaitCommand(.2))
         .andThen(new BackwardsIntake(m_robotIntake, m_robotShooter).withTimeout(.15))
         .andThen(new ControllerRumble(m_gunnerController).withTimeout(0.2)));
