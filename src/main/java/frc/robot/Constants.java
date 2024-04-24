@@ -41,7 +41,7 @@ public final class Constants {
     public static final double kMaxAngularSpeed = .5 * Math.PI; // radians per second (was 0.75)
 
     //turbo
-    public static final double kTurboModeModifier = 1.5;
+    public static final double kTurboModeModifier = 1.0;
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(28.5);
