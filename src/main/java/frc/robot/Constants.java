@@ -36,12 +36,12 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.6; //4.5
-    public static final double kNormalSpeedMetersPerSecond = 1.5; //0.85
-    public static final double kMaxAngularSpeed = 1 * Math.PI; // radians per second (was 0.75)
+    public static final double kMaxSpeedMetersPerSecond = 4.0; //4.5
+    public static final double kNormalSpeedMetersPerSecond = .7; //0.85
+    public static final double kMaxAngularSpeed = .5 * Math.PI; // radians per second (was 0.75)
 
     //turbo
-    public static final double kTurboModeModifier = 7.0;
+    public static final double kTurboModeModifier = 4.0;
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(28.5);
@@ -156,8 +156,8 @@ public final class Constants {
     // These are port values (where it's located on the robot)
     public static final int kNeckMotorPort = 11;  
     // NOT UPDATED TO 2024 NECK VALUES
-    public static final double kNeckReverseSpeed = -0.4; 
-    public static final double kNeckForwardSpeed = 0.6; //Was 0.6
+    public static final double kNeckReverseSpeed = -0.2; 
+    public static final double kNeckForwardSpeed = 0.3; //Was 0.6
     public static final double kNeckForwardMaxSpeed = 0.15;
     public static final double kNeckReverseMaxSpeed = -0.15;
     public static final double kNeckStableSpeed = 0.058;
@@ -231,12 +231,12 @@ public final class Constants {
       // NOT UPDATED TO 2024 SHOOTER VALUES (besides port)
       public static final double kShooterSpeedSlow = 0.6;
       public static final double kBackwardsShooter = 0.2;
-      public static final double kShooterFastRPM = 2100;
+      public static final double kShooterFastRPM = 1400;
       //public static final int kShooterSlowRPM = 3000;
-      public static final int kDistanceShooterRPM = 3000;
-      public static final int kShooterTrapRPM = 3000;
-      public static final double kShooterSpeedFast = -0.6;
-      public static final double kDistanceShooterSpeedFast = -0.75;
+      public static final int kDistanceShooterRPM = 1600;
+      public static final int kShooterTrapRPM = 1600;
+      public static final double kShooterSpeedFast = -0.4;
+      public static final double kDistanceShooterSpeedFast = -0.45;
       public static final double kShooterReverseFast = 1;
       public static final double kShooterSpeed = 1.1; //0.43
       public static final double kBallFiredThreshold = 0.1;
