@@ -215,39 +215,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  @Override
-  public void simulationPeriodic() {
-    // Update the odometry in the periodic block
-    REVPhysicsSim.getInstance().run();
-
-    // Update camera simulation
-    m_simVision.simulationPeriodic(this.getPose());
-
-    var debugField = m_simVision.getSimDebugField();
-    debugField.getObject("EstimatedRobot").setPose(this.getPose());
-    // debugField.getObject("EstimatedRobotModules").setPoses(this.getModulePoses());
-
-    // angle.set(5.0);
-    // From NavX example
-    // int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
-    // SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev,
-    // "Yaw"));
-    // NavX expects clockwise positive, but sim outputs clockwise negative
-
-    // navxSimAngle = -drivetrainSim.getHeading().getDegrees();
-    // double angle = getPose().getRotation().getDegrees();
-
-    // double angle = m_gyro.getAngle() -
-    // Math.toDegrees(m_lastSpeeds.omegaRadiansPerSecond) * 0.20 ;
-    double angle = m_simOdometryPose.getRotation().getDegrees();
-
-    double newangle = Math.IEEEremainder(angle, 360);
-    m_simAngle.set(newangle);
-
-    SmartDashboard.putNumber("SimAngle", m_simAngle.get());
-
-  }
-
   /**
    * Returns the currently-estimated pose of the robot.
    *
