@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private final DigitalInput m_noteSensor = new DigitalInput(9);
+  //private final DigitalInput m_noteSensor = new DigitalInput(9);
   private final DigitalInput m_noteSwitch = new DigitalInput(8); //TODO: Put this on correct channel
   /** Creates a new Intake. */
 public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
@@ -23,7 +23,7 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Note Sensor", NoteInPlace());
+    //SmartDashboard.putBoolean("Note Sensor", NoteInPlace());
     SmartDashboard.putBoolean("Note Switch", NoteIsPresent());
 
   }
@@ -41,11 +41,11 @@ public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIn
     return ringIsPresent;
   }
 
-  public boolean NoteInPlace() {
-    boolean ringInPlace = !m_noteSensor.get();
+  //public boolean NoteInPlace() {
+  //  boolean ringInPlace = !m_noteSensor.get();
     // Uses vision sensor to determine if true
-    return ringInPlace;
-  }
+  //  return ringInPlace;
+  //}
 
   public void stop() {
     m_intakeMotor.stopMotor();

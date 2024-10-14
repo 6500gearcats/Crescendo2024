@@ -32,9 +32,9 @@ private final Intake m_IntakeSystem;
   }
 
    // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return m_IntakeSystem.NoteInPlace();
-  }
+  //@Override
+  //public boolean isFinished() {
+    //return m_IntakeSystem.NoteInPlace();
+  //}
 
 }
