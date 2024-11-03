@@ -36,6 +36,8 @@ public class AmpAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // Gets the rotation of the chosen target and returns true if it is within an acceptable range
+    double rotaton = m_vision.getChosenTargetRotation(5);
+    return rotaton < 0.1 && rotaton > -0.1;
   }
 }

@@ -222,7 +222,7 @@ public class RobotContainer {
         new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
                 .whileTrue(new MoveNeckDown(m_Neck));
 
-        // Creates a new joystick button for R3 and makes the robot face the speaker
+        // Assigns the R3 button to a command that makes the robot rotate towards the speaker
         new JoystickButton(m_driverController, Button.kRightStick.value)
                 .whileTrue(new FaceSpeaker(m_robotDrive, m_tagVision));
 
