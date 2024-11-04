@@ -222,8 +222,8 @@ public class RobotContainer {
         new Trigger(() -> m_gunnerController.getLeftY() > 0.5)
                 .whileTrue(new MoveNeckDown(m_Neck));
 
-        // Assigns the R3 button to a command that makes the robot rotate towards the speaker
-        new JoystickButton(m_driverController, Button.kRightStick.value)
+        // Assigns the A button to a command that makes the robot rotate towards the speaker
+        new JoystickButton(m_driverController, Button.kA.value)
                 .whileTrue(new FaceSpeaker(m_robotDrive, m_tagVision));
 
         // new Trigger(() -> (m_gunnerController.getLeftTriggerAxis() > 0.5))

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Navigation;
@@ -23,13 +24,14 @@ public class FaceSpeaker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double rotation = m_vision.getChosenTargetRotation(5);
-    m_drive.drive(0, 0, rotation, true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double rotation = m_vision.getChosenTargetRotation(5);
+    m_drive.drive(0, 0, -0.3 * Math.log10(Math.abs(rotation) + 1) * (rotation / Math.abs(rotation)), true);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
