@@ -19,6 +19,7 @@ public class FaceSpeaker extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = theDrive;
     m_vision = theVision;
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
@@ -35,12 +36,14 @@ public class FaceSpeaker extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.drive(0, 0, 0, true);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     double rotation = m_vision.getChosenTargetRotation(5);
-    return rotation < 0.1 && rotation > -0.1;
+    return false;
   }
 }
