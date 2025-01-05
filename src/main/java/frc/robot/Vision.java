@@ -112,7 +112,7 @@ public class Vision {
      *         used for estimation.
      */
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-        var visionEst = photonEstimator.update();
+        var visionEst = photonEstimator.update(getLatestCameraResult());
         double latestTimestamp = m_camera.getLatestResult().getTimestampSeconds();
         boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
         if (Robot.isSimulation()) {

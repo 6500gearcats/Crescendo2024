@@ -6,12 +6,9 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
-import com.kauailabs.navx.frc.AHRS;
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.sim.SparkMaxSim;
 
 import edu.wpi.first.hal.SimBoolean;
