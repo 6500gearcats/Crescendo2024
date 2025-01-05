@@ -73,6 +73,11 @@ public class Neck extends SubsystemBase {
 
 
   public Neck() {
+
+    SparkMaxConfig m_neckMotorConfig = new SparkMaxConfig();
+    m_neckMotorConfig.closedLoop
+      .pid(NeckConstants.kNeck_kP, NeckConstants.kNeck_kI, NeckConstants.kNeck_kD);
+
     m_neckEncoder = m_neckMotor.getAbsoluteEncoder();
 
     // See https://www.chiefdelphi.com/t/holding-up-a-wrist-with-a-neo/425787/14 to set these
@@ -92,13 +97,7 @@ public class Neck extends SubsystemBase {
       //REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); 
     }
     neckPIDcontroller2 = new PIDController(NeckConstants.kNeck_kP2, NeckConstants.kNeck_kI2, NeckConstants.kNeck_kD2);
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.encoder
-      .positionConversionFactor((endAngle - startAngle) / valueAtEndAngle);
-    config.closedLoop
-    .pid(NeckConstants.kNeck_kP, NeckConstants.kNeck_kI, NeckConstants.kNeck_kD);
-  
-    m_neckMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    neckPIDcontroller1 = m_neckMotor.getClosedLoopController();
   }
 
   @Override
