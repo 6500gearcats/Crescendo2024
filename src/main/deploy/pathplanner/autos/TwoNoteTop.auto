@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7632625194328401,
+      "y": 6.557248291801549
+    },
+    "rotation": 59.264512298079936
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopToTop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToClosestNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopToLeft-Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopToTaxi"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
