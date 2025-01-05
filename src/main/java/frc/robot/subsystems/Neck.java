@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -40,7 +42,8 @@ public class Neck extends SubsystemBase {
     // Create the Neck tilter motor and claw tilter motor
     // The constants are not corect right now, will be replaced.
 
-    private final SparkMax m_neckMotor = new SparkMax(NeckConstants.kNeckMotorPort, SparkLowLevel.MotorType.kBrushless); 
+    private final SparkMax m_neckMotor = new SparkMax(NeckConstants.kNeckMotorPort, SparkLowLevel.MotorType.kBrushless);
+     
     //private final MotorController m_neckMotor =  m_CanSparkMaxNeck;
 
     private final AbsoluteEncoder m_neckEncoder;
@@ -70,7 +73,7 @@ public class Neck extends SubsystemBase {
 
 
   public Neck() {
-    m_neckEncoder = m_neckMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    m_neckEncoder = m_neckMotor.getAbsoluteEncoder();
 
     // See https://www.chiefdelphi.com/t/holding-up-a-wrist-with-a-neo/425787/14 to set these
     double endAngle = 0;
@@ -82,17 +85,20 @@ public class Neck extends SubsystemBase {
       .withProperties(Map.of(
         "min", 0.0, 
         "max", 0.5)) // specify widget properties here
-      .getEntry();
-
-    m_neckEncoder.setPositionConversionFactor((endAngle - startAngle) / valueAtEndAngle);    
+      .getEntry();   
 
     if (RobotBase.isSimulation()) {
-      REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); }
+      //fix Physics sim
+      //REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); 
+    }
     neckPIDcontroller2 = new PIDController(NeckConstants.kNeck_kP2, NeckConstants.kNeck_kI2, NeckConstants.kNeck_kD2);
-    neckPIDcontroller1 = m_neckMotor.getPIDController();
-    neckPIDcontroller1.setP(NeckConstants.kNeck_kP);
-    neckPIDcontroller1.setP(NeckConstants.kNeck_kI);
-    neckPIDcontroller1.setP(NeckConstants.kNeck_kD);
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.encoder
+      .positionConversionFactor((endAngle - startAngle) / valueAtEndAngle);
+    config.closedLoop
+    .pid(NeckConstants.kNeck_kP, NeckConstants.kNeck_kI, NeckConstants.kNeck_kD);
+  
+    m_neckMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
