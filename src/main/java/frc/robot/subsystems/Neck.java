@@ -4,7 +4,9 @@
 //EDIT PORTS; create code!
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,16 +25,14 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.SparkPIDController;
+
+
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import java.util.Map;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
 import frc.robot.Constants.NeckConstants;
 
 public class Neck extends SubsystemBase {
@@ -42,7 +42,8 @@ public class Neck extends SubsystemBase {
     // Create the Neck tilter motor and claw tilter motor
     // The constants are not corect right now, will be replaced.
 
-    private final CANSparkMax m_neckMotor = new CANSparkMax(NeckConstants.kNeckMotorPort, MotorType.kBrushless); 
+    private final SparkMax m_neckMotor = new SparkMax(NeckConstants.kNeckMotorPort, SparkLowLevel.MotorType.kBrushless);
+     
     //private final MotorController m_neckMotor =  m_CanSparkMaxNeck;
 
     private final AbsoluteEncoder m_neckEncoder;
@@ -63,7 +64,8 @@ public class Neck extends SubsystemBase {
     //private boolean lowerLimit;
 
     private PIDController neckPIDcontroller2;
-    private SparkPIDController neckPIDcontroller1;
+    private SparkClosedLoopController neckPIDcontroller1;
+    
 
     private ShuffleboardTab m_neckTab = Shuffleboard.getTab("Neck");
     private GenericEntry m_neckAngle;
@@ -71,7 +73,12 @@ public class Neck extends SubsystemBase {
 
 
   public Neck() {
-    m_neckEncoder = m_neckMotor.getAbsoluteEncoder(Type.kDutyCycle);
+
+    SparkMaxConfig m_neckMotorConfig = new SparkMaxConfig();
+    m_neckMotorConfig.closedLoop
+      .pid(NeckConstants.kNeck_kP, NeckConstants.kNeck_kI, NeckConstants.kNeck_kD);
+
+    m_neckEncoder = m_neckMotor.getAbsoluteEncoder();
 
     // See https://www.chiefdelphi.com/t/holding-up-a-wrist-with-a-neo/425787/14 to set these
     double endAngle = 0;
@@ -83,17 +90,14 @@ public class Neck extends SubsystemBase {
       .withProperties(Map.of(
         "min", 0.0, 
         "max", 0.5)) // specify widget properties here
-      .getEntry();
-
-    m_neckEncoder.setPositionConversionFactor((endAngle - startAngle) / valueAtEndAngle);    
+      .getEntry();   
 
     if (RobotBase.isSimulation()) {
-      REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); }
+      //fix Physics sim
+      //REVPhysicsSim.getInstance().addSparkMax(m_neckMotor, DCMotor.getNEO(1)); 
+    }
     neckPIDcontroller2 = new PIDController(NeckConstants.kNeck_kP2, NeckConstants.kNeck_kI2, NeckConstants.kNeck_kD2);
-    neckPIDcontroller1 = m_neckMotor.getPIDController();
-    neckPIDcontroller1.setP(NeckConstants.kNeck_kP);
-    neckPIDcontroller1.setP(NeckConstants.kNeck_kI);
-    neckPIDcontroller1.setP(NeckConstants.kNeck_kD);
+    neckPIDcontroller1 = m_neckMotor.getClosedLoopController();
   }
 
   @Override
@@ -139,9 +143,11 @@ public void move(double kneckreversespeed) {
    neckPIDcontroller1.setReference(
                  target.getRadians(),
                  ControlType.kPosition,
-                 0,
+                 ClosedLoopSlot.kSlot0,
                  armFeedforward.calculate(target.getRadians(), 0));
+                 
  }
+
 
 public void moveTo(double target) {
   move(neckPIDcontroller2.calculate(getNeckAngle(), target)*NeckConstants.kNeckForwardSpeed*10);

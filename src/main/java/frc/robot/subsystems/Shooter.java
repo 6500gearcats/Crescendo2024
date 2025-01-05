@@ -4,9 +4,10 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.config.*;
 
 // import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -16,7 +17,7 @@ import frc.robot.Constants.ShooterConstants;;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  private CANSparkMax m_sparkMax = new CANSparkMax(ShooterConstants.kShooterMotorPort, MotorType.kBrushless);
+  private SparkMax m_sparkMax = new SparkMax(ShooterConstants.kShooterMotorPort, SparkLowLevel.MotorType.kBrushless);
 
   public final MotorController m_ShooterMotor = m_sparkMax;
   private boolean m_bNoteFired = false; 
