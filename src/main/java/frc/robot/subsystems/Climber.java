@@ -9,12 +9,14 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkClosedLoopController;
 
-import com.revrobotics.*;
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.config.*;
 
 
 
@@ -31,8 +33,8 @@ import frc.robot.utility.EncoderOdometer;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  public final CANSparkMax m_LeftClimberMotor = new CANSparkMax(ClimberConstants.kLeft_ClimberMotorPort,CANSparkLowLevel.MotorType.kBrushless);
-  public final CANSparkMax m_RightClimberMotor = new CANSparkMax(ClimberConstants.kRight_ClimberMotorPort,CANSparkLowLevel.MotorType.kBrushless);
+  public final SparkMax m_LeftClimberMotor = new SparkMax(ClimberConstants.kLeft_ClimberMotorPort,SparkLowLevel.MotorType.kBrushless);
+  public final SparkMax m_RightClimberMotor = new SparkMax(ClimberConstants.kRight_ClimberMotorPort,SparkLowLevel.MotorType.kBrushless);
   private final DigitalInput m_LeftArmDownSensor = new DigitalInput(0);
   private final DigitalInput m_RightArmDownSensor = new DigitalInput(1);
   
@@ -43,8 +45,8 @@ public class Climber extends SubsystemBase {
   private RelativeEncoder m_winchEncoder;
   private EncoderOdometer m_winchOdometer;
 
-  private SparkPIDController leftPIDcontroller;
-  private SparkPIDController rightPIDcontroller;
+  private SparkClosedLoopController leftPIDcontroller;
+  private SparkClosedLoopController rightPIDcontroller;
   private ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(NeckConstants.kNeck_kS, NeckConstants.kNeck_kG, NeckConstants.kNeck_kV);
   
   public Climber() {
