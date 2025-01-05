@@ -4,7 +4,7 @@
 //EDIT PORTS; create code!
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,16 +23,14 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.SparkPIDController;
+
+
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import java.util.Map;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
 import frc.robot.Constants.NeckConstants;
 
 public class Neck extends SubsystemBase {
@@ -42,7 +40,7 @@ public class Neck extends SubsystemBase {
     // Create the Neck tilter motor and claw tilter motor
     // The constants are not corect right now, will be replaced.
 
-    private final CANSparkMax m_neckMotor = new CANSparkMax(NeckConstants.kNeckMotorPort, MotorType.kBrushless); 
+    private final SparkMax m_neckMotor = new SparkMax(NeckConstants.kNeckMotorPort, SparkLowLevel.MotorType.kBrushless); 
     //private final MotorController m_neckMotor =  m_CanSparkMaxNeck;
 
     private final AbsoluteEncoder m_neckEncoder;
@@ -63,7 +61,8 @@ public class Neck extends SubsystemBase {
     //private boolean lowerLimit;
 
     private PIDController neckPIDcontroller2;
-    private SparkPIDController neckPIDcontroller1;
+    private SparkClosedLoopController neckPIDcontroller1;
+    
 
     private ShuffleboardTab m_neckTab = Shuffleboard.getTab("Neck");
     private GenericEntry m_neckAngle;
@@ -139,9 +138,11 @@ public void move(double kneckreversespeed) {
    neckPIDcontroller1.setReference(
                  target.getRadians(),
                  ControlType.kPosition,
-                 0,
+                 ClosedLoopSlot.kSlot0,
                  armFeedforward.calculate(target.getRadians(), 0));
+                 
  }
+
 
 public void moveTo(double target) {
   move(neckPIDcontroller2.calculate(getNeckAngle(), target)*NeckConstants.kNeckForwardSpeed*10);
