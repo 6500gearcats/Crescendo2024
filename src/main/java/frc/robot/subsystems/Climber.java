@@ -7,16 +7,14 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkLowLevel;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.spark.SparkClosedLoopController;
-
 import com.revrobotics.spark.*;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.*;
+import com.revrobotics.AbsoluteEncoder;
 
 
 
@@ -51,24 +49,26 @@ public class Climber extends SubsystemBase {
   
   public Climber() {
 
-    m_RightClimberMotor.setInverted(true);
+    SparkMaxConfig rightConfig = new SparkMaxConfig();
+    rightConfig
+      .inverted(true);
+    rightConfig.closedLoop
+      .pid(.5,NeckConstants.kNeck_kI,NeckConstants.kNeck_kD);
+
+    m_RightClimberMotor.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    SparkMaxConfig leftConfig = new SparkMaxConfig();
+    leftConfig.closedLoop
+      .pid(.5,NeckConstants.kNeck_kI,NeckConstants.kNeck_kD);
+    m_LeftClimberMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     // int m_lowerLimit = m_LeftClimberMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     // int m_upperLimit = m_LeftClimberMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-    m_leftClimberEncoder = m_LeftClimberMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    m_rightClimberEncoder = m_RightClimberMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    m_leftClimberEncoder = m_LeftClimberMotor.getAbsoluteEncoder();
+    m_rightClimberEncoder = m_RightClimberMotor.getAbsoluteEncoder();
 
     m_winchEncoder = m_LeftClimberMotor.getEncoder();
     m_winchOdometer = new EncoderOdometer(m_winchEncoder);
 
-    leftPIDcontroller = m_LeftClimberMotor.getPIDController();
-    leftPIDcontroller.setP(.5);
-    leftPIDcontroller.setI(NeckConstants.kNeck_kI);
-    leftPIDcontroller.setD(NeckConstants.kNeck_kD);
-
-    rightPIDcontroller = m_RightClimberMotor.getPIDController();
-    rightPIDcontroller.setP(.5);
-    rightPIDcontroller.setI(NeckConstants.kNeck_kI);
-    rightPIDcontroller.setD(NeckConstants.kNeck_kD);
   }
 
   @Override
@@ -137,10 +137,10 @@ public class Climber extends SubsystemBase {
   leftPIDcontroller.setReference(
                 target,
                 ControlType.kPosition,
-                0);
+                ClosedLoopSlot.kSlot0);
   rightPIDcontroller.setReference(
                 target,
                 ControlType.kPosition,
-                0);
+                ClosedLoopSlot.kSlot0);
   }
 }
