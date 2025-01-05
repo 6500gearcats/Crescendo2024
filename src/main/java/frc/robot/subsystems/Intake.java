@@ -3,8 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -16,7 +16,7 @@ public class Intake extends SubsystemBase {
   private final DigitalInput m_noteSensor = new DigitalInput(9);
   private final DigitalInput m_noteSwitch = new DigitalInput(8); //TODO: Put this on correct channel
   /** Creates a new Intake. */
-public final MotorController m_intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
+public final MotorController m_intakeMotor = new SparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
 
   public Intake() {}
 
