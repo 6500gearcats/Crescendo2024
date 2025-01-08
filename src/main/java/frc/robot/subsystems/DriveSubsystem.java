@@ -5,16 +5,22 @@
 package frc.robot.subsystems;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
-import com.revrobotics.sim.SparkMaxSim;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PathFollowingController;
+import com.pathplanner.lib.util.DriveFeedforwards;
 import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.hal.SimBoolean;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,11 +47,15 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 import frc.robot.Vision;
+import com.revrobotics.spark.SparkSim;
+import com.revrobotics.sim.SparkMaxSim;
+import com.revrobotics.sim.SparkSimFaultManager;
+
 
 public class DriveSubsystem extends SubsystemBase {
   public boolean turboEnable = false;
 
-  // Create MAXSwerveModules
+  // Create MAXSwerveModules 
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
@@ -65,6 +75,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
+
 
   // The gyro sensor
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
@@ -105,7 +116,8 @@ public class DriveSubsystem extends SubsystemBase {
        * See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for
        * details.
        */
-      m_gyro = new AHRS(SPI.Port.kMXP);
+
+      m_gyro = new AHRS(NavXComType.kMXP_SPI);
       System.out.println("AHRS constructed");
     } catch (RuntimeException ex) {
       System.out.println("AHRS not constructed");
@@ -148,37 +160,40 @@ public class DriveSubsystem extends SubsystemBase {
       .getEntry();
 
     
-    // MODIFIED TEMPLATE CODE: Configure AutoBuilder last
-    AutoBuilder.configureHolonomic(
-        this::getPose, // Robot pose supplier
-        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-        this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(10.0, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
-            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // Load the RobotConfig from the GUI settings. You should probably
+    // store this in your Constants file
+    RobotConfig config = null;
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
 
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
-        this // Reference to this subsystem to set requirements
-    );
+      AutoBuilder.configure(
+        this::getPose,
+        this::resetOdometry,
+        this::getChassisSpeed,
+    (BiConsumer<ChassisSpeeds, DriveFeedforwards>) null,
+    new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(10.0, 0.0, 0.0) // Rotation PID constants
+            ), 
+            config,
+    () -> {
+      // Boolean supplier that controls when the path will be mirrored for the red
+      // alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    publisher = NetworkTableInstance.getDefault()
-      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
-
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this
+);
   }
 
   @Override
@@ -216,8 +231,11 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // Update the odometry in the periodic block
-    REVPhysicsSim.getInstance().run();
+    
+    //SparkSim.iterate();
 
+    
+    
     // Update camera simulation
     m_simVision.simulationPeriodic(this.getPose());
 
