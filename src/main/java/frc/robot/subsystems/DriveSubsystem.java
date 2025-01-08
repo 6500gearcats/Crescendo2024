@@ -194,6 +194,9 @@ public class DriveSubsystem extends SubsystemBase {
     },
     this
 );
+publisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+
   }
 
   @Override
