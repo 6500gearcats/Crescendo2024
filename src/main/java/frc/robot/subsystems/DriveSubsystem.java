@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Robot;
 import frc.robot.Vision;
 import com.revrobotics.spark.SparkSim;
@@ -162,13 +163,6 @@ public class DriveSubsystem extends SubsystemBase {
     
     // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
-    RobotConfig config = null;
-    try{
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      // Handle exception as needed
-      e.printStackTrace();
-    }
 
       AutoBuilder.configure(
         this::getPose,
@@ -179,7 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
                     new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(10.0, 0.0, 0.0) // Rotation PID constants
             ), 
-            config,
+            AutoConstants.config,
     () -> {
       // Boolean supplier that controls when the path will be mirrored for the red
       // alliance
