@@ -150,7 +150,7 @@ private final RangeFinder m_Range = new RangeFinder();
                 !m_driverController.getRightBumper()),
             m_robotDrive));
 
-    m_Neck.setDefaultCommand(new NeckStable(m_Neck));
+    //m_Neck.setDefaultCommand(new NeckStable(m_Neck));
    // m_robotClimber.setDefaultCommand(new ClimberStable(m_robotClimber)); 
   }
   

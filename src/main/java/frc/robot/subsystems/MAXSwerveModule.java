@@ -30,6 +30,9 @@ public class MAXSwerveModule {
   //private final RelativeEncoder m_drivingEncoder;
   //private final AbsoluteEncoder m_turningEncoder;
 
+  SparkMaxConfig drivingConfig;
+  SparkMaxConfig turningConfig;
+  
   private final SparkClosedLoopController m_drivingPIDController;
   private final SparkClosedLoopController m_turningPIDController;
 
@@ -46,8 +49,8 @@ public class MAXSwerveModule {
     m_drivingSparkMax = new SparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new SparkMax(turningCANId, MotorType.kBrushless);
 
-    SparkMaxConfig drivingConfig = new SparkMaxConfig();
-    SparkMaxConfig turningConfig = new SparkMaxConfig();
+    drivingConfig = new SparkMaxConfig();
+    turningConfig = new SparkMaxConfig();
 
     m_drivingPIDController = m_drivingSparkMax.getClosedLoopController();
     m_turningPIDController = m_turningSparkMax.getClosedLoopController();
@@ -186,5 +189,6 @@ public class MAXSwerveModule {
   }
 
   public void setCoast() {
+    drivingConfig.idleMode(ModuleConstants.kDrivingMotorIdleMode);
   }
 }
