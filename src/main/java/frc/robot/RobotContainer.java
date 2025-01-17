@@ -166,9 +166,6 @@ private final RangeFinder m_Range = new RangeFinder();
    */
   private void configureButtonBindings() {
 
-    // Turbo Buttons 
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).whileTrue(new DriveTurbo(m_robotDrive));
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).onFalse(new DriveNormal(m_robotDrive));
 
     // Set the wheels in locked arrangement to prevent movement
     new JoystickButton(m_driverController, Button.kX.value)
